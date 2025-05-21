@@ -1,103 +1,154 @@
-import Image from "next/image";
+'use client';
 
-export default function Home() {
+import { useEffect, useState } from 'react';
+import { supabase } from '@/lib/supabase';
+
+type Player = {
+  id: string;
+  name: string;
+};
+
+type Match = {
+  id: string;
+  date: string;
+  team_a: string[];
+  team_b: string[];
+  score_a: number;
+  score_b: number;
+  goals: Record<string, number>;
+};
+
+export default function Dashboard() {
+  const [players, setPlayers] = useState<Player[]>([]);
+  const [matches, setMatches] = useState<Match[]>([]);
+  const [goalsByPlayer, setGoalsByPlayer] = useState<Record<string, number>>({});
+  const [winsByPlayer, setWinsByPlayer] = useState<Record<string, number>>({});
+  const [matchesPlayed, setMatchesPlayed] = useState<Record<string, number>>({});
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data: playersData } = await supabase.from('players').select('*');
+      const { data: matchesData } = await supabase.from('matches').select('*');
+
+      if (playersData) setPlayers(playersData);
+      if (matchesData) setMatches(matchesData as Match[]);
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const goals: Record<string, number> = {};
+    const wins: Record<string, number> = {};
+    const appearances: Record<string, number> = {};
+
+    matches.forEach((match) => {
+      // Count goals
+      for (const [playerId, goalCount] of Object.entries(match.goals)) {
+        goals[playerId] = (goals[playerId] || 0) + goalCount;
+      }
+
+      //Count appearances
+      [...match.team_a, ...match.team_b].forEach((playerId) => {
+        appearances[playerId] = (appearances[playerId] || 0) + 1;
+      });
+
+      // Determine winner
+      let winningTeam: string[] = [];
+      if (match.score_a > match.score_b) winningTeam = match.team_a;
+      else if (match.score_b > match.score_a) winningTeam = match.team_b;
+
+      winningTeam.forEach((playerId) => {
+        wins[playerId] = (wins[playerId] || 0) + 1;
+      });
+    });
+
+    setGoalsByPlayer(goals);
+    setWinsByPlayer(wins);
+    setMatchesPlayed(appearances);
+  }, [matches]);
+
+  const getPlayerName = (id: string) => players.find((p) => p.id === id)?.name || 'Unknown';
+
+  const getWinRatio = (id:string) => {
+    const wins = winsByPlayer[id] || 0;
+    const played = matchesPlayed[id] || 0;
+    if (played == 0) return '0%';
+    return `${((wins / played) * 100).toFixed(1)}%`;
+  }
+
+  const getTrophy = (index: number) => {
+    if (index === 0) return '🥇';
+    if (index === 1) return '🥈';
+    if (index === 2) return '🥉';
+    return '';
+  };
+
+  const sortedGoals = Object.entries(goalsByPlayer).sort((a, b) => b[1] - a[1]);
+  const sortedWins = Object.entries(winsByPlayer).sort((a, b) => b[1] - a[1]);
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+      <div className="max-w-4xl mx-auto p-6">
+        <h1 className="text-2xl font-bold mb-6 text-center">🏟️ Player Stats Dashboard - Umelka 2025</h1>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div>
+            <h2 className="text-xl font-semibold mb-2">🥅 Top Scorers</h2>
+            <ul className="space-y-1">
+              {sortedGoals.map(([id, goals], index) => (
+                  <li key={id} className="flex justify-between border-b py-1">
+                    <span><span className="text-xl">{getTrophy(index)}</span> {getPlayerName(id)}</span>
+                    <span>{goals} goals</span>
+                  </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h2 className="text-xl font-semibold mb-2">🏆 Most Wins</h2>
+            <ul className="space-y-1">
+              {sortedWins.map(([id, wins], index) => (
+                  <li key={id} className="flex justify-between border-b py-1">
+                    <span><span className="text-xl">{getTrophy(index)}</span> {getPlayerName(id)}</span>
+                    <span>{wins} wins</span>
+                  </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h2 className="text-xl font-semibold mb-2">📅 Matches Played</h2>
+            <ul className="space-y-1">
+              {Object.entries(matchesPlayed)
+                  .sort((a, b) => b[1] - a[1])
+                  .map(([id, count], index) => (
+                      <li key={id} className="flex justify-between border-b py-1">
+                        <span><span className="text-xl">{getTrophy(index)}</span> {getPlayerName(id)}</span>
+                        <span>{count} matches</span>
+                      </li>
+                  ))}
+            </ul>
+          </div>
+
+          <div>
+          <h2 className="text-xl font-semibold mb-2">📈 Win Ratios</h2>
+            <ul className="space-y-1">
+              {Object.keys(matchesPlayed)
+                  .sort((a, b) => {
+                    const ratioA = (winsByPlayer[a] || 0) / matchesPlayed[a];
+                    const ratioB = (winsByPlayer[b] || 0) / matchesPlayed[b];
+                    return ratioB - ratioA;
+                  })
+                  .map((id, index) => (
+                      <li key={id} className="flex justify-between border-b py-1">
+                        <span><span className="text-xl">{getTrophy(index)}</span> {getPlayerName(id)}</span>
+                        <span>{getWinRatio(id)}</span>
+                      </li>
+                  ))}
+            </ul>
+          </div>
+
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+      </div>
   );
 }
