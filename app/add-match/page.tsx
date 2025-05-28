@@ -3,7 +3,7 @@
 import MatchForm from '@/app/components/MatchForm';
 import {useAuthGuard} from "@/app/hooks/useAuthGuard";
 
-export default function MatchPage() {
+export default function AddMatchPage() {
     const { user, loading } = useAuthGuard();
 
     if (loading) return <p className="text-center mt-10">Checking authentication...</p>;

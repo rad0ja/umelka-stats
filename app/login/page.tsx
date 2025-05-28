@@ -12,7 +12,7 @@ export default function LoginPage() {
     const handleLogin = async () => {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) alert(error.message);
-        else router.push('/match');
+        else router.push('/add-match');
     };
 
     return (
