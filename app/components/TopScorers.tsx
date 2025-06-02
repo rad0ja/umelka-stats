@@ -23,7 +23,7 @@ export default function TopScorers({ goals, players, showAll}: Props) {
             <span>
               <span className="text-xl">{getTrophy(index)}</span> {getPlayerName(players, id)}
             </span>
-                        <span className="text-sm text-gray-600">{goals} goals</span>
+                        <span className="text-sm text-gray-600 dark:text-white">{goals} goals</span>
                     </li>
                 ))}
             </ul>

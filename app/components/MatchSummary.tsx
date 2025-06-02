@@ -8,17 +8,17 @@ type Props = {
 
 export default function MatchSummary({ match, players }: Props) {
     const renderTeam = (team: string[]) => (
-        <table className="w-full text-sm border border-gray-300">
+        <table className="w-full text-sm border border-gray-300 dark:border-white dark:border-gray-600 text-gray-800 dark:text-gray-100">
             <thead>
-            <tr className="bg-gray-100 border-b">
-                <th className="p-2 text-left">Player</th>
+            <tr className="bg-gray-100 dark:bg-gray-700 border-b">
+                <th className="p-2 text-left dark:border-white">Player</th>
                 <th className="p-2 text-left">Goals</th>
             </tr>
             </thead>
             <tbody>
             {team.map((playerId) => (
                 <tr key={playerId} className="border-b">
-                    <td className="p-2">{getPlayerName(players, playerId)}</td>
+                    <td className="p-2 dark:border-white">{getPlayerName(players, playerId)}</td>
                     <td className="p-2">{match.goals[playerId] || 0}</td>
                 </tr>
             ))}
@@ -27,7 +27,7 @@ export default function MatchSummary({ match, players }: Props) {
     );
 
     return (
-        <div className="bg-white shadow-md rounded-lg p-4 mb-6">
+        <div className="bg-white shadow-md rounded-lg p-4 mb-6 dark:border-gray-600 bg-white dark:bg-black text-gray-800 dark:text-gray-100">
             <h2 className="text-xl font-semibold text-center mb-2">Last Match Summary</h2>
             <div className="text-center text-2xl font-bold mb-4">
                 <span className="text-base">Team A</span> {match.score_a} : {match.score_b}{' '}

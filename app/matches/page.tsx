@@ -15,7 +15,7 @@ export default function MatchesPage() {
             {matches
                 .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
                 .map((match) => (
-                    <div key={match.id} className="bg-white shadow-md rounded-lg p-4 mb-4">
+                    <div key={match.id} className="bg-white shadow-md rounded-lg p-4 mb-4 dark:bg-black">
                         <div className="text-center text-lg font-semibold mb-2">
                             <span className="text-base">Team A</span> {match.score_a} : {match.score_b} <span
                             className="text-base">Team B</span>

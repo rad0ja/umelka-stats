@@ -16,7 +16,7 @@ export default function Dashboard() {
 
     return (
         <div className="max-w-4xl mx-auto p-6">
-            <h1 className="text-2xl font-bold mb-6 text-center">🏟️ Player Stats Dashboard - Umelka 2025</h1>
+            <h1 className="text-2xl font-bold mb-6 text-center">🏟️ Ultimate Dashboard - Umelka 2025</h1>
             {lastMatch && <MatchSummary match={lastMatch} players={players} />}
 
             <div className="text-center mb-6">

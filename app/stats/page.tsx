@@ -37,7 +37,7 @@ export default function Dashboard() {
                             .map(([id, matches], index) => (
                                 <li key={id} className="flex justify-between border-b py-1">
                                     <span><span className="text-xl">{getTrophy(index)}</span> {getPlayerName(players, id)}</span>
-                                    <span className="text-sm text-gray-600">{matches} matches</span>
+                                    <span className="text-sm text-gray-600 dark:text-white">{matches} matches</span>
                                 </li>
                             ))}
                     </ul>
@@ -55,7 +55,7 @@ export default function Dashboard() {
                             .map((id, index) => (
                                 <li key={id} className="flex justify-between border-b py-1">
                                     <span><span className="text-xl">{getTrophy(index)}</span> {getPlayerName(players, id)}</span>
-                                    <span className="text-sm text-gray-600">{getWinRatio(id)}</span>
+                                    <span className="text-sm text-gray-600 dark:text-white">{getWinRatio(id)}</span>
                                 </li>
                             ))}
                     </ul>
