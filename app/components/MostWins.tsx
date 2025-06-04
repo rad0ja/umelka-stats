@@ -1,16 +1,16 @@
 'use client';
 
 import { Player } from "@/app/types";
-import {getPlayerName, getSortedWins, getTrophy} from "@/app/utils/playerHelpers";
+import { getPlayerName, getSortedStats, getTrophy } from "@/app/utils/playerHelpers";
 
 type Props = {
-    wins: Record<string, number>;
+    wins:Record<string, number>;
     players: Player[];
     showAll?: boolean;
-};
+}
 
 export default function MostWins({ wins, players, showAll}: Props) {
-    const sortedWins = getSortedWins(wins);
+    const sortedWins = getSortedStats(wins);
     const displayedWins = showAll ? sortedWins : sortedWins.slice(0, 5);
 
     return (

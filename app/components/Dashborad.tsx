@@ -10,9 +10,11 @@ import MostWins from "@/app/components/MostWins";
 
 
 export default function Dashboard() {
-    const { players, matches, loading } = usePlayerMatchData();;
-    const { goals, wins, appearances } = usePlayerStats(matches);
+    const { players, matches, loading } = usePlayerMatchData();
+    const { goals, wins } = usePlayerStats(matches);
     const lastMatch = getLastMatch(matches);
+
+    if (loading) return <div className="text-center">Loading...</div>
 
     return (
         <div className="max-w-4xl mx-auto p-6">

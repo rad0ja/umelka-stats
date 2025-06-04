@@ -1,15 +1,16 @@
 'use client';
 
-import { getTrophy, getPlayerName } from "@/app/utils/playerHelpers";
 import { usePlayerMatchData } from "@/app/hooks/usePlayerMatchData";
 import { usePlayerStats } from "@/app/hooks/usePlayerStats";
 import TopScorers from "@/app/components/TopScorers";
 import MostWins from "@/app/components/MostWins";
+import MatchesPlayed from "@/app/components/MatchesPlayed";
+import WinRatios from "@/app/components/WinRatios";
 
 
-export default function Dashboard() {
+export default function StatsFull() {
     const { players, matches, loading } = usePlayerMatchData();
-    const { goals, wins, appearances, getWinRatio } = usePlayerStats(matches);
+    const { goals, wins, appearances} = usePlayerStats(matches);
 
     if (loading) return <div className="text-center">Loading...</div>
 
@@ -30,36 +31,18 @@ export default function Dashboard() {
                    showAll={true}
                />
 
-                <div>
-                    <h2 className="text-xl font-semibold mb-2">📅 Matches Played</h2>
-                    <ul className="space-y-1">
-                        {Object.entries(appearances)
-                            .map(([id, matches], index) => (
-                                <li key={id} className="flex justify-between border-b py-1">
-                                    <span><span className="text-xl">{getTrophy(index)}</span> {getPlayerName(players, id)}</span>
-                                    <span className="text-sm text-gray-600 dark:text-white">{matches} matches</span>
-                                </li>
-                            ))}
-                    </ul>
-                </div>
+                <MatchesPlayed
+                    players={players}
+                    appearances={appearances}
+                    showAll={true}
+                />
 
-                <div>
-                    <h2 className="text-xl font-semibold mb-2">📈 Win Ratios</h2>
-                    <ul className="space-y-1">
-                        {Object.keys(appearances)
-                            .sort((a, b) => {
-                                const ratioA = (wins[a] || 0) / appearances[a];
-                                const ratioB = (wins[b] || 0) / appearances[b];
-                                return ratioB - ratioA;
-                            })
-                            .map((id, index) => (
-                                <li key={id} className="flex justify-between border-b py-1">
-                                    <span><span className="text-xl">{getTrophy(index)}</span> {getPlayerName(players, id)}</span>
-                                    <span className="text-sm text-gray-600 dark:text-white">{getWinRatio(id)}</span>
-                                </li>
-                            ))}
-                    </ul>
-                </div>
+                <WinRatios
+                    appearances={appearances}
+                    players={players}
+                    wins={wins}
+                />
+
             </div>
         </div>
     );

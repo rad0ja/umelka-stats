@@ -2,16 +2,16 @@
 
 import { Player } from "@/app/types";
 import { getPlayerName } from "@/app/utils/playerHelpers";
-import { getSortedGoals, getTrophy } from "@/app/utils/playerHelpers";
+import { getTrophy, getSortedStats } from "@/app/utils/playerHelpers";
 
 type Props = {
     goals: Record<string, number>;
-    players: Player[]
+    players: Player[];
     showAll?: boolean;
-};
+}
 
 export default function TopScorers({ goals, players, showAll}: Props) {
-    const sortedGoals = getSortedGoals(goals)
+    const sortedGoals = getSortedStats(goals)
     const displayedGoals = showAll ? sortedGoals : sortedGoals.slice(0, 5);
 
     return (
