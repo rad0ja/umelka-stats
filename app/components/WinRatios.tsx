@@ -1,9 +1,9 @@
-'use client'
+'use client';
 
 import { Player } from "@/app/types";
 import { getPlayerName, getTrophy } from "@/app/utils/playerHelpers";
 import { usePlayerStats } from "@/app/hooks/usePlayerStats";
-import {usePlayerMatchData} from "@/app/hooks/usePlayerMatchData";
+import { usePlayerMatchData } from "@/app/hooks/usePlayerMatchData";
 
 type Props = {
     appearances: Record<string, number>;

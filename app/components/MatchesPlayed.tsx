@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { getPlayerName, getSortedStats, getTrophy } from "@/app/utils/playerHelpers";
 import { Player } from "@/app/types";

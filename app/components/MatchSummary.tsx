@@ -1,5 +1,10 @@
+'use client';
+
 import {Match, Player} from "@/app/types";
 import { getPlayerName } from "@/app/utils/playerHelpers";
+import RecentFormBadge from "@/app/components/RecentFormBadge";
+import { getRecentForm } from "@/app/utils/form-utils";
+import { usePlayerMatchData } from "@/app/hooks/usePlayerMatchData";
 
 type Props = {
     match: Match;
@@ -7,6 +12,10 @@ type Props = {
 };
 
 export default function MatchSummary({ match, players }: Props) {
+    const { matches } = usePlayerMatchData();
+    const recentForm = getRecentForm(matches, players.map(p => p.id));
+
+
     const renderTeam = (team: string[]) => (
         <table className="w-full text-sm border border-gray-300 dark:border-white dark:border-gray-600 text-gray-800 dark:text-gray-100">
             <thead>
@@ -18,7 +27,10 @@ export default function MatchSummary({ match, players }: Props) {
             <tbody>
             {team.map((playerId) => (
                 <tr key={playerId} className="border-b">
-                    <td className="p-2 dark:border-white">{getPlayerName(players, playerId)}</td>
+                    <td className="p-2 dark:border-white">
+                        <span>{getPlayerName(players, playerId)}</span>
+                        <span><RecentFormBadge form={recentForm[playerId] || []}/></span>
+                    </td>
                     <td className="p-2">{match.goals[playerId] || 0}</td>
                 </tr>
             ))}

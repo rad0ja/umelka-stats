@@ -9,6 +9,7 @@ import Link from "next/link";
 import MostWins from "@/app/components/MostWins";
 
 
+
 export default function Dashboard() {
     const { players, matches, loading } = usePlayerMatchData();
     const { goals, wins } = usePlayerStats(matches);
@@ -19,7 +20,7 @@ export default function Dashboard() {
     return (
         <div className="max-w-4xl mx-auto p-6">
             <h1 className="text-2xl font-bold mb-6 text-center">🏟️ Ultimate Dashboard - Umelka 2025</h1>
-            {lastMatch && <MatchSummary match={lastMatch} players={players} />}
+            {lastMatch && <MatchSummary match={lastMatch} players={players}/>}
 
             <div className="text-center mb-6">
                 <Link href="/matches"
@@ -45,10 +46,10 @@ export default function Dashboard() {
             <div className="text-center mb-6 mt-6">
                 <Link href="/stats"
                       className="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
-                    📋 View All Stats
+                    📋 View Complete Stats
                 </Link>
             </div>
 
-        </div>
+           </div>
     );
 }
