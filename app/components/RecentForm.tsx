@@ -5,7 +5,7 @@ import { getRecentForm } from "@/app/utils/form-utils";
 import { usePlayerMatchData } from "@/app/hooks/usePlayerMatchData";
 
 export default function RecentForm() {
-    const { players, matches, loading } = usePlayerMatchData();
+    const { players, matches } = usePlayerMatchData();
     const recentForm = getRecentForm(matches, players.map(p => p.id));
     const sortedByMatchCount = players
         .map((player) => ({

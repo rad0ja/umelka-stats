@@ -18,7 +18,7 @@ export function suggestBalancedTeams(players: PlayerStat[]): [SuggestedTeam, Sug
     // 1. Calculate a weighted score for each player
     const scoredPlayers = players.map((p) => ({
         ...p,
-        score: p.goals * 2 + p.wins * 1.5 + p.matchesPlayed * 1
+        score: p.goals * 2 + p.wins * 1.5 + p.matchesPlayed
     }));
 
     // 2. Sort by score descending
