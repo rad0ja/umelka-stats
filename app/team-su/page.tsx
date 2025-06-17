@@ -1,4 +1,3 @@
-/*
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -34,7 +33,7 @@ export default function TeamSuggestionsPage() {
                 });
 
                 Object.entries(match.goals).forEach(([id, count]) => {
-                    if (statsMap[id]) statsMap[id].goals += count;
+                    if (statsMap[id]) statsMap[id].goals += count as number;
                 });
 
                 const winningTeam =
@@ -82,4 +81,3 @@ export default function TeamSuggestionsPage() {
         </div>
     );
 }
-*/
