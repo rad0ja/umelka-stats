@@ -37,11 +37,19 @@ export function usePlayerStats(matches: Match[]) {
             return `${((win / played) * 100).toFixed(1)}%`;
         };
 
+        const getGoalsPerGame = (id: string) => {
+            const goal = goals[id] || 0;
+            const played = appearances[id] || 0;
+            if (played == 0) return '0';
+            return `${(goal / played).toFixed(1)} goals`
+        }
+
         return {
             goals,
             wins,
             appearances,
-            getWinRatio
+            getWinRatio,
+            getGoalsPerGame
         };
     }, [matches]);
 }
