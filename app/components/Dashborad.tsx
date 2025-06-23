@@ -2,7 +2,7 @@
 
 import { usePlayerStats } from "@/app/hooks/usePlayerStats";
 import { usePlayerMatchData } from "@/app/hooks/usePlayerMatchData";
-import { getLastMatch } from "@/app/utils/playerHelpers";
+import { getLastMatch, getPlayerName } from "@/app/utils/playerHelpers";
 import MatchSummary from "@/app/components/MatchSummary";
 import TopScorers from "@/app/components/TopScorers";
 import Link from "next/link";
@@ -50,6 +50,6 @@ export default function Dashboard() {
                 </Link>
             </div>
 
-           </div>
+        </div>
     );
 }

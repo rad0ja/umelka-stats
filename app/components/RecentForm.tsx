@@ -21,7 +21,7 @@ export default function RecentForm() {
                 {sortedByMatchCount.map(player => (
                     <li key={player.id} className="flex justify-between border-b py-1">
             <span>
-                <div className="font-bold">{player.name}</div>
+                <div>{player.name}</div>
             </span>
                         <span className="text-sm text-gray-600 dark:text-white">
                                 <RecentFormBadge form={recentForm[player.id] || []}/>
