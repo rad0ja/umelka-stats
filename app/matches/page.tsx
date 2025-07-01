@@ -26,11 +26,11 @@ export default function MatchesPage() {
                                     <h3 className="font-semibold mb-2">{i === 0 ? 'Team A' : 'Team B'}</h3>
                                     <ul className="text-sm space-y-1">
                                         {team.map((id) => (
-                                                <li key={id} className="flex justify-between border-b py-1">
-                                                    <span>{getPlayerName(players, id)}</span>
-                                                    <span>{match.goals[id] || 0} goals</span>
-                                                </li>
-                                            ))}
+                                            <li key={id} className="flex justify-between border-b py-1">
+                                                <span>{getPlayerName(players, id)}</span>
+                                                <span>{match.goals[id] || 0} goals</span>
+                                            </li>
+                                        ))}
                                     </ul>
                                 </div>
                             ))}

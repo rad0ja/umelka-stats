@@ -5,6 +5,7 @@ import { getPlayerName } from "@/app/utils/playerHelpers";
 import RecentFormBadge from "@/app/components/RecentFormBadge";
 import { getRecentForm } from "@/app/utils/form-utils";
 import { usePlayerMatchData } from "@/app/hooks/usePlayerMatchData";
+import Link from "next/link";
 
 type Props = {
     match: Match;
@@ -28,10 +29,16 @@ export default function MatchSummary({ match, players }: Props) {
             {team.map((playerId) => (
                 <tr key={playerId} className="border-b">
                     <td className="p-2 dark:border-white">
-                        <span>{getPlayerName(players, playerId)}</span>
+                        <Link
+                            href={`players/${playerId}`}
+                            className="hover:underline text-blue-600 dark:text-blue-400">
+
+                            <span>{getPlayerName(players, playerId)}</span>
+                        </Link>
                         <span><RecentFormBadge form={recentForm[playerId] || []}/></span>
                     </td>
-                    <td className="p-2">{match.goals[playerId] || 0}</td>
+                    <td className="p-2">{match.goals[playerId] || 0}
+                    </td>
                 </tr>
             ))}
             </tbody>

@@ -6,7 +6,8 @@ import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { Player } from '@/app/types';
 import PlayerCard from '@/app/components/PlayerCard';
-import { getTrophy } from '@/app/utils/playerHelpers'; // if used
+import { getTrophy } from '@/app/utils/playerHelpers';
+import {usePlayerMatchData} from "@/app/hooks/usePlayerMatchData"; // if used
 
 export default function PlayerDetailPage() {
     const { id } = useParams();
@@ -16,6 +17,7 @@ export default function PlayerDetailPage() {
     const [goals, setGoals] = useState(0);
     const [wins, setWins] = useState(0);
     const [matchesPlayed, setMatchesPlayed] = useState(0);
+    const { matches } = usePlayerMatchData();
 
     useEffect(() => {
         const fetchPlayerData = async () => {
@@ -59,16 +61,14 @@ export default function PlayerDetailPage() {
 
     return (
         <div className="max-w-2xl mx-auto p-6">
-            <h1 className="text-2xl font-bold mb-4">{player.name}'s Stats</h1>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 <PlayerCard
                     name={player.name}
                     goals={goals}
                     wins={wins}
                     matchesPlayed={matchesPlayed}
+                    totalMatches={matches.length}
                     trophy={getTrophy(0)} // optional
                 />
-            </div>
         </div>
     );
 }

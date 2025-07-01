@@ -1,18 +1,7 @@
 // lib/teamSuggestion.ts
 'use client'
 
-export type PlayerStat = {
-    id: string;
-    name: string;
-    goals: number;
-    wins: number;
-    matchesPlayed: number;
-};
-
-export type SuggestedTeam = {
-    players: PlayerStat[];
-    totalScore: number;
-};
+import { PlayerStat, SuggestedTeam} from "@/app/types";
 
 export function suggestBalancedTeams(players: PlayerStat[]): [SuggestedTeam, SuggestedTeam] {
     // 1. Calculate a weighted score for each player
@@ -23,6 +12,8 @@ export function suggestBalancedTeams(players: PlayerStat[]): [SuggestedTeam, Sug
 
     // 2. Sort by score descending
     scoredPlayers.sort((a, b) => b.score - a.score);
+
+    console.log(scoredPlayers)
 
     // 3. Distribute players alternating to balance score
     const teamA: SuggestedTeam = { players: [], totalScore: 0 };

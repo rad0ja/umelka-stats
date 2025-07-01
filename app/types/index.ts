@@ -12,3 +12,16 @@ export type Match = {
     score_b: number;
     goals: Record<string, number>;
 };
+
+export type PlayerStat = {
+    id: string;
+    name: string;
+    goals: number;
+    wins: number;
+    matchesPlayed: number;
+};
+
+export type SuggestedTeam = {
+    players: PlayerStat[];
+    totalScore: number;
+};
