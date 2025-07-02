@@ -12,19 +12,8 @@ export default function TeamSuggestionsPage() {
 
     useEffect(() => {
         const fetchData = async () => {
-            //const { data: players } = await supabase.from('players').select('*');
+            const { data: players } = await supabase.from('players').select('*');
             const { data: matches } = await supabase.from('matches').select('*');
-            const players = [{"id":"56d7386b-39d2-4a14-ade4-83138a7b5c3b","name":"Jan Radoch"},
-                {"id":"653c6fe7-2bb5-4ea5-8261-fb1aa6f6f6f0","name":"Martin Tomco"},
-                {"id":"94b9795a-96d3-4deb-9181-e6fff5e0e96b","name":"Marek Janicek"},
-                {"id":"1dc09b4d-f5f1-4c0b-8b74-8cae4555f666","name":"Miky Srubar"},
-                {"id":"6e92368a-bc9c-4759-8020-7a0c31f7b003","name":"Martin Schwarz"},
-                {"id":"fc8188a6-31e2-4f90-a00a-10b003c82b7c","name":"KOZLIK"},
-                {"id":"f15a1855-7f95-4cb4-af6c-405ad4c074cd","name":"Vlada Gromotovic"},
-                {"id":"f2434abe-b87c-48ed-9c8c-2a3d6961363a","name":"Lukas Aprias"},
-                {"id":"8a53f15d-b18e-4407-9025-ece8cfdc6add","name":"Vaclav Jandek"},
-                {"id":"b5a6e728-46ce-4af5-9713-64584c5848a1","name":"Martin Janota"},
-                {"id":"ea4e3177-9b49-40cc-9058-b475fc0a92f9","name":"Jan Gunka"}]
 
             if (!players || !matches) return;
 

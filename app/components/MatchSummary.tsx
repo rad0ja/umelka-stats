@@ -31,7 +31,7 @@ export default function MatchSummary({ match, players }: Props) {
                     <td className="p-2 dark:border-white">
                         <Link
                             href={`players/${playerId}`}
-                            className="hover:underline text-blue-600 dark:text-blue-400">
+                            className="hover:underline text-blue-800 dark:text-blue-400">
 
                             <span>{getPlayerName(players, playerId)}</span>
                         </Link>

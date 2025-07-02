@@ -3,6 +3,7 @@
 
 import { usePlayerMatchData } from "@/app/hooks/usePlayerMatchData";
 import { getPlayerName } from "@/app/utils/playerHelpers";
+import Link from "next/link";
 
 export default function MatchesPage() {
     const { players, matches, loading } = usePlayerMatchData();
@@ -27,7 +28,12 @@ export default function MatchesPage() {
                                     <ul className="text-sm space-y-1">
                                         {team.map((id) => (
                                             <li key={id} className="flex justify-between border-b py-1">
-                                                <span>{getPlayerName(players, id)}</span>
+                                                <Link
+                                                    href={`players/${id}`}
+                                                    className="hover:underline text-blue-800 dark:text-blue-400">
+
+                                                    <span>{getPlayerName(players, id)}</span>
+                                                </Link>
                                                 <span>{match.goals[id] || 0} goals</span>
                                             </li>
                                         ))}

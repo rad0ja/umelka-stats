@@ -9,10 +9,13 @@ export function usePlayerStats(matches: Match[]) {
         const wins: Record<string, number> = {};
         const appearances: Record<string, number> = {};
 
+        const allPlayersIds = new Set<string>();
+
         matches.forEach((match) => {
             // Count goals
             for (const [playerId, goalCount] of Object.entries(match.goals)) {
                 goals[playerId] = (goals[playerId] || 0) + goalCount;
+                allPlayersIds.add(playerId);
             }
 
             // Count appearances
@@ -27,7 +30,13 @@ export function usePlayerStats(matches: Match[]) {
 
             winningTeam.forEach((playerId) => {
                 wins[playerId] = (wins[playerId] || 0) + 1;
+                allPlayersIds.add(playerId);
             });
+        });
+
+        allPlayersIds.forEach((playerId) => {
+            if (!(playerId in wins)) wins[playerId] = 0;
+            if (!(playerId in goals)) goals[playerId] = 0;
         });
 
         const getWinRatio = (id: string) => {
