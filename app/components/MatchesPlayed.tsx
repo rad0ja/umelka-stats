@@ -1,7 +1,8 @@
 'use client';
 
-import { getPlayerName, getSortedStats, getTrophy } from "@/app/utils/playerHelpers";
+import {  getSortedStats } from "@/app/utils/playerHelpers";
 import { Player } from "@/app/types";
+import CustomBadgeForPlayer from "@/app/components/CustomBadgeForPlayer";
 
 type Props = {
     players: Player[];
@@ -19,7 +20,7 @@ export default function MatchesPlayed({players, appearances, showAll}: Props) {
             <ul className="space-y-1">
                 {displayedAppearances.map(([id, appearances], index) => (
                     <li key={id} className="flex justify-between border-b py-1">
-                        <span><span className="text-xl">{getTrophy(index)}</span> {getPlayerName(players, id)}</span>
+                        <CustomBadgeForPlayer id={id} players={players} index={index} />
                         <span className="text-sm text-gray-600 dark:text-white">{appearances} matches</span>
                     </li>
                 ))}

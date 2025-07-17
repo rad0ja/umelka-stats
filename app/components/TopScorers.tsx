@@ -1,8 +1,8 @@
 'use client';
 
 import { Player } from "@/app/types";
-import { getPlayerName } from "@/app/utils/playerHelpers";
-import { getTrophy, getSortedStats } from "@/app/utils/playerHelpers";
+import { getSortedStats } from "@/app/utils/playerHelpers";
+import CustomBadgeForPlayer from "@/app/components/CustomBadgeForPlayer";
 
 type Props = {
     goals: Record<string, number>;
@@ -20,9 +20,9 @@ export default function TopScorers({ goals, players, showAll}: Props) {
             <ul className="space-y-1">
                 {displayedGoals.map(([id, goals], index) => (
                     <li key={id} className="flex justify-between border-b py-1">
-            <span>
-              <span className="text-xl">{getTrophy(index)}</span> {getPlayerName(players, id)}
-            </span>
+                        <span>
+                          <CustomBadgeForPlayer id={id} players={players} index={index} />
+                        </span>
                         <span className="text-sm text-gray-600 dark:text-white">{goals} goals</span>
                     </li>
                 ))}

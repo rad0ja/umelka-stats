@@ -3,7 +3,7 @@
 import { Player } from "@/app/types";
 import { usePlayerMatchData } from "@/app/hooks/usePlayerMatchData";
 import { usePlayerStats } from "@/app/hooks/usePlayerStats";
-import { getPlayerName, getTrophy } from "@/app/utils/playerHelpers";
+import CustomBadgeForPlayer from "@/app/components/CustomBadgeForPlayer";
 
 type Props = {
     appearances: Record<string, number>;
@@ -27,8 +27,7 @@ export default function GoalsPerGame({appearances, players, goals}: Props) {
                     })
                     .map((id, index) => (
                         <li key={id} className="flex justify-between border-b py-1">
-                            <span><span
-                                className="text-xl">{getTrophy(index)}</span> {getPlayerName(players, id)}</span>
+                            <CustomBadgeForPlayer id={id} players={players} index={index} />
                             <span className="text-sm text-gray-600 dark:text-white">{getGoalsPerGame(id)}</span>
                         </li>
                     ))}

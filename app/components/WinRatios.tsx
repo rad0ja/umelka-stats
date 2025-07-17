@@ -1,9 +1,9 @@
 'use client';
 
 import { Player } from "@/app/types";
-import { getPlayerName, getTrophy } from "@/app/utils/playerHelpers";
 import { usePlayerStats } from "@/app/hooks/usePlayerStats";
 import { usePlayerMatchData } from "@/app/hooks/usePlayerMatchData";
+import CustomBadgeForPlayer from "@/app/components/CustomBadgeForPlayer";
 
 type Props = {
     appearances: Record<string, number>;
@@ -27,8 +27,7 @@ export default function WinRatios({appearances, players, wins}: Props)  {
                     })
                     .map((id, index) => (
                         <li key={id} className="flex justify-between border-b py-1">
-                            <span><span
-                                className="text-xl">{getTrophy(index)}</span> {getPlayerName(players, id)}</span>
+                            <CustomBadgeForPlayer id={id} players={players} index={index} />
                             <span className="text-sm text-gray-600 dark:text-white">{getWinRatio(id)}</span>
                         </li>
                     ))}
