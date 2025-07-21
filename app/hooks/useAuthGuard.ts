@@ -10,6 +10,7 @@ export function useAuthGuard() {
     const router = useRouter();
 
     useEffect(() => {
+        console.log("🔍 Fetching useAuth");
         const checkUser = async () => {
             const { data, error } = await supabase.auth.getUser();
             if (error || !data.user) {

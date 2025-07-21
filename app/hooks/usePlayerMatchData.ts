@@ -10,6 +10,7 @@ export function usePlayerMatchData() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        console.log("🔍 Fetching playerMatchdata");
         const fetchData = async () => {
             const {data: playersData} = await supabase.from('players').select('*');
             const {data: matchesData} = await supabase.from('matches').select('*');

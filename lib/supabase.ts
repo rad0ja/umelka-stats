@@ -5,10 +5,17 @@ import { createClient } from "@supabase/supabase-js";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+const options = {
+    db: {
+        schema: 'public',
+    },
+    auth: {
+        autoRefreshToken: true,
+        persistSession: true,
+        detectSessionInUrl: true
+    }
+}
 
-// console.log("Supabase URL in client:", supabaseUrl);
-// console.log("Supabaes anon key", supabaseAnonKey);
-
-export const supabase = createClient (supabaseUrl ?? '', supabaseAnonKey ?? '')
+export const supabase = createClient (supabaseUrl ?? '', supabaseAnonKey ?? '', options)
 
 console.log("supabase client initialized");

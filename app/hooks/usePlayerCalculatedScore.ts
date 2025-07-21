@@ -15,6 +15,7 @@ export function usePlayerCalculatedScore() {
     const [matchesPlayed, setMatchesPlayed] = useState(0);
 
     useEffect(() => {
+        console.log("🔍 Fetching usePlayer");
         const fetchPlayerData = async () => {
             const { data: playersData } = await supabase.from('players').select('*');
             const { data: matchesData } = await supabase.from('matches').select('*');
