@@ -1,4 +1,4 @@
-import { Player, Match } from "@/app/types";
+import { Player, Match, PlayerStat } from "@/app/types";
 
 export function getPlayerName(players: Player[], id: string): string {
     return players.find((p) => p.id === id)?.name || 'Unknown';
@@ -20,3 +20,16 @@ export const getLastMatch = (matches: Match[]): Match | null => {
 
 export const getSortedStats = (stats: Record<string, number>) => Object.entries(stats)
     .sort((a, b) => b[1] - a[1]);
+
+export function getStatRankSubtitle(
+    players: PlayerStat[],
+    targetPlayer: PlayerStat,
+    stat: 'goals' | 'wins' | 'matchesPlayed',
+): string {
+    const sorted = [...players].sort((a, b) => b[stat] - a[stat]);
+    const rank = sorted.findIndex(p => p.name === targetPlayer.name) + 1;
+
+    if (rank === 1) return 'GOAT';
+    if (rank > 1 && rank <= 5) return 'GOOD';
+    return 'ZABER';
+}

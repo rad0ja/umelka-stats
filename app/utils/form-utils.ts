@@ -2,7 +2,7 @@
 
 import { Match } from "@/app/types";
 
-export function getRecentForm(matches: Match[], players: string[], maxGames = 5): Record<string, string[]> {
+export function getRecentForm(matches: Match[], players: string[], maxGames: number): Record<string, string[]> {
     const formMap: Record<string, string[]> = {};
 
     // Sort by most recent
