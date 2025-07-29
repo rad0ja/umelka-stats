@@ -3,7 +3,7 @@
 interface StatsCardProps {
     value: number | string;
     title: string;
-    subtitle: string;
+    subtitle?: string;
     emoji?: string;
     maxValue?: string | number;
 }
