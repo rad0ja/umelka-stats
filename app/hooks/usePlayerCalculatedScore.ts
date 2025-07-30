@@ -9,10 +9,10 @@ export function usePlayerCalculatedScore() {
     const { id } = useParams();
     const playerId = id as string;
 
-    const [player, setPlayer] = useState<Player | null>(null);
-    const [goals, setGoals] = useState(0);
-    const [wins, setWins] = useState(0);
-    const [matchesPlayed, setMatchesPlayed] = useState(0);
+    const [playerCalc, setPlayer] = useState<Player | null>(null);
+    const [goalsCalc, setGoals] = useState(0);
+    const [winsCalc, setWins] = useState(0);
+    const [matchesPlayedCalc, setMatchesPlayed] = useState(0);
 
     useEffect(() => {
         console.log("🔍 Fetching usePlayer");
@@ -53,5 +53,5 @@ export function usePlayerCalculatedScore() {
         fetchPlayerData();
     }, [playerId]);
 
-    return { player, goals, matchesPlayed, wins }
+    return { playerCalc, goalsCalc, matchesPlayedCalc, winsCalc }
 }

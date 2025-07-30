@@ -7,20 +7,20 @@ import { usePlayerCalculatedScore } from "@/app/hooks/usePlayerCalculatedScore";
 import { usePlayerMatchData } from "@/app/hooks/usePlayerMatchData"; // if used
 
 export default function PlayerDetailPage() {
-    const { player, goals, matchesPlayed, wins } = usePlayerCalculatedScore();
+    const { playerCalc, goalsCalc, matchesPlayedCalc, winsCalc } = usePlayerCalculatedScore();
     const { matches } = usePlayerMatchData();
 
-    const MVPScore = goals * 2 + wins * 1.5 + matchesPlayed;
+    const MVPScore = goalsCalc * 2 + winsCalc * 1.5 + matchesPlayedCalc;
 
-    if (!player) return <div className="p-6 text-center">Loading...</div>;
+    if (!playerCalc) return <div className="p-6 text-center">Loading...</div>;
 
     return (
         <div className="max-w-2xl mx-auto p-6">
                 <PlayerCard
-                    name={player.name}
-                    goals={goals}
-                    wins={wins}
-                    matchesPlayed={matchesPlayed}
+                    name={playerCalc.name}
+                    goals={goalsCalc}
+                    wins={winsCalc}
+                    matchesPlayed={matchesPlayedCalc}
                     totalMatches={matches.length}
                     score={MVPScore}
                     trophy={getTrophy(0)} // optional
