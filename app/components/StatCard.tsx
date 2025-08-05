@@ -11,7 +11,7 @@ interface StatsCardProps {
 export default function StatCard({ value, title, subtitle, emoji, maxValue }: StatsCardProps) {
     return (
         <div
-            className="flex justify-center items-center p-6 text-center bg-gray-200 rounded xl:p-12 dark:bg-gray-800">
+            className="flex justify-center items-center p-6 text-center bg-gray-200 rounded-lg xl:p-12 dark:bg-gray-800">
             <div className="text-gray-900 dark:text-white">
                 <p className="mb-2 text-4xl font-extrabold md:text-5xl">
                     {maxValue !== undefined ? `${value} of ${maxValue}` : value}
