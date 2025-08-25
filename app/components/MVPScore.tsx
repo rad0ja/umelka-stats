@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react';
 import { getAllMVPs } from '@/app/utils/getAllMVPs';
 import { supabase } from '@/lib/supabase';
-import {getTrophy} from "@/app/utils/playerHelpers";
+import { getTrophy } from "@/app/utils/playerHelpers";
+import MVPDialog from "@/app/components/MVPDialog";
 
 type MVPPlayer = {
     id: string;
@@ -34,7 +35,9 @@ export default function MVPScore() {
 
     return (
         <div>
-            <h2 className="text-xl font-semibold mb-2">🐐 MVP (aka THE GOAT)</h2>
+            <h2 className="text-xl font-semibold mb-2 flex items-center gap-2">🐐 MVP (aka THE GOAT)
+                <MVPDialog />
+            </h2>
 
             <ul className="space-y-1">
                 {mvps.map((player, index) => (

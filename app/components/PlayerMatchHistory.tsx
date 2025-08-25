@@ -1,7 +1,9 @@
 import { PlayerMatchDetail } from "@/app/types";
-import {LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend, ComposedChart, Bar} from 'recharts';
-import {playerStreaks} from "@/app/utils/playerStreaks";
+import { Line, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend, ComposedChart, Bar} from 'recharts';
+import { playerStreaks } from "@/app/utils/playerStreaks";
 import StatCard from "@/app/components/StatCard";
+import { useState } from "react";
+import { MatchAccordion } from "@/app/components/MatchAccordion";
 
 type MatchHistory = {
     [playerId: string]: {
@@ -16,10 +18,16 @@ type Props = {
 }
 
 export default function PlayerMatchHistory({ playerId, history, allMVPs = [] }: Props) {
+    const [openMatchId, setOpenMatchId] = useState<string | null>(null);
+    const [collapsedChart, setCollapsedChart] = useState(true);
+
+    const toggleMatch = (matchId: string) => {
+        setOpenMatchId((prev) => (prev === matchId ? null : matchId));
+    };
+
     const playerMatches = history[playerId]?.matches || [];
     const sortedPlayerMatches = [...playerMatches].sort((a,b) => new Date(b.date).getTime() - new Date(a.date).getTime());
     const streaks = playerStreaks(sortedPlayerMatches);
-    console.log(streaks)
 
     let cumulative = 0;
     const chartData = playerMatches.map(match => {
@@ -48,25 +56,51 @@ export default function PlayerMatchHistory({ playerId, history, allMVPs = [] }: 
             ) : (
                 <>
                     <div className="mb-8 pt-6">
-                        <h3 className="text-lg font-semibold mb-2">📈 Goals Over Time</h3>
-                        <ResponsiveContainer width="100%" height={250}>
-                            <ComposedChart
-                                width={500}
-                                height={400}
-                                data={chartData}
-                                margin={{
-                                    top: 20,
-                                    bottom: 20,
-                                }}>
-                                <XAxis dataKey="date" tick={{fontSize: 12}}/>
-                                <YAxis/>
-                                <Tooltip/>
-                                <Legend/>
-                                <Bar dataKey="goals" barSize={10} fill="#413ea0" name="Goals"/>
-                                <Line type="monotone" dataKey="cumulativeGoals" stroke="#10b981" strokeWidth={2}
-                                      name="Cumulative Goals"/>
-                            </ComposedChart>
-                        </ResponsiveContainer>
+                        <div className="flex items-center justify-between mb-2">
+                            <h3 className="text-lg font-semibold">📈 Goals Over Time</h3>
+                            <button
+                                onClick={() => setCollapsedChart(!collapsedChart)}
+                                className="text-sm px-3 py-1 rounded-lg bg-gray-200 hover:bg-gray-300 dark:bg-gray-800"
+                            >
+                                {collapsedChart ? "Expand" : "Collapse"}
+                            </button>
+                        </div>
+
+                        <div
+                            className={`overflow-hidden transition-all duration-500 ${
+                                collapsedChart ? "max-h-0 opacity-0" : "max-h-[400px] opacity-100"
+                            }`}
+                        >
+                            <ResponsiveContainer width="100%" height={250}>
+                                <ComposedChart
+                                    width={500}
+                                    height={400}
+                                    data={chartData}
+                                    margin={{
+                                        top: 20,
+                                        bottom: 20,
+                                    }}
+                                >
+                                    <XAxis dataKey="date" tick={{fontSize: 12}}/>
+                                    <YAxis/>
+                                    <Tooltip/>
+                                    <Legend/>
+                                    <Bar
+                                        dataKey="goals"
+                                        barSize={10}
+                                        fill="#413ea0"
+                                        name="Goals"
+                                    />
+                                    <Line
+                                        type="monotone"
+                                        dataKey="cumulativeGoals"
+                                        stroke="#10b981"
+                                        strokeWidth={2}
+                                        name="Cumulative Goals"
+                                    />
+                                </ComposedChart>
+                            </ResponsiveContainer>
+                        </div>
                     </div>
 
                     <div className="mb-6">
@@ -91,35 +125,7 @@ export default function PlayerMatchHistory({ playerId, history, allMVPs = [] }: 
                     </div>
 
                     <h3 className="text-lg font-bold mb-2">📜 Match History</h3>
-                    <ul className="space-y-4">
-                        {sortedPlayerMatches
-                            .map((match) => (
-                                <li
-                                    key={match.match_id}
-                                    className="border-b border-gray-300 rounded-lg p-4 shadow-sm bg-white dark:bg-gray-800"
-                                >
-                                    <div className="flex justify-between items-center mb-2">
-                                        <span className="text-sm text-gray-500">{match.date}</span>
-                                        <span className="font-medium">Score: {match.score}</span>
-                                        <span
-                                            className={`text-xs font-bold px-2 py-1 rounded ${
-                                                match.team_result === 'Win' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
-                                            }`}
-                                        >
-            {match.team_result}
-          </span>
-
-                                        <span className="font-medium">⚽️ {match.goals_scored}</span>
-                                    </div>
-
-                                    <div className="flex justify-between text-sm">
-                                        <div className="text-gray-700 dark:text-gray-300">
-
-                                        </div>
-                                    </div>
-                                </li>
-                            ))}
-                    </ul>
+                    <MatchAccordion matches={sortedPlayerMatches} playerId={playerId}/>
                 </>
 
             )}

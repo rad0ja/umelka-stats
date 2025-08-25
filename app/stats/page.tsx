@@ -6,9 +6,8 @@ import TopScorers from "@/app/components/TopScorers";
 import MostWins from "@/app/components/MostWins";
 import MatchesPlayed from "@/app/components/MatchesPlayed";
 import WinRatios from "@/app/components/WinRatios";
-import RecentForm from "@/app/components/RecentForm";
 import GoalsPerGame from "@/app/components/GoalsPerGame";
-import PlayerMVPScore from "@/app/components/MVPScore";
+
 import MVPScore from "@/app/components/MVPScore";
 
 export default function StatsFull() {

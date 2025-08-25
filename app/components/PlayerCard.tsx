@@ -9,7 +9,7 @@ type Props = {
     matchesPlayed: number;
     trophy?: string;
     totalMatches: number;
-    score: number
+    score: number | string;
 };
 
 export default function PlayerCard({ name, goals, wins, matchesPlayed, totalMatches, score }: Props) {

@@ -7,16 +7,15 @@ import { usePlayerCalculatedScore } from "@/app/hooks/usePlayerCalculatedScore";
 import { usePlayerMatchData } from "@/app/hooks/usePlayerMatchData";
 import PlayerMatchHistory from "@/app/components/PlayerMatchHistory";
 import { playerMatchHistory } from "@/app/utils/playerMatchHistory";
-import {getAllMVPs} from "@/app/utils/getAllMVPs";
+import { getAllMVPs } from "@/app/utils/getAllMVPs";
 
 export default function PlayerDetailPage() {
     const { playerCalc, goalsCalc, matchesPlayedCalc, winsCalc } = usePlayerCalculatedScore();
     const { matches , players} = usePlayerMatchData();
     const allData = playerMatchHistory(matches);
     const allMvps = getAllMVPs(players, matches)
-    console.log(allData)
 
-    const MVPScore = goalsCalc * 2 + winsCalc * 1.5 + matchesPlayedCalc;
+    const MVPScore = (((2 * goalsCalc / matchesPlayedCalc) + (1.5 * winsCalc / matchesPlayedCalc) + (matchesPlayedCalc)) * 10).toFixed(1);
 
     if (!playerCalc) return <div className="p-6 text-center">Loading...</div>;
 
@@ -31,6 +30,7 @@ export default function PlayerDetailPage() {
                     score={MVPScore}
                     trophy={getTrophy(0)} // optional
                 />
+                {/*<GoalProgress />*/}
                 <PlayerMatchHistory playerId={playerCalc.id} history={allData} allMVPs={allMvps}/>
         </div>
     );

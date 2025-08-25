@@ -15,6 +15,7 @@ export function getAllMVPs(players: Player[], matches: Match[]) {
         let goals = 0;
         let wins = 0;
         let matchesPlayed = 0;
+        let maxMatches = matches.length;
 
         matches.forEach((match) => {
             const inTeamA = match.team_a.includes(player.id);
@@ -34,7 +35,7 @@ export function getAllMVPs(players: Player[], matches: Match[]) {
             goals += match.goals?.[player.id] || 0;
         });
 
-        const mvpScore = goals * 2 + wins * 1.5 + matchesPlayed;
+        const mvpScore = ((2 * goals / matchesPlayed) + (1.5 * wins / matchesPlayed) + (matchesPlayed)) * 10;
 
         return {
             id: player.id,
