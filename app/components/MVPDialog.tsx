@@ -11,7 +11,7 @@ export default function MVPDialog() {
         <div>
             <button
                 onClick={() => setOpen(true)}
-                className="text-xl text-gray-900 dark:bg-white/10 dark:text-white dark:inset-ring dark:inset-ring-white/5 dark:hover:bg-white/20"
+                className="text-xl"
             > ℹ️
             </button>
             <Dialog open={open} onClose={setOpen} className="relative z-10">

@@ -118,8 +118,8 @@ export function MatchAccordion({ matches, playerId }: { matches: PlayerMatchDeta
                                             className={`p-2 rounded mb-2 ${
                                                 teamInfo?.teamAIds.includes(playerId)
                                                     ? playerWon
-                                                        ? "bg-green-100 dark:bg-green-800"
-                                                        : "bg-red-100 dark:bg-red-800"
+                                                        ? "bg-green-100 dark:bg-green-500/60"
+                                                        : "bg-red-100 dark:bg-red-500/60"
                                                     : ""
                                             }`}
                                         >
@@ -130,7 +130,7 @@ export function MatchAccordion({ matches, playerId }: { matches: PlayerMatchDeta
                                                         key={name}
                                                         className={
                                                             teamInfo?.teamAIds[idx] === playerId
-                                                                ? "font-bold text-blue-600"
+                                                                ? "font-bold text-blue-600 dark:text-gray-900"
                                                                 : ""
                                                         }
                                                     >
@@ -145,8 +145,8 @@ export function MatchAccordion({ matches, playerId }: { matches: PlayerMatchDeta
                                             className={`p-2 rounded ${
                                                 teamInfo?.teamBIds.includes(playerId)
                                                     ? playerWon
-                                                        ? "bg-green-100 dark:bg-green-800"
-                                                        : "bg-red-100 dark:bg-red-800"
+                                                        ? "bg-green-100 dark:bg-green-500/60"
+                                                        : "bg-red-100 dark:bg-red-500/60"
                                                     : ""
                                             }`}
                                         >
@@ -157,7 +157,7 @@ export function MatchAccordion({ matches, playerId }: { matches: PlayerMatchDeta
                                                         key={name}
                                                         className={
                                                             teamInfo?.teamBIds[idx] === playerId
-                                                                ? "font-bold text-blue-600"
+                                                                ? "font-bold text-blue-600 dark:text-gray-900"
                                                                 : ""
                                                         }
                                                     >
