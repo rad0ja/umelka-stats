@@ -13,6 +13,7 @@ export function usePlayerCalculatedScore() {
     const [goalsCalc, setGoals] = useState(0);
     const [winsCalc, setWins] = useState(0);
     const [matchesPlayedCalc, setMatchesPlayed] = useState(0);
+    const [goalTarget, setGoalTarget] = useState(30);
 
     useEffect(() => {
         console.log("🔍 Fetching usePlayer");
@@ -48,10 +49,23 @@ export function usePlayerCalculatedScore() {
             setGoals(g);
             setWins(w);
             setMatchesPlayed(mp);
+
+            // pull goalTarget from DB
+            if (foundPlayer.goal_target) {
+                setGoalTarget(foundPlayer.goal_target);
+            }
         };
 
         fetchPlayerData();
     }, [playerId]);
 
-    return { playerCalc, goalsCalc, matchesPlayedCalc, winsCalc }
+    const updateGoalTarget = async (newTarget: number) => {
+        setGoalTarget(newTarget);
+        await supabase
+            .from('players')
+            .update({ goalTarget: newTarget })
+            .eq('id', playerId);
+    };
+
+    return { playerCalc, goalsCalc, matchesPlayedCalc, winsCalc, goalTarget, updateGoalTarget }
 }
