@@ -88,9 +88,9 @@ export function MatchAccordion({ matches, playerId }: { matches: PlayerMatchDeta
                             <div className="flex items-center gap-3">
                 <span
                     className={`text-xs font-bold px-2 py-1 rounded ${
-                        match.team_result === "Win"
-                            ? "bg-green-500 text-white"
-                            : "bg-red-500 text-white"
+                        match.team_result === "Win" ? "bg-green-500 text-white"
+                            : match.team_result === "Loss" ? "bg-red-500 text-white"
+                            : "bg-orange-500 text-white"
                     }`}
                 >
                   {match.team_result}

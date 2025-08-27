@@ -7,6 +7,7 @@ import MatchSummary from "@/app/components/MatchSummary";
 import TopScorers from "@/app/components/TopScorers";
 import Link from "next/link";
 import MostWins from "@/app/components/MostWins";
+import FeedbackForm from "@/app/components/FeedbackForm";
 
 export default function Dashboard() {
     const { players, matches, loading } = usePlayerMatchData();
@@ -47,7 +48,7 @@ export default function Dashboard() {
                     📋 View Complete Stats
                 </Link>
             </div>
-
+            <FeedbackForm />
         </div>
     );
 }
