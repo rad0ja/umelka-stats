@@ -66,6 +66,8 @@ export function MatchAccordion({ matches, playerId }: { matches: PlayerMatchDeta
                 const playerInA = teamInfo?.teamAIds?.includes(playerId);
                 const playerInB = teamInfo?.teamBIds?.includes(playerId);
 
+                const isDraw = match.team_result === "Draw";
+
                 // Determine if this player's team won/lost
                 const playerWon =
                     (playerInA && match.team_result === "Win") ||
@@ -116,11 +118,13 @@ export function MatchAccordion({ matches, playerId }: { matches: PlayerMatchDeta
                                         {/* Team A */}
                                         <div
                                             className={`p-2 rounded mb-2 ${
-                                                teamInfo?.teamAIds.includes(playerId)
-                                                    ? playerWon
-                                                        ? "bg-green-100 dark:bg-green-500/60"
-                                                        : "bg-red-100 dark:bg-red-500/60"
-                                                    : ""
+                                                isDraw
+                                                    ? "bg-orange-100 dark:bg-orange-500/60" // draw
+                                                    : teamInfo?.teamAIds.includes(playerId)
+                                                        ? playerWon
+                                                            ? "bg-green-100 dark:bg-green-500/60" // win
+                                                            : "bg-red-100 dark:bg-red-500/60"   // loss
+                                                        : ""
                                             }`}
                                         >
                                             <p className="mb-1 font-semibold">👥 Team A:</p>
@@ -142,12 +146,14 @@ export function MatchAccordion({ matches, playerId }: { matches: PlayerMatchDeta
 
                                         {/* Team B */}
                                         <div
-                                            className={`p-2 rounded ${
-                                                teamInfo?.teamBIds.includes(playerId)
-                                                    ? playerWon
-                                                        ? "bg-green-100 dark:bg-green-500/60"
-                                                        : "bg-red-100 dark:bg-red-500/60"
-                                                    : ""
+                                            className={`p-2 rounded mb-2 ${
+                                                isDraw
+                                                    ? "bg-orange-100 dark:bg-orange-500/60" // draw
+                                                    : teamInfo?.teamBIds.includes(playerId)
+                                                        ? playerWon
+                                                            ? "bg-green-100 dark:bg-green-500/60" // win
+                                                            : "bg-red-100 dark:bg-red-500/60"   // loss
+                                                        : ""
                                             }`}
                                         >
                                             <p className="mb-1 font-semibold">👥 Team B:</p>
