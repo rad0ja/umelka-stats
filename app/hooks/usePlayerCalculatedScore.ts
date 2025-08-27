@@ -13,6 +13,7 @@ export function usePlayerCalculatedScore() {
     const [goalsCalc, setGoals] = useState(0);
     const [winsCalc, setWins] = useState(0);
     const [matchesPlayedCalc, setMatchesPlayed] = useState(0);
+    const [drawsCalc, setDraws] = useState(0);
     const [goalTarget, setGoalTarget] = useState(30);
 
     useEffect(() => {
@@ -28,7 +29,7 @@ export function usePlayerCalculatedScore() {
 
             setPlayer(foundPlayer);
 
-            let g = 0, w = 0, mp = 0;
+            let g = 0, w = 0, mp = 0, d = 0;
 
             matchesData.forEach(match => {
                 const inTeamA = match.team_a.includes(playerId);
@@ -44,11 +45,14 @@ export function usePlayerCalculatedScore() {
                     (inTeamB && match.score_b > match.score_a);
 
                 if (won) w += 1;
+
+                if (match.score_a == match.score_b) d += 1;
             });
 
             setGoals(g);
             setWins(w);
             setMatchesPlayed(mp);
+            setDraws(d);
 
             // pull goalTarget from DB
             if (foundPlayer.goal_target) {
@@ -67,5 +71,5 @@ export function usePlayerCalculatedScore() {
             .eq('id', playerId);
     };
 
-    return { playerCalc, goalsCalc, matchesPlayedCalc, winsCalc, goalTarget, updateGoalTarget }
+    return { playerCalc, goalsCalc, matchesPlayedCalc, winsCalc, goalTarget, drawsCalc,  updateGoalTarget }
 }

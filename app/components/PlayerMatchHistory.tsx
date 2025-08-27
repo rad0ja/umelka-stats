@@ -18,12 +18,7 @@ type Props = {
 }
 
 export default function PlayerMatchHistory({ playerId, history, allMVPs = [] }: Props) {
-    const [openMatchId, setOpenMatchId] = useState<string | null>(null);
     const [collapsedChart, setCollapsedChart] = useState(true);
-
-    const toggleMatch = (matchId: string) => {
-        setOpenMatchId((prev) => (prev === matchId ? null : matchId));
-    };
 
     const playerMatches = history[playerId]?.matches || [];
     const sortedPlayerMatches = [...playerMatches].sort((a,b) => new Date(b.date).getTime() - new Date(a.date).getTime());
@@ -47,8 +42,8 @@ export default function PlayerMatchHistory({ playerId, history, allMVPs = [] }: 
             <div className="grid grid-cols-2 gap-4">
                 <StatCard title="🏆 Longest Win Streak" value={streaks.longestWinningStreak}/>
                 <StatCard title="💀 Longest Loss Streak" value={streaks.longestLosingStreak}/>
-                <StatCard title="🔥 Scoring Streak" value={streaks.longestScoringStreak}/>
-                <StatCard title="🥶 No-Goal Streak" value={streaks.longestNonScoringStreak}/>
+                <StatCard title="🔥 Longest Scoring Streak" value={streaks.longestScoringStreak}/>
+                <StatCard title="🥶 Longest No-Scoring Streak" value={streaks.longestNonScoringStreak}/>
             </div>
 
             {playerMatches.length === 0 ? (

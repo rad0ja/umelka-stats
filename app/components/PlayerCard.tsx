@@ -10,9 +10,10 @@ type Props = {
     trophy?: string;
     totalMatches: number;
     score: number | string;
+    draws: number;
 };
 
-export default function PlayerCard({ name, goals, wins, matchesPlayed, totalMatches, score }: Props) {
+export default function PlayerCard({ name, goals, wins, matchesPlayed, totalMatches, score, draws }: Props) {
     const winRatio = matchesPlayed === 0 ? '0%' : `${((wins / matchesPlayed) * 100).toFixed(1)}%`;
 
     return (
@@ -46,7 +47,14 @@ export default function PlayerCard({ name, goals, wins, matchesPlayed, totalMatc
                 />
 
                 <StatCard
-                    value={matchesPlayed - wins}
+                    value={draws}
+                    title="Games drawn"
+                    /*subtitle="Ujde to"*/
+                    emoji="🤝"
+                />
+
+                <StatCard
+                    value={matchesPlayed - wins - draws}
                     title="Games lost"
                     /*subtitle="Ujde to"*/
                     emoji="💩"

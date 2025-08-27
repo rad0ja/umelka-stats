@@ -7,6 +7,7 @@ import MatchSummary from "@/app/components/MatchSummary";
 import TopScorers from "@/app/components/TopScorers";
 import Link from "next/link";
 import MostWins from "@/app/components/MostWins";
+import FeedbackForm from "@/app/components/FeedbackForm";
 
 export default function Dashboard() {
     const { players, matches, loading } = usePlayerMatchData();
@@ -17,7 +18,6 @@ export default function Dashboard() {
 
     return (
         <div className="max-w-4xl mx-auto p-6">
-            <h1 className="text-2m font-bold mb-6 text-center">❗❗❗ Chyba s nesprávným zobrazováním remízového stavu je předána na vývojářský tým, který na ni usilovně pracuje</h1>
             <h1 className="text-2xl font-bold mb-6 text-center">🏟️ Ultimate Dashboard - Umelka 2025</h1>
             {lastMatch && <MatchSummary match={lastMatch} players={players}/>}
 
@@ -48,7 +48,7 @@ export default function Dashboard() {
                     📋 View Complete Stats
                 </Link>
             </div>
-
+            <FeedbackForm />
         </div>
     );
 }

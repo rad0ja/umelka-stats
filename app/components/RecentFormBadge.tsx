@@ -8,7 +8,11 @@ export default function RecentFormBadge({ form }: { form: string[] }) {
                 <span
                     key={idx}
                     className={`text-xs font-bold px-2 py-1 rounded ${
-                        result === 'W' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+                        result === "W"
+                            ? "bg-green-500 text-white"
+                            : result === "L"
+                                ? "bg-red-500 text-white"
+                                : "bg-orange-400 text-white" // Draw
                     }`}
                 >
                     {result}
