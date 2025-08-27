@@ -47,8 +47,8 @@ export default function PlayerMatchHistory({ playerId, history, allMVPs = [] }: 
             <div className="grid grid-cols-2 gap-4">
                 <StatCard title="🏆 Longest Win Streak" value={streaks.longestWinningStreak}/>
                 <StatCard title="💀 Longest Loss Streak" value={streaks.longestLosingStreak}/>
-                <StatCard title="🔥 Scoring Streak" value={streaks.longestScoringStreak}/>
-                <StatCard title="🥶 No-Goal Streak" value={streaks.longestNonScoringStreak}/>
+                <StatCard title="🔥 Longest Scoring Streak" value={streaks.longestScoringStreak}/>
+                <StatCard title="🥶 Longest No-Scoring Streak" value={streaks.longestNonScoringStreak}/>
             </div>
 
             {playerMatches.length === 0 ? (

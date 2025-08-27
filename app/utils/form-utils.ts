@@ -19,11 +19,15 @@ export function getRecentForm(matches: Match[], players: string[], maxGames: num
 
             if (!inTeamA && !inTeamB) continue;
 
+            const isDraw = match.score_a == match.score_b;
+
             const didWin =
                 (inTeamA && match.score_a > match.score_b) ||
                 (inTeamB && match.score_b > match.score_a);
 
-            form.push(didWin ? 'W' : "L");
+            form.push(isDraw ? 'D'
+                        : didWin ? 'W'
+                        : 'L');
         }
 
         formMap[playerId] = form;

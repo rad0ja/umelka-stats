@@ -10,7 +10,7 @@ import { playerMatchHistory } from "@/app/utils/playerMatchHistory";
 import { getAllMVPs } from "@/app/utils/getAllMVPs";
 
 export default function PlayerDetailPage() {
-    const { playerCalc, goalsCalc, matchesPlayedCalc, winsCalc } = usePlayerCalculatedScore();
+    const { playerCalc, goalsCalc, matchesPlayedCalc, winsCalc, drawsCalc } = usePlayerCalculatedScore();
     const { matches , players} = usePlayerMatchData();
     const allData = playerMatchHistory(matches);
     const allMvps = getAllMVPs(players, matches)
@@ -25,6 +25,7 @@ export default function PlayerDetailPage() {
                     name={playerCalc.name}
                     goals={goalsCalc}
                     wins={winsCalc}
+                    draws={drawsCalc}
                     matchesPlayed={matchesPlayedCalc}
                     totalMatches={matches.length}
                     score={MVPScore}
