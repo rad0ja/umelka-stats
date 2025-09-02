@@ -8,6 +8,7 @@ import { usePlayerMatchData } from "@/app/hooks/usePlayerMatchData";
 import PlayerMatchHistory from "@/app/components/PlayerMatchHistory";
 import { playerMatchHistory } from "@/app/utils/playerMatchHistory";
 import { getAllMVPs } from "@/app/utils/getAllMVPs";
+import Karta from "@/app/components/Karta";
 
 export default function PlayerDetailPage() {
     const { playerCalc, goalsCalc, matchesPlayedCalc, winsCalc, drawsCalc } = usePlayerCalculatedScore();
@@ -21,7 +22,8 @@ export default function PlayerDetailPage() {
 
     return (
         <div className="max-w-2xl mx-auto p-6">
-                <PlayerCard
+            <Karta />
+            <PlayerCard
                     name={playerCalc.name}
                     goals={goalsCalc}
                     wins={winsCalc}
