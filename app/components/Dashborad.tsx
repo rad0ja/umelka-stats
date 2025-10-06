@@ -8,6 +8,7 @@ import TopScorers from "@/app/components/TopScorers";
 import Link from "next/link";
 import MostWins from "@/app/components/MostWins";
 import FeedbackForm from "@/app/components/FeedbackForm";
+import SeasonPicker from "@/app/components/SeasonPicker";
 
 export default function Dashboard() {
     const { players, matches, loading } = usePlayerMatchData();
@@ -19,6 +20,7 @@ export default function Dashboard() {
     return (
         <div className="max-w-4xl mx-auto p-6">
             <h1 className="text-2xl font-bold mb-6 text-center">🏟️ Ultimate Dashboard - Umelka 2025</h1>
+            <SeasonPicker />
             {lastMatch && <MatchSummary match={lastMatch} players={players}/>}
 
             <div className="text-center mb-6">
@@ -48,7 +50,7 @@ export default function Dashboard() {
                     📋 View Complete Stats
                 </Link>
             </div>
-            <FeedbackForm />
+            {/*<FeedbackForm />*/}
         </div>
     );
 }
