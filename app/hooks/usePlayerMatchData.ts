@@ -1,28 +1,35 @@
+// hooks/usePlayerMatchData.ts
 'use client';
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { Match, Player} from "@/app/types";
+import { useSeason } from "@/app/context/SeasonContext";
 
 export function usePlayerMatchData() {
-    const [players, setPlayers] = useState<Player[]>([]);
-    const [matches, setMatches] = useState<Match[]>([]);
+    const { seasonId } = useSeason();
+    const [players, setPlayers] = useState<any[]>([]);
+    const [matches, setMatches] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        console.log("🔍 Fetching playerMatchdata");
-        const fetchData = async () => {
-            const {data: playersData} = await supabase.from('players').select('*');
-            const {data: matchesData} = await supabase.from('matches').select('*');
+        if (!seasonId) return; // wait until a season is chosen
 
-            if (playersData) setPlayers(playersData);
-            if (matchesData) setMatches(matchesData as Match[]);
+        const fetchData = async () => {
+            setLoading(true);
+
+            const { data: playersData } = await supabase.from("players").select("*");
+            const { data: matchesData } = await supabase
+                .from("matches")
+                .select("*")
+                .eq("season_id", seasonId); // 👈 scope to season
+
+            setPlayers(playersData || []);
+            setMatches(matchesData || []);
             setLoading(false);
         };
 
         fetchData();
-    }, []);
+    }, [seasonId]); // 👈 re-run whenever season changes
 
-    return { players, matches, loading}
+    return { players, matches, loading };
 }
-

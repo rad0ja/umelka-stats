@@ -4,10 +4,12 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Player } from "@/app/types";
 import { supabase } from "@/lib/supabase";
+import {useSeason} from "@/app/context/SeasonContext";
 
 export function usePlayerCalculatedScore() {
     const { id } = useParams();
     const playerId = id as string;
+    const { seasonId } = useSeason();
 
     const [playerCalc, setPlayer] = useState<Player | null>(null);
     const [goalsCalc, setGoals] = useState(0);
@@ -20,14 +22,21 @@ export function usePlayerCalculatedScore() {
         console.log("🔍 Fetching usePlayer");
         const fetchPlayerData = async () => {
             const { data: playersData } = await supabase.from('players').select('*');
-            const { data: matchesData } = await supabase.from('matches').select('*');
+            const { data: matchesData } = await supabase
+                .from("matches")
+                .select("*")
+                .eq("season_id", seasonId); // 👈 scope to season
 
-            if (!playersData || !matchesData) return;
+            if (!playersData) return;
+
+            if (!seasonId) return;
 
             const foundPlayer = playersData.find(p => p.id === playerId);
             if (!foundPlayer) return;
 
             setPlayer(foundPlayer);
+
+            if (!matchesData) return;
 
             let g = 0, w = 0, mp = 0, d = 0;
 
@@ -61,7 +70,7 @@ export function usePlayerCalculatedScore() {
         };
 
         fetchPlayerData();
-    }, [playerId]);
+    }, [playerId, seasonId]);
 
     const updateGoalTarget = async (newTarget: number) => {
         setGoalTarget(newTarget);
@@ -71,5 +80,5 @@ export function usePlayerCalculatedScore() {
             .eq('id', playerId);
     };
 
-    return { playerCalc, goalsCalc, matchesPlayedCalc, winsCalc, goalTarget, drawsCalc,  updateGoalTarget }
+    return { playerCalc, goalsCalc, matchesPlayedCalc, winsCalc, goalTarget, drawsCalc, updateGoalTarget }
 }

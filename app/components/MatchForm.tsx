@@ -16,6 +16,7 @@ export default function MatchForm() {
     const [scoreB, setScoreB] = useState<number>(0);
     const [goals, setGoals] = useState<Record<string, number>>({});
     const [loading, setLoading] = useState(false);
+    const [season, setSeason] = useState<number>(2)
 
     // Get most recent Tuesday
     const getLastTuesday = () => {
@@ -54,6 +55,7 @@ export default function MatchForm() {
                 score_a: scoreA,
                 score_b: scoreB,
                 goals,
+                season_id: season,
             },
         ]);
 
@@ -69,6 +71,7 @@ export default function MatchForm() {
             setScoreA(0);
             setScoreB(0);
             setGoals({});
+            setSeason(2);
         }
     };
 
@@ -134,6 +137,15 @@ export default function MatchForm() {
                         />
                     </div>
                 </div>
+
+                <label className="block font-semibold mb-2">Season:</label>
+                <select
+                    className="border p-2 rounded w-24"
+                    value={season}
+                    onChange={(e) => setSeason(Number(e.target.value))}
+                >
+                    <option>Salovka</option>
+                </select>
 
                 <div>
                     <label className="block font-semibold mb-2">Goals per Player</label>
