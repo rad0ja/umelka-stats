@@ -26,7 +26,7 @@ export default function MatchesPage() {
                                 <div key={i}>
                                     <h3 className="font-semibold mb-2">{i === 0 ? 'Team A' : 'Team B'}</h3>
                                     <ul className="text-sm space-y-1">
-                                        {team.map((id) => (
+                                        {team.map((id: string) => (
                                             <li key={id} className="flex justify-between border-b py-1">
                                                 <Link
                                                     href={`players/${id}`}
