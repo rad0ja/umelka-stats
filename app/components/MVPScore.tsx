@@ -5,6 +5,7 @@ import { getAllMVPs } from '@/app/utils/getAllMVPs';
 import { supabase } from '@/lib/supabase';
 import { getTrophy } from "@/app/utils/playerHelpers";
 import MVPDialog from "@/app/components/MVPDialog";
+import {useSeason} from "@/app/context/SeasonContext";
 
 type MVPPlayer = {
     id: string;
@@ -14,11 +15,12 @@ type MVPPlayer = {
 
 export default function MVPScore() {
     const [mvps, setMvps] = useState<MVPPlayer[]>([]);
+    const { seasonId } = useSeason();
 
     useEffect(() => {
         const fetchAndCompute = async () => {
             const { data: playersData, error: playerErr } = await supabase.from('players').select('*');
-            const { data: matchesData, error: matchErr } = await supabase.from('matches').select('*');
+            const { data: matchesData, error: matchErr } = await supabase.from('matches').select('*').eq("season_id", seasonId);
 
             if (playerErr || matchErr || !playersData || !matchesData) {
                 console.error('Error loading data', { playerErr, matchErr });
