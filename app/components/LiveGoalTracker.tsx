@@ -1,4 +1,4 @@
-'use client';
+
 import { useState } from 'react';
 import { Player } from "@/app/types";
 
@@ -19,7 +19,7 @@ export default function LiveGoalTracker({ teamA, teamB, onFinish }: { teamA: Pla
             <h2 className="font-bold text-xl mb-2">🎯 Live Goal Tracker</h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {[{ label: 'Team A', team: teamA }, { label: 'Team B', team: teamB }].map(({ label, team }) => (
+                {[{ label: 'Team Barevni', team: teamA }, { label: 'Team Zeleni', team: teamB }].map(({ label, team }) => (
                     <div key={label}>
                         <h3 className="font-semibold mb-2">{label}</h3>
                         {team.map((p: Player) => (

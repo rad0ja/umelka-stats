@@ -6,6 +6,7 @@ import { supabase } from '@/lib/supabase';
 import { getTrophy } from "@/app/utils/playerHelpers";
 import MVPDialog from "@/app/components/MVPDialog";
 import {useSeason} from "@/app/context/SeasonContext";
+import CustomBadgeForPlayer from "@/app/components/CustomBadgeForPlayer";
 
 type MVPPlayer = {
     id: string;
@@ -29,11 +30,12 @@ export default function MVPScore() {
 
             const allMVPs = getAllMVPs(playersData, matchesData);
             const sorted = allMVPs.sort((a, b) => b.mvpScore - a.mvpScore);
-            setMvps(sorted);
+            const nonZero = sorted.filter((p) => p.mvpScore > 0);
+            setMvps(nonZero);
         };
 
         fetchAndCompute();
-    }, []);
+    }, [seasonId]);
 
     return (
         <div>

@@ -9,6 +9,7 @@ import Link from "next/link";
 import MostWins from "@/app/components/MostWins";
 import FeedbackForm from "@/app/components/FeedbackForm";
 import SeasonPicker from "@/app/components/SeasonPicker";
+import MatchCard from "@/app/components/MatchCard";
 
 export default function Dashboard() {
     const { players, matches, loading } = usePlayerMatchData();
@@ -19,7 +20,7 @@ export default function Dashboard() {
 
     return (
         <div className="max-w-4xl mx-auto p-6">
-            <h1 className="text-2xl font-bold mb-6 text-center">🏟️ Ultimate Dashboard - Umelka 2025</h1>
+            <h1 className="text-2xl font-bold mb-6 text-center">Ultimate Dashboard</h1>
             <SeasonPicker />
             {lastMatch && <MatchSummary match={lastMatch} players={players}/>}
 
