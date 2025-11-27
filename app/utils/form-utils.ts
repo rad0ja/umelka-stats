@@ -2,11 +2,14 @@
 
 import { Match } from "@/app/types";
 
-export function getRecentForm(matches: Match[], players: string[], maxGames: number): Record<string, string[]> {
+export function getRecentForm(matches: Match[], players: string[], maxGames: number, upToDate?: string | Date): Record<string, string[]> {
     const formMap: Record<string, string[]> = {};
 
-    // Sort by most recent
-    const recentMatches = [...matches].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    // Optionally filter matches up to a specific date, then sort by most recent
+    const cutoff = upToDate ? new Date(upToDate).getTime() : undefined;
+    const recentMatches = [...matches]
+        .filter(m => cutoff === undefined || new Date(m.date).getTime() <= cutoff)
+        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
     for (const playerId of players) {
         let form: string[] = [];
@@ -26,8 +29,8 @@ export function getRecentForm(matches: Match[], players: string[], maxGames: num
                 (inTeamB && match.score_b > match.score_a);
 
             form.push(isDraw ? 'D'
-                        : didWin ? 'W'
-                        : 'L');
+                : didWin ? 'W'
+                    : 'L');
         }
 
         formMap[playerId] = form;

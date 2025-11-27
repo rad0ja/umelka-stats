@@ -14,7 +14,7 @@ type Props = {
 
 export default function MatchSummary({ match, players }: Props) {
     const { matches } = usePlayerMatchData();
-    const recentForm = getRecentForm(matches, players.map(p => p.id), 5);
+    const recentForm = getRecentForm(matches, players.map(p => p.id), 5, match.date);
 
 
     const renderTeam = (team: string[]) => (

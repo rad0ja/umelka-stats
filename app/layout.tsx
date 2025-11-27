@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/next";
 import {SeasonProvider} from "@/app/context/SeasonContext";
+import TopHeader from "@/app/components/header/TopHeader";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,6 +30,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+      <TopHeader />
             <SeasonProvider>
                 {children}
             </SeasonProvider>
