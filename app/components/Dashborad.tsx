@@ -10,16 +10,25 @@ import MostWins from "@/app/components/MostWins";
 import FeedbackForm from "@/app/components/FeedbackForm";
 import SeasonPicker from "@/app/components/SeasonPicker";
 import MatchCard from "@/app/components/MatchCard";
+import Navbar from "@/app/components/header/NavBar";
 
 export default function Dashboard() {
     const { players, matches, loading } = usePlayerMatchData();
     const { goals, wins } = usePlayerStats(matches);
     const lastMatch = getLastMatch(matches);
 
+    const navigationLinks = [
+        { label: 'Home', href: '/',icon: '🏠' },
+        { label: 'Matches', href: '/matches', icon: '🏠' },
+        { label: 'About', href: '/about', icon: '🏠' },
+        { label: 'Contact', href: '/contact', icon: '🏠' },
+    ];
+
     if (loading) return <div className="text-center">Loading...</div>
 
     return (
         <div className="max-w-4xl mx-auto p-6">
+            <Navbar links={navigationLinks} logoText="ReactApp" />
             <h1 className="text-2xl font-bold mb-6 text-center">Ultimate Dashboard</h1>
             <SeasonPicker />
             {lastMatch && <MatchSummary match={lastMatch} players={players}/>}

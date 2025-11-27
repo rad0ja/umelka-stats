@@ -8,7 +8,6 @@ export default function Header() {
   return (
     <div className="bg-gray-50 flex flex-col">
       <TopHeader />
-      <NavBar />
     </div>
   );
 }
