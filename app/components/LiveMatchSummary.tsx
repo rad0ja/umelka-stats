@@ -15,7 +15,8 @@ export default function LiveMatchSummary({ teamA, teamB, goals, onDone }: any) {
             score_a: totalA,
             score_b: totalB,
             goals,
-            date: new Date().toISOString().slice(0, 10)
+            date: new Date().toISOString().slice(0, 10),
+            season_id: 2
         });
         if (error) console.error(error);
         else onDone();
