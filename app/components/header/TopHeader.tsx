@@ -3,10 +3,10 @@ import NavBar from "@/app/components/header/NavBar";
 export default function TopHeader() {
 
     const navigationLinks = [
-        { label: 'Home', href: '/',icon: '🏠' },
-        { label: 'Matches', href: '/matches', icon: '🏠' },
-        { label: 'About', href: '/about', icon: '🏠' },
-        { label: 'Contact', href: '/contact', icon: '🏠' },
+        { label: 'Matches', href: '/matches' },
+        { label: 'Stats', href: '/stats' },
+        { label: 'Settings', href: '/settings'  },
+        { label: 'Contact', href: '/contact' },
     ];
 
     return (

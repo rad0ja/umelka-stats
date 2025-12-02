@@ -3,6 +3,7 @@
 import Dashboard from "@/app/components/Dashborad";
 import {useSeason} from "@/app/context/SeasonContext";
 import SeasonPicker from "@/app/components/SeasonPicker";
+import React from "react";
 
 export default function HomePage() {
     const { seasonId } = useSeason();
@@ -19,8 +20,11 @@ export default function HomePage() {
     }
 
   return (
-      <div>
+      <div className="bg-gradient-to-br from-cyan-100 via-white to-teal-50">
         <Dashboard />
+          <p className="mt-6 text-center text-xs text-gray-500">
+              © 2025 FotbalekAPP. All rights reserved.
+          </p>
       </div>
   );
 }

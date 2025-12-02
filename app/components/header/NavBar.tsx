@@ -49,20 +49,6 @@ const Navbar: React.FC<NavbarProps> = ({ links, logoText }) => {
                         </div>
                     </div>
 
-                    <div className="hidden sm:block sm:ml-6">
-                        <div className="flex space-x-4">
-                            {links.map((link) => (
-                                <a
-                                    key={link.href}
-                                    href={link.href}
-                                    className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition duration-300"
-                                >
-                                    {link.label}
-                                </a>
-                            ))}
-                        </div>
-                    </div>
-
                     {/* Mobile Menu Button (Hamburger) */}
                     <div className="absolute inset-y-0 right-0 flex items-center sm:hidden">
                         <button

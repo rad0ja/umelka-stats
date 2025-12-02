@@ -1,28 +1,24 @@
 import React from 'react';
 import Image from 'next/image';
 import MatchSummary from "@/app/components/MatchSummary";
-import { usePlayerMatchData } from "@/app/hooks/usePlayerMatchData";
 import { Player, Match } from "@/app/types";
-import {getRecentForm} from "@/app/utils/form-utils";
 
 
 type Props = {
     match: Match,
     players: Player[],
-    initialExpanded?: boolean
+    isExpanded: boolean,
+    onToggle: () => void
 }
 
 // Use Props type for MatchCard to include both match and players
-const MatchCard = ({ match, players, initialExpanded = false }: Props) => {
-    const [isExpanded, setIsExpanded] = React.useState(initialExpanded);
-
-
+const MatchCard = ({ match, players, isExpanded, onToggle }: Props) => {
     return (
         <div className="mb-6">
             <div className="bg-white rounded-lg shadow-sm overflow-hidden">
                 <div
-                    className="flex items-center justify-between p-2 cursor-pointer hover:bg-gray-50 transition-colors"
-                    onClick={() => setIsExpanded(!isExpanded)}
+                    className="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 transition-colors"
+                    onClick={onToggle}
                 >
                     <div className="flex items-center gap-3">
                         <Image
@@ -99,6 +95,8 @@ export default function MatchResults({ match, players }: Props1) {
 
     const displayMatches = match.length > 0 ? match.slice(0,3) : sampleMatches;
 
+    const [expandedId, setExpandedId] = React.useState<string | null>(displayMatches[0]?.id ?? null);
+
     if (displayMatches.length === 0) {
         return (
             <div className="max-w-md mx-auto p-6 bg-gray-50 min-h-screen">
@@ -108,9 +106,15 @@ export default function MatchResults({ match, players }: Props1) {
     }
 
     return (
-        <div className="max-w-4xl mx-auto p-6 bg-gray-50">
-            {displayMatches.map((match, index) => (
-                <MatchCard key={match.id} match={match} players={players} initialExpanded={index === 0} />
+        <div className="max-w-4xl mx-auto p-6">
+            {displayMatches.map((m) => (
+                <MatchCard
+                    key={m.id}
+                    match={m}
+                    players={players}
+                    isExpanded={expandedId === m.id}
+                    onToggle={() => setExpandedId(expandedId === m.id ? null : m.id)}
+                />
             ))}
         </div>
     );
