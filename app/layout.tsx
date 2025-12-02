@@ -30,7 +30,6 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-      <TopHeader />
             <SeasonProvider>
                 {children}
             </SeasonProvider>
