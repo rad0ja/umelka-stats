@@ -1,14 +1,11 @@
 'use client'
 
-import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Player } from "@/app/types";
 import { supabase } from "@/lib/supabase";
 import {useSeason} from "@/app/context/SeasonContext";
 
 export function usePlayerCalculatedScore() {
-    const { id } = useParams();
-    const playerId = id as string;
     const { seasonId } = useSeason();
 
     const [playerCalc, setPlayer] = useState<Player | null>(null);
@@ -19,24 +16,35 @@ export function usePlayerCalculatedScore() {
     const [goalTarget, setGoalTarget] = useState(30);
 
     useEffect(() => {
-        console.log("🔍 Fetching usePlayer");
+        console.log("🔍 Fetching usePlayer (authenticated)");
         const fetchPlayerData = async () => {
-            const { data: playersData } = await supabase.from('players').select('*');
+            // Ensure season is selected
+            if (!seasonId) return;
+
+            // Get authenticated user
+            const { data: { user } } = await supabase.auth.getUser();
+            if (!user) return;
+
+            // Load player for the authenticated user
+            const { data: foundPlayer } = await supabase
+                .from('players')
+                .select('*')
+                .eq('user_id', user.id)
+                .single();
+
+            if (!foundPlayer) return;
+
+            setPlayer(foundPlayer as Player);
+
+            // Now load matches for the current season
             const { data: matchesData } = await supabase
                 .from("matches")
                 .select("*")
                 .eq("season_id", seasonId); // 👈 scope to season
 
-            if (!playersData) return;
-
-            if (!seasonId) return;
-
-            const foundPlayer = playersData.find(p => p.id === playerId);
-            if (!foundPlayer) return;
-
-            setPlayer(foundPlayer);
-
             if (!matchesData) return;
+
+            const playerId = (foundPlayer as any).id as string;
 
             let g = 0, w = 0, mp = 0, d = 0;
 
@@ -64,20 +72,21 @@ export function usePlayerCalculatedScore() {
             setDraws(d);
 
             // pull goalTarget from DB
-            if (foundPlayer.goal_target) {
-                setGoalTarget(foundPlayer.goal_target);
+            if ((foundPlayer as any).goal_target) {
+                setGoalTarget((foundPlayer as any).goal_target);
             }
         };
 
         fetchPlayerData();
-    }, [playerId, seasonId]);
+    }, [seasonId]);
 
     const updateGoalTarget = async (newTarget: number) => {
         setGoalTarget(newTarget);
+        if (!playerCalc?.id) return;
         await supabase
             .from('players')
-            .update({ goalTarget: newTarget })
-            .eq('id', playerId);
+            .update({ goal_target: newTarget })
+            .eq('id', playerCalc.id);
     };
 
     return { playerCalc, goalsCalc, matchesPlayedCalc, winsCalc, goalTarget, drawsCalc, updateGoalTarget }

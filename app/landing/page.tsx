@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Menu, X, Users, Calendar, Trophy, MessageCircle, ChevronRight } from 'lucide-react';
+import Link from "next/link";
 
 export default function FotbalekLanding() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -41,7 +42,7 @@ export default function FotbalekLanding() {
     return (
         <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-green-50">
             {/* Navigation */}
-            <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-white shadow-lg' : 'bg-transparent'}`}>
+            <nav className={`fixed w-full sticky top-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white shadow-lg' : 'bg-transparent'}`}>
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between items-center h-16 sm:h-20">
                         <div className="flex items-center space-x-2">
@@ -104,9 +105,11 @@ export default function FotbalekLanding() {
                                 Fotbalek makes it easy to keep your soccer community thriving.
                             </p>
                             <div className="flex flex-col sm:flex-row gap-4">
-                                <button className="bg-gradient-to-r from-emerald-500 to-green-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:shadow-2xl transform hover:scale-105 transition-all flex items-center justify-center gap-2">
+                                <Link
+                                    href={"/login"}
+                                    className="bg-gradient-to-r from-emerald-500 to-green-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:shadow-2xl transform hover:scale-105 transition-all flex items-center justify-center gap-2">
                                     Join Now <ChevronRight className="w-5 h-5" />
-                                </button>
+                                </Link>
                                 <button className="border-2 border-emerald-600 text-emerald-600 px-8 py-4 rounded-full text-lg font-semibold hover:bg-emerald-50 transition-all">
                                     Learn More
                                 </button>

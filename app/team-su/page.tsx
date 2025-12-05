@@ -13,7 +13,10 @@ export default function TeamSuggestionsPage() {
     useEffect(() => {
         const fetchData = async () => {
             const { data: players } = await supabase.from('players').select('*');
-            const { data: matches } = await supabase.from('matches').select('*');
+            const { data: matches } = await supabase
+                .from('matches')
+                .select('*')
+                .eq('season_id', 2);
 
             if (!players || !matches) return;
 

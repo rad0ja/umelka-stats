@@ -51,13 +51,6 @@ export default function LoginPage() {
 
             <h1 className="text-xl font-bold mb-4">SignUp</h1>
             <input
-                type="username"
-                placeholder="Username"
-                className="border p-2 w-full mb-2"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-            />
-            <input
                 type="email"
                 placeholder="Email"
                 className="border p-2 w-full mb-2"

@@ -4,6 +4,8 @@ import "./globals.css";
 import { Analytics } from "@vercel/analytics/next";
 import {SeasonProvider} from "@/app/context/SeasonContext";
 import TopHeader from "@/app/components/header/TopHeader";
+import Navigace from "@/app/components/header/Navigace";
+import {AuthRedirectWatcher} from "@/app/utils/AuthRedirectWatcher";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,6 +32,8 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+            <Navigace />
+            <AuthRedirectWatcher />
             <SeasonProvider>
                 {children}
             </SeasonProvider>
