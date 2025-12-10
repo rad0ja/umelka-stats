@@ -11,9 +11,9 @@ export function AuthRedirectWatcher() {
         const { data: subscription } = supabase.auth.onAuthStateChange(
             (event) => {
                 if (event === 'SIGNED_IN') {
-                    router.push('/me');
+                    router.push('/home');
                 } else if (event === 'SIGNED_OUT') {
-                    router.push('/');
+                    router.push('/signup');
                 }
 
             }

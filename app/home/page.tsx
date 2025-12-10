@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { Menu, X, Home, Calendar, Users, Trophy, Bell, User, ChevronRight, MapPin, Clock } from 'lucide-react';
+import {usePlayerCalculatedScore} from "@/app/hooks/usePlayerCalculatedScore";
 
 interface Match {
     id: number;
@@ -41,6 +42,10 @@ type MatchStatus = 'win' | 'loss' | 'draw';
 
 export default function FotbalekHomepage() {
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+
+    const { playerCalc } = usePlayerCalculatedScore();
+    console.log("playerClal", playerCalc);
+    const name = playerCalc?.name
 
     const recentMatches: Match[] = [
         {
@@ -213,7 +218,7 @@ export default function FotbalekHomepage() {
                 {/* Welcome Section */}
                 <div className="mb-8">
                     <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
-                        Welcome back, <span className="text-emerald-600">{playerStats.name}</span>!
+                        Welcome back, <span className="text-emerald-600">{name}</span>!
                     </h1>
                     <p className="text-gray-600">Here's what's happening with your soccer community</p>
                 </div>

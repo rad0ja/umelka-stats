@@ -11,12 +11,18 @@ import FeedbackForm from "@/app/components/FeedbackForm";
 import MatchCard from "@/app/components/MatchCard";
 import Navbar from "@/app/components/header/NavBar";
 import MatchResults from "@/app/components/MatchResult";
+import {playerVsPlayerStats} from "@/app/utils/playerVsPlayerStats";
 
 export default function Dashboard() {
     const { players, matches, loading } = usePlayerMatchData();
     const { goals, wins } = usePlayerStats(matches);
     const recentMatches = getLastMatches(matches, 3)
     console.log(goals, wins, recentMatches)
+
+    const result = playerVsPlayerStats(matches, "56d7386b-39d2-4a14-ade4-83138a7b5c3b");
+    console.log(`Most wins with: ${result.mostWinsWith} (${result.winsCount} wins)`);
+    console.log(`Most losses with: ${result.mostLossesWith} (${result.lossesCount} losses)`);
+    console.log(`Most draws with: ${result.mostDrawsWith} (${result.drawsCount} draws)`);
 
     if (loading) return <div className="text-center">Loading...</div>
 

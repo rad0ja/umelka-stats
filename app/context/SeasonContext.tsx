@@ -10,7 +10,7 @@ type SeasonContextType = {
 const SeasonContext = createContext<SeasonContextType | undefined>(undefined);
 
 export function SeasonProvider({ children }: { children: React.ReactNode }) {
-    const [seasonId, setSeasonId] = useState<string | null>(null);
+    const [seasonId, setSeasonId] = useState<string | null>("2");
 
     useEffect(() => {
         const stored = localStorage.getItem("seasonId");
