@@ -19,7 +19,7 @@ export default function CustomBadgeForPlayer({ id, players, index }: Props) {
             <span className="text-xl">{trophy}</span> {playerName}
             {playerIds.includes(id) && (
                 <span>
-                🩼
+                🙂
                 </span>
             )}
         </span>
