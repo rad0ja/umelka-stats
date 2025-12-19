@@ -2,11 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { Player } from "@/app/types";
-import { supabase } from "@/lib/supabase";
-import {useSeason} from "@/app/context/SeasonContext";
+import { createClient } from "@/lib/client";
+import { useSeason } from "@/app/context/SeasonContext";
 
 export function usePlayerCalculatedScore() {
     const { seasonId } = useSeason();
+    const supabase = createClient();
 
     const [playerCalc, setPlayer] = useState<Player | null>(null);
     const [goalsCalc, setGoals] = useState(0);

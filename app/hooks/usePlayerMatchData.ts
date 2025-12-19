@@ -2,7 +2,7 @@
 'use client';
 
 import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/client";
 import { useSeason } from "@/app/context/SeasonContext";
 
 export function usePlayerMatchData() {
@@ -10,6 +10,8 @@ export function usePlayerMatchData() {
     const [players, setPlayers] = useState<any[]>([]);
     const [matches, setMatches] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
+
+    const supabase = createClient();
 
     useEffect(() => {
         if (!seasonId) return; // wait until a season is chosen
@@ -29,7 +31,7 @@ export function usePlayerMatchData() {
         };
 
         fetchData();
-    }, [seasonId]); // 👈 re-run whenever season changes
+    }, [seasonId]); // 👈 re-run whenever the season changes
 
     return { players, matches, loading };
 }

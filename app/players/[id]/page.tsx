@@ -10,6 +10,7 @@ import { playerMatchHistory } from "@/app/utils/playerMatchHistory";
 import { getAllMVPs } from "@/app/utils/getAllMVPs";
 import {SeasonProvider} from "@/app/context/SeasonContext";
 import SeasonPicker from "@/app/components/SeasonPicker";
+import {GoalProgress} from "@/app/components/GoalProgress";
 
 export default function PlayerDetailPage() {
     const { playerCalc, goalsCalc, matchesPlayedCalc, winsCalc, drawsCalc } = usePlayerCalculatedScore();
@@ -33,7 +34,7 @@ export default function PlayerDetailPage() {
                     score={MVPScore}
                     trophy={getTrophy(0)} // optional
                 />
-                {/*<GoalProgress />*/}
+                <GoalProgress />
                 <PlayerMatchHistory playerId={playerCalc.id} history={allData} allMVPs={allMvps}/>
         </div>
     );

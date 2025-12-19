@@ -1,72 +1,60 @@
-'use client';
-
-import { useState } from 'react';
-import { supabase } from '@/lib/supabase';
-import { useRouter } from 'next/navigation';
+import { login } from './actions'
+import Link from 'next/link'
 
 export default function LoginPage() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [emailSign, setEmailSign] = useState('');
-    const [passwordSign, setPasswordSign] = useState('');
-    const [username, setUsername] = useState('');
-    const router = useRouter();
-
-    const handleLogin = async () => {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) alert(error.message);
-        else router.push('/add-match');
-    };
-
-    const handleSignUp = async () => {
-        const { error } = await supabase.auth.signUp({
-            email: emailSign,
-            password: passwordSign,
-            options: {
-                data: { name: username },
-            }});
-        if (error) alert(error.message);
-    }
-
     return (
-        <div className="max-w-md mx-auto p-6">
-            <h1 className="text-xl font-bold mb-4">Login</h1>
-            <input
-                type="email"
-                placeholder="Email"
-                className="border p-2 w-full mb-2"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-            />
-            <input
-                type="password"
-                placeholder="Password"
-                className="border p-2 w-full mb-4"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-            />
-            <button onClick={handleLogin} className="bg-blue-600 text-white px-4 py-2 rounded">
-                Login
-            </button>
+        <div className="flex min-h-screen items-center justify-center bg-gray-50">
+            <div className="w-full max-w-md">
+                <div className="bg-white px-8 py-10 shadow-md rounded-lg">
+                    <h1 className="text-3xl font-bold text-center mb-8">Sign In</h1>
 
-            <h1 className="text-xl font-bold mb-4">SignUp</h1>
-            <input
-                type="email"
-                placeholder="Email"
-                className="border p-2 w-full mb-2"
-                value={emailSign}
-                onChange={(e) => setEmailSign(e.target.value)}
-            />
-            <input
-                type="password"
-                placeholder="Password"
-                className="border p-2 w-full mb-4"
-                value={passwordSign}
-                onChange={(e) => setPasswordSign(e.target.value)}
-            />
-            <button onClick={handleSignUp} className="bg-blue-600 text-white px-4 py-2 rounded">
-                SIgnUp
-            </button>
+                    <form className="space-y-6">
+                        <div>
+                            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                                Email Address
+                            </label>
+                            <input
+                                id="email"
+                                name="email"
+                                type="email"
+                                autoComplete="email"
+                                required
+                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                placeholder="you@example.com"
+                            />
+                        </div>
+
+                        <div>
+                            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+                                Password
+                            </label>
+                            <input
+                                id="password"
+                                name="password"
+                                type="password"
+                                autoComplete="current-password"
+                                required
+                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                placeholder="••••••••"
+                            />
+                        </div>
+
+                        <button
+                            formAction={login}
+                            className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 font-medium transition-colors"
+                        >
+                            Sign In
+                        </button>
+                    </form>
+
+                    <p className="mt-6 text-center text-sm text-gray-600">
+                        Don't have an account?{' '}
+                        <Link href="/signup" className="text-blue-600 hover:text-blue-700 font-medium">
+                            Sign up
+                        </Link>
+                    </p>
+                </div>
+            </div>
         </div>
-    );
+    )
 }

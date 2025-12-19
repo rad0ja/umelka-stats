@@ -2,7 +2,7 @@
 
 import {useAuthGuard} from "@/app/hooks/useAuthGuard";
 import {usePlayerMatchData} from "@/app/hooks/usePlayerMatchData";
-import LiveMatchFlow from "@/app/components/LiveMatchFlow";
+import LiveMatchFlow from "@/app/components/liveMatchSummary/LiveMatchFlow";
 
 export default function AddMatchPage() {
     const { user, loading } = useAuthGuard();

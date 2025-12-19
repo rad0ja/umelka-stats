@@ -1,6 +1,6 @@
-// context/SeasonContext.tsx
 "use client";
-import {createContext, use, useContext, useEffect, useState} from "react";
+import { createContext, useContext, useEffect, useState, startTransition } from "react";
+import { setSeason } from "@/app/actions"
 
 type SeasonContextType = {
     seasonId: string | null;
@@ -10,18 +10,24 @@ type SeasonContextType = {
 const SeasonContext = createContext<SeasonContextType | undefined>(undefined);
 
 export function SeasonProvider({ children }: { children: React.ReactNode }) {
-    const [seasonId, setSeasonId] = useState<string | null>("2");
+    const [seasonId, setSeasonIdState] = useState<string | null>(null);
 
     useEffect(() => {
-        const stored = localStorage.getItem("seasonId");
-        if (stored) setSeasonId(stored);
+        const stored = document.cookie
+            .split("; ")
+            .find(row => row.startsWith("seasonId="))
+            ?.split("=")[1];
+
+        if (stored) setSeasonIdState(stored);
     }, []);
 
-    useEffect(() => {
-        if (seasonId) {
-            localStorage.setItem("seasonId", seasonId);
-        }
-    }, [seasonId]);
+    function setSeasonId(id: string) {
+        setSeasonIdState(id);
+
+        startTransition(() => {
+            setSeason(id); // server action
+        });
+    }
 
     return (
         <SeasonContext.Provider value={{ seasonId, setSeasonId }}>

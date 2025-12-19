@@ -55,3 +55,50 @@ export interface PlayerRecord {
 export interface AllPlayerRecords {
     [playerId: string]: PlayerRecord;
 }
+
+export interface PlayerStatsProps {
+    data: {
+        player: any
+        stats: {
+            goals: number
+            wins: number
+            matchesPlayed: number
+            draws: number
+        }
+        goalTarget: number
+}}
+export interface HomeMatch {
+    id: number;
+    team1: string;
+    team2: string;
+    score1: number;
+    score2: number;
+    date: string;
+    location: string;
+    status: 'win' | 'loss' | 'draw';
+}
+
+export interface HomeEvent {
+    id: number;
+    title: string;
+    opponent: string | null;
+    date: string;
+    time: string;
+    location: string;
+    players: number;
+    needed: number;
+}
+
+export interface HomeStat {
+    label: string;
+    value: number | string;
+    icon: string;
+}
+
+export interface HomePlayerStats {
+    name: string;
+    avatar: string;
+    stats: HomeStat[];
+}
+
+export type HomeMatchStatus = 'win' | 'loss' | 'draw';

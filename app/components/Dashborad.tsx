@@ -3,13 +3,9 @@
 import { usePlayerStats } from "@/app/hooks/usePlayerStats";
 import { usePlayerMatchData } from "@/app/hooks/usePlayerMatchData";
 import { getLastMatches } from "@/app/utils/playerHelpers";
-import MatchSummary from "@/app/components/MatchSummary";
 import TopScorers from "@/app/components/TopScorers";
 import Link from "next/link";
 import MostWins from "@/app/components/MostWins";
-import FeedbackForm from "@/app/components/FeedbackForm";
-import MatchCard from "@/app/components/MatchCard";
-import Navbar from "@/app/components/header/NavBar";
 import MatchResults from "@/app/components/MatchResult";
 import {playerVsPlayerStats} from "@/app/utils/playerVsPlayerStats";
 
