@@ -76,8 +76,8 @@ export default function HomeNavigation() {
                         <a href="#" className="flex items-center gap-2 text-gray-600">
                             <Users className="w-5 h-5" /> Teams
                         </a>
-                        <a href="#" className="flex items-center gap-2 text-gray-600">
-                            <Trophy className="w-5 h-5" /> Stats
+                        <a href="/ios" className="flex items-center gap-2 text-gray-600">
+                            <Trophy className="w-5 h-5" /> iOS
                         </a>
                     </div>
                 </div>
