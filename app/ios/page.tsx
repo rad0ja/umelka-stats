@@ -195,7 +195,7 @@ export default function FotbalekHomepage() {
         name: "John Doe",
         avatar: "JD",
         stats: [
-            { label: "Matches", value: 28, icon: <Calendar strokeWidth={2.25} /> },
+            { label: "Matches", value: 28, icon: "⚽" },
             { label: "Goals", value: 12, icon: "⚽" },
             { label: "Assists", value: 8, icon: "🎯" },
             { label: "Win Rate", value: "64%", icon: "🏆" }

@@ -4,7 +4,8 @@ import {revalidatePath, revalidateTag} from 'next/cache'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/server'
 import { cookies } from "next/headers";
-import webpush from 'web-push'
+import * as webpush from 'web-push'
+import { PushSubscription } from 'web-push'
 
 export async function logout() {
     const supabase = await createClient()
@@ -24,15 +25,17 @@ export async function setSeason(seasonId: string) {
     revalidateTag('matches')
 }
 
-webpush.setVapidDetails(
-    'mailto:janrdch@gmail.com',
-    process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!,
-    process.env.VAPID_PRIVATE_KEY!
-)
 
 let subscription: PushSubscription | null = null
 
 export async function subscribeUser(sub: PushSubscription) {
+    if (process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY) {
+        webpush.setVapidDetails(
+            'mailto:janrdch@gmail.com',
+            process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY,
+            process.env.VAPID_PRIVATE_KEY
+        )
+    }
     subscription = sub
     // In a production environment, you would want to store the subscription in a database
     // For example: await db.subscriptions.create({ data: sub })
@@ -49,6 +52,14 @@ export async function unsubscribeUser() {
 export async function sendNotification(message: string) {
     if (!subscription) {
         throw new Error('No subscription available')
+    }
+
+    if (process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY) {
+        webpush.setVapidDetails(
+            'mailto:janrdch@gmail.com',
+            process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY,
+            process.env.VAPID_PRIVATE_KEY
+        )
     }
 
     try {
