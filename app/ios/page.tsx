@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react';
-import { Menu, X, Home, Calendar, Users, Trophy, Bell, User, ChevronRight, MapPin, Clock, ChevronDown, ChevronUp } from 'lucide-react';
+import { Menu, X, Home, Calendar, Users, Trophy, Bell, User, ChevronRight, MapPin, Clock, ChevronDown, ChevronUp, Cuboid } from 'lucide-react';
 
 interface Player {
     id: string;
@@ -195,7 +195,7 @@ export default function FotbalekHomepage() {
         name: "John Doe",
         avatar: "JD",
         stats: [
-            { label: "Matches", value: 28, icon: "🎮" },
+            { label: "Matches", value: 28, icon: <Calendar strokeWidth={2.25} /> },
             { label: "Goals", value: 12, icon: "⚽" },
             { label: "Assists", value: 8, icon: "🎯" },
             { label: "Win Rate", value: "64%", icon: "🏆" }
@@ -236,7 +236,7 @@ export default function FotbalekHomepage() {
                         </div>
                         <button className="relative p-2">
                             <Bell className="w-6 h-6 text-gray-700" />
-                            <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                            <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-white text-xs flex items-center justify-center">3</span>
                         </button>
                     </div>
                     <h1 className="text-2xl font-bold text-gray-900">Welcome back</h1>
@@ -278,7 +278,7 @@ export default function FotbalekHomepage() {
                             return (
                                 <div
                                     key={match.id}
-                                    className="bg-white rounded-2xl shadow-sm overflow-hidden"
+                                    className="bg-white rounded-2xl shadow-sm overflow-hidden border-l-4 border-green-500/10"
                                 >
                                     <div
                                         className="p-4"
@@ -351,14 +351,21 @@ export default function FotbalekHomepage() {
                                                                     }`}
                                                                 >
                                                                     <div className="flex items-center gap-2">
-                                                                        <div className="w-8 h-8 bg-gradient-to-br from-emerald-500 to-green-600 rounded-full flex items-center justify-center text-white font-bold text-xs">
-                                                                            {player.avatar}
-                                                                        </div>
+                                                                        {/*<div className="w-8 h-8 bg-gradient-to-br from-emerald-500 to-green-600 rounded-full flex items-center justify-center text-white font-bold text-xs">*/}
+                                                                        {/*    {player.avatar}*/}
+                                                                        {/*</div>*/}
                                                                         <span className={`text-sm font-medium ${
                                                                             player.id === currentPlayerId ? "text-blue-600" : "text-gray-900"
                                                                         }`}>
                                       {player.name}
                                     </span>
+                                                                        <span className="text-xs font-bold px-1 py-1 rounded bg-green-500 text-white">
+                                                                            W
+                                                                        </span><span className="text-xs font-bold px-1 py-1 rounded bg-green-500 text-white">
+                                                                            L
+                                                                        </span><span className="text-xs font-bold px-1 py-1 rounded bg-green-500 text-white">
+                                                                            D
+                                                                        </span>
                                                                     </div>
                                                                     {player.goals > 0 && (
                                                                         <span className="text-xs font-semibold text-emerald-600">
@@ -484,7 +491,7 @@ export default function FotbalekHomepage() {
             </div>
 
             {/* iOS-style Bottom Navigation */}
-            <div className="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-xl border-t border-gray-200 pb-safe">
+            <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-xl border-t border-gray-200 pb-safe">
                 <div className="flex justify-around items-center h-16 px-4">
                     <button
                         onClick={() => setActiveTab('home')}
