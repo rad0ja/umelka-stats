@@ -73,7 +73,7 @@ export default function HomeNavigation() {
                         <a href="#" className="flex items-center gap-2 text-gray-600">
                             <Calendar className="w-5 h-5" /> Matches
                         </a>
-                        <a href="#" className="flex items-center gap-2 text-gray-600">
+                        <a href="/notif" className="flex items-center gap-2 text-gray-600">
                             <Users className="w-5 h-5" /> Teams
                         </a>
                         <a href="/ios" className="flex items-center gap-2 text-gray-600">
