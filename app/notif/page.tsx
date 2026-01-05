@@ -40,11 +40,17 @@ function PushNotificationManager() {
     }
 
     async function subscribeToPush() {
+        const vapidPublicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!
+        if (!vapidPublicKey) {
+            console.error('No VAPID key found. ');
+            return;
+        }
+
         const registration = await navigator.serviceWorker.ready
         const sub = await registration.pushManager.subscribe({
             userVisibleOnly: true,
             applicationServerKey: urlBase64ToUint8Array(
-                process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!
+                vapidPublicKey
             ),
         })
         setSubscription(sub)
