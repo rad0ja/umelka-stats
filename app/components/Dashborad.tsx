@@ -7,9 +7,7 @@ import MatchSummary from "@/app/components/MatchSummary";
 import TopScorers from "@/app/components/TopScorers";
 import Link from "next/link";
 import MostWins from "@/app/components/MostWins";
-import FeedbackForm from "@/app/components/FeedbackForm";
 import SeasonPicker from "@/app/components/SeasonPicker";
-import MatchCard from "@/app/components/MatchCard";
 
 export default function Dashboard() {
     const { players, matches, loading } = usePlayerMatchData();
@@ -26,8 +24,12 @@ export default function Dashboard() {
 
             <div className="text-center mb-6">
                 <Link href={"/matches"}
-                      className="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+                      className="inline-block bg-blue-500 text-white px-4 py-2 mb-2 mr-2 rounded hover:bg-blue-700 transition">
                     📋 View All Matches
+                </Link>
+                <Link href={"/add-match"}
+                      className="inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+                    + Add new result
                 </Link>
             </div>
 
@@ -47,7 +49,7 @@ export default function Dashboard() {
 
             <div className="text-center mb-6 mt-6">
                 <Link href={"/stats"}
-                      className="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+                      className="inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
                     📋 View Complete Stats
                 </Link>
             </div>

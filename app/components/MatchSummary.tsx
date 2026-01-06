@@ -33,7 +33,7 @@ export default function MatchSummary({ match, players }: Props) {
                             href={`players/${playerId}`}
                             className="hover:underline text-blue-800 dark:text-blue-400">
 
-                            <span>{getPlayerName(players, playerId)}</span>
+                            <span>{getPlayerName(players, playerId)} ➡️</span>
                         </Link>
                         <span><RecentFormBadge form={recentForm[playerId] || []}/></span>
                     </td>
