@@ -226,9 +226,9 @@ export default function FotbalekHomepage() {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 sm:max-w-4xl sm:mx-auto sm:p-6">
+        <div className="min-h-screen bg-gray-50 sm:max-w-4xl sm:mx-auto sm:p-6 pt-safe">
             {/* iOS-style Header */}
-            <div className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-gray-200">
+            <div className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-gray-200 pt-safe">
                 <div className="px-4 pt-3 pb-2">
                     <div className="flex items-center justify-between mb-2">
                         <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-green-600 rounded-2xl flex items-center justify-center shadow-sm">
