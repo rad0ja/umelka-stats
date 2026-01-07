@@ -6,7 +6,7 @@ export default async function Home() {
     const { data: { user } } = await supabase.auth.getUser()
 
     return (
-        <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-blue-50 to-white">
+        <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-blue-50 to-white pt-safe">
             <div className="text-center space-y-8 px-4">
                 <h1 className="text-5xl font-bold text-gray-900">
                     Welcome to Your App
