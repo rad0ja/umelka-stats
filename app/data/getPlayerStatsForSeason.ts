@@ -1,7 +1,7 @@
 import { cache } from 'react'
-import { getPlayerForUser } from './singlePlayer'
-import { getMatchesForSeason } from './matches'
-import { calculatePlayerStats } from './stats'
+import { getPlayerForUser } from './getPlayerForUser'
+import { getMatchesForSeason } from './getMatchesForSeason'
+import { calculatePlayerStats } from './calcPlayerStats'
 
 export const getPlayerStatsForSeason = cache(
     async (seasonId: string | undefined) => {

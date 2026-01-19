@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { MapPin, ChevronDown } from 'lucide-react';
 import { Match, Player } from './types';
+import Link from 'next/link';
 
 interface RecentMatchesProps {
     currentPlayerId: string;
@@ -156,6 +157,9 @@ export default function RecentMatches({ currentPlayerId }: RecentMatchesProps) {
                 <button className="text-emerald-600 text-sm font-semibold">
                     See All
                 </button>
+                <Link className="text-emerald-600 text-sm font-semibold" href="/stats">
+                    See Alles
+                </Link>
             </div>
 
             <div className="space-y-3">

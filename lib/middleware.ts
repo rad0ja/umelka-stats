@@ -59,5 +59,12 @@ export async function updateSession(request: NextRequest) {
         return NextResponse.redirect(url)
     }
 
+    if (request.nextUrl.pathname.startsWith('/admin')) {
+        if (!user || user.email !== "janrdch@gmail.com") {
+            const url = request.nextUrl.clone()
+            return NextResponse.redirect(url)
+        }
+    }
+
     return supabaseResponse
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { HomePlayerStats } from "@/app/types";
 import { cookies } from "next/headers";
-import { getPlayerStatsForSeason } from "@/app/data/singlePlayerStats";
+import { getPlayerStatsForSeason } from "@/app/data/getPlayerStatsForSeason";
 import PlayerStats from "@/app/components/ui/PlayerStats";
 
 

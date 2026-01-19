@@ -5,7 +5,7 @@ import UpcomingEvents from "@/app/components/home/UpcomingEvents";
 import PlayerStatsSection from "@/app/components/home/PlayerStatsSection";
 import {HomeMatch, HomeEvent, Match} from "@/app/types";
 import { cookies } from "next/headers";
-import { getPlayerStatsForSeason } from "@/app/data/singlePlayerStats";
+import { getPlayerStatsForSeason } from "@/app/data/getPlayerStatsForSeason";
 import { Suspense } from "react";
 import { PlayerStatsSkeleton } from "@/app/components/home/PlayerStatsSkeleton";
 
