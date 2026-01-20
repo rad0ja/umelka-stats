@@ -1,9 +1,9 @@
 'use client'
 
-import { BarChart3, Calendar, User } from "lucide-react";
+import { BarChart3, Calendar, User, MessageCircle } from "lucide-react";
 import { motion } from "motion/react";
 
-export type TabType = 'stats' | 'matches' | 'profile';
+export type TabType = 'stats' | 'matches' | 'chat' | 'profile';
 
 type Tab = {
     id: TabType;
@@ -14,6 +14,7 @@ type Tab = {
 const tabs: Tab[] = [
     { id: 'stats', label: 'Stats', icon: BarChart3 },
     { id: 'matches', label: 'Matches', icon: Calendar },
+    { id: 'chat', label: 'Chat', icon: MessageCircle },
     { id: 'profile', label: 'Profile', icon: User },
 ];
 

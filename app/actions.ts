@@ -25,10 +25,7 @@ export async function setSeason(seasonId: string) {
     revalidateTag('matches')
 }
 
-
-let subscription: PushSubscription | null = null
-
-export async function subscribeUser(sub: PushSubscription) {
+function initVapid() {
     if (process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY) {
         webpush.setVapidDetails(
             'mailto:janrdch@gmail.com',
@@ -36,35 +33,83 @@ export async function subscribeUser(sub: PushSubscription) {
             process.env.VAPID_PRIVATE_KEY
         )
     }
-    subscription = sub
-    // In a production environment, you would want to store the subscription in a database
-    // For example: await db.subscriptions.create({ data: sub })
+}
+
+export async function subscribeUser(sub: PushSubscription) {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+
+    if (!user) {
+        return { success: false, error: 'Not authenticated' }
+    }
+
+    // Delete existing subscriptions for this user (one subscription per user)
+    await supabase
+        .from('push_subscriptions')
+        .delete()
+        .eq('user_id', user.id)
+
+    // Store new subscription in database
+    const { error } = await supabase
+        .from('push_subscriptions')
+        .insert({
+            user_id: user.id,
+            subscription: sub as unknown as Record<string, unknown>
+        })
+
+    if (error) {
+        console.error('Error saving subscription:', error)
+        return { success: false, error: 'Failed to save subscription' }
+    }
+
     return { success: true }
 }
 
 export async function unsubscribeUser() {
-    subscription = null
-    // In a production environment, you would want to remove the subscription from the database
-    // For example: await db.subscriptions.delete({ where: { ... } })
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+
+    if (!user) {
+        return { success: false, error: 'Not authenticated' }
+    }
+
+    const { error } = await supabase
+        .from('push_subscriptions')
+        .delete()
+        .eq('user_id', user.id)
+
+    if (error) {
+        console.error('Error removing subscription:', error)
+        return { success: false, error: 'Failed to remove subscription' }
+    }
+
     return { success: true }
 }
 
 export async function sendNotification(message: string) {
-    if (!subscription) {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+
+    if (!user) {
+        throw new Error('Not authenticated')
+    }
+
+    // Get user's subscription
+    const { data: subData } = await supabase
+        .from('push_subscriptions')
+        .select('subscription')
+        .eq('user_id', user.id)
+        .single()
+
+    if (!subData?.subscription) {
         throw new Error('No subscription available')
     }
 
-    if (process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY) {
-        webpush.setVapidDetails(
-            'mailto:janrdch@gmail.com',
-            process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY,
-            process.env.VAPID_PRIVATE_KEY
-        )
-    }
+    initVapid()
 
     try {
         await webpush.sendNotification(
-            subscription,
+            subData.subscription as unknown as PushSubscription,
             JSON.stringify({
                 title: 'Test Notification',
                 body: message,
@@ -76,4 +121,127 @@ export async function sendNotification(message: string) {
         console.error('Error sending push notification:', error)
         return { success: false, error: 'Failed to send notification' }
     }
+}
+
+// Send push notification to all users except the sender
+export async function sendChatNotification(senderUserId: string, senderName: string, messageContent: string) {
+    const supabase = await createClient()
+
+    // Get all subscriptions except the sender's
+    const { data: subscriptions, error: fetchError } = await supabase
+        .from('push_subscriptions')
+        .select('subscription, user_id')
+        .neq('user_id', senderUserId)
+
+    console.log('[Chat Notification] Sender:', senderUserId)
+    console.log('[Chat Notification] Found subscriptions:', subscriptions?.length ?? 0)
+    if (fetchError) {
+        console.error('[Chat Notification] Error fetching subscriptions:', fetchError)
+    }
+
+    if (!subscriptions || subscriptions.length === 0) {
+        return { success: true, sent: 0 }
+    }
+
+    initVapid()
+
+    const truncatedMessage = messageContent.length > 100
+        ? messageContent.substring(0, 100) + '...'
+        : messageContent
+
+    const payload = JSON.stringify({
+        title: `${senderName}`,
+        body: truncatedMessage,
+        icon: '/icon.png',
+        data: {
+            type: 'chat',
+            url: '/figma'
+        }
+    })
+
+    let sentCount = 0
+    const failedUserIds: string[] = []
+
+    await Promise.all(
+        subscriptions.map(async ({ subscription, user_id }) => {
+            try {
+                console.log('[Chat Notification] Sending to user:', user_id)
+                await webpush.sendNotification(
+                    subscription as unknown as PushSubscription,
+                    payload
+                )
+                sentCount++
+                console.log('[Chat Notification] Successfully sent to user:', user_id)
+            } catch (error: unknown) {
+                console.error(`[Chat Notification] Failed to send to user ${user_id}:`, error)
+                // If subscription is invalid (expired/unsubscribed), mark for cleanup
+                if (error && typeof error === 'object' && 'statusCode' in error) {
+                    const statusCode = (error as { statusCode: number }).statusCode
+                    if (statusCode === 404 || statusCode === 410) {
+                        failedUserIds.push(user_id!)
+                    }
+                }
+            }
+        })
+    )
+
+    // Clean up invalid subscriptions
+    if (failedUserIds.length > 0) {
+        await supabase
+            .from('push_subscriptions')
+            .delete()
+            .in('user_id', failedUserIds)
+    }
+
+    console.log('[Chat Notification] Total sent:', sentCount)
+    return { success: true, sent: sentCount }
+}
+
+// Send chat message and trigger notifications
+export async function sendChatMessage(content: string) {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+
+    if (!user) {
+        return { success: false, error: 'Not authenticated' }
+    }
+
+    console.log('[sendChatMessage] User ID:', user.id)
+
+    // Get sender's player name
+    const { data: player } = await supabase
+        .from('players')
+        .select('name')
+        .eq('user_id', user.id)
+        .single()
+
+    const senderName = player?.name || 'Someone'
+    console.log('[sendChatMessage] Sender name:', senderName)
+
+    // Insert the message
+    const { data: message, error } = await supabase
+        .from('chat_messages')
+        .insert({
+            user_id: user.id,
+            content: content.trim()
+        })
+        .select()
+        .single()
+
+    if (error) {
+        console.error('[sendChatMessage] Error sending message:', error)
+        return { success: false, error: 'Failed to send message' }
+    }
+
+    console.log('[sendChatMessage] Message inserted, sending notifications...')
+
+    // Send push notifications to other users
+    try {
+        const notifResult = await sendChatNotification(user.id, senderName, content)
+        console.log('[sendChatMessage] Notification result:', notifResult)
+    } catch (err) {
+        console.error('[sendChatMessage] Error sending chat notifications:', err)
+    }
+
+    return { success: true, message }
 }
