@@ -1,6 +1,8 @@
 import { User, Mail, Phone, MapPin, Calendar, Award, Activity } from 'lucide-react';
 import { motion } from 'motion/react';
 import LogoutButton from '../LogoutButton';
+import InstallPrompt from '@/app/notif/InstallPrompt';
+import PushNotificationManager from '@/app/notif/PushNotificationManager';
 
 export function Profile() {
   const userStats = {
@@ -133,6 +135,8 @@ export function Profile() {
             </div>
           </motion.div>
           <LogoutButton />
+          <InstallPrompt />
+          <PushNotificationManager />
         </div>
       </div>
     </div>
