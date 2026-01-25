@@ -105,32 +105,7 @@ export default function EventPage({ params }: EventPageProps) {
               <div className="text-sm text-gray-600 dark:text-gray-300">{timeStr}</div>
             </div>
           </div>
-
-          {event.location && (
-            <div className="flex items-center gap-3 pt-3 border-t border-gray-100 dark:border-gray-800">
-              <div className="w-10 h-10 rounded-full bg-green-100 dark:bg-green-900/50 flex items-center justify-center">
-                <MapPin className="w-5 h-5 text-green-600 dark:text-green-400" />
-              </div>
-              <div>
-                <div className="text-sm text-gray-500 dark:text-gray-400">Location</div>
-                <div className="font-semibold text-gray-900 dark:text-white">{event.location}</div>
-              </div>
-            </div>
-          )}
         </motion.div>
-
-        {/* Description */}
-        {event.description && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="bg-white dark:bg-gray-900 rounded-2xl p-5 shadow-sm"
-          >
-            <h2 className="font-semibold text-gray-900 dark:text-white mb-2">Description</h2>
-            <p className="text-gray-600 dark:text-gray-300">{event.description}</p>
-          </motion.div>
-        )}
 
         {/* RSVP Section - Only for upcoming events */}
         {isUpcoming && (
