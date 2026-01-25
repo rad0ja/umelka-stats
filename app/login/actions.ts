@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
+import { cookies } from 'next/headers'
 import { createClient } from "@/lib/server";
 
 
@@ -18,6 +19,11 @@ export async function login(formData: FormData) {
     if (error) {
         // You can handle errors more gracefully here
         redirect('/login?error=Invalid credentials')
+    }
+
+    const cookieStore = await cookies()
+    if (!cookieStore.get('seasonId')) {
+        cookieStore.set('seasonId', '2')
     }
 
     revalidatePath('/', 'layout')
