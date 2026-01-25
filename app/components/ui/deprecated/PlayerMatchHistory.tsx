@@ -1,9 +1,9 @@
 import { PlayerMatchDetail } from "@/app/types";
 import { Line, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend, ComposedChart, Bar} from 'recharts';
 import { playerStreaks } from "@/app/utils/playerStreaks";
-import StatCard from "@/app/components/StatCard";
+import StatCard from "@/app/components/ui/deprecated/StatCard";
 import { useState } from "react";
-import { MatchAccordion } from "@/app/components/MatchAccordion";
+import { MatchAccordion } from "@/app/components/ui/deprecated/MatchAccordion";
 
 type MatchHistory = {
     [playerId: string]: {

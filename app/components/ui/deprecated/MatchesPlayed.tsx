@@ -2,7 +2,7 @@
 
 import {  getSortedStats } from "@/app/utils/playerHelpers";
 import { Player } from "@/app/types";
-import CustomBadgeForPlayer from "@/app/components/CustomBadgeForPlayer";
+import CustomBadgeForPlayer from "@/app/components/ui/deprecated/CustomBadgeForPlayer";
 
 type Props = {
     players: Player[];

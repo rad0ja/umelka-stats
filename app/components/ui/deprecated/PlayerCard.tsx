@@ -1,6 +1,6 @@
 'use client'
 
-import StatCard from "@/app/components/StatCard";
+import StatCard from "@/app/components/ui/deprecated/StatCard";
 
 type Props = {
     name: string;

@@ -4,6 +4,7 @@ import { Trophy, Target } from 'lucide-react'
 import { StatCard } from './components/StatCard'
 import { TopScorerCard } from './components/TopScorerCard'
 import { PlayerStatsData } from './types/player-stats-types'
+import { MatchSection } from './components/MatchSection'
 
 interface PlayerStatsProps {
   data: PlayerStatsData | null
@@ -42,7 +43,7 @@ export function PlayerStats({ data }: PlayerStatsProps) {
             icon={Target}
             label="Goals"
             value={`${stats.goals}/${goalTarget}`}
-            color="bg-gradient-to-br from-blue-500 to-blue-600 text-white"
+            color="bg-gradient-to-br from-blue-600/50 to-emerald-800/50 text-white"
           />
         </div>
       </div>

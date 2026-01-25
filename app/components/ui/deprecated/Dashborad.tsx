@@ -3,10 +3,10 @@
 import { usePlayerStats } from "@/app/hooks/usePlayerStats";
 import { usePlayerMatchData } from "@/app/hooks/usePlayerMatchData";
 import { getLastMatches } from "@/app/utils/playerHelpers";
-import TopScorers from "@/app/components/TopScorers";
+import TopScorers from "@/app/components/ui/deprecated/TopScorers";
 import Link from "next/link";
-import MostWins from "@/app/components/MostWins";
-import MatchResults from "@/app/components/MatchResult";
+import MostWins from "@/app/components/ui/deprecated/MostWins";
+import MatchResults from "@/app/components/ui/deprecated/MatchResult";
 import {playerVsPlayerStats} from "@/app/utils/playerVsPlayerStats";
 
 export default function Dashboard() {

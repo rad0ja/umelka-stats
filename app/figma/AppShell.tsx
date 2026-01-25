@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import MainContent from '../components/figma/components/MainContent';
 import { BottomTabNavigation, TabType } from '../components/figma/components/BottomTabNavigation';
 import { PlayerStatsData } from '../components/figma/types/player-stats-types';
@@ -11,6 +11,18 @@ type Props = {
 
 export default function AppShell({ playerStats }: Props) {
   const [activeTab, setActiveTab] = useState<TabType>('stats');
+
+  useEffect(() => {
+   const colors = {
+    stats: '#aa0101',
+    matches: '#0277bd',
+    chat: '#2e7d32',
+    profile: '#6a1b9a',
+   };
+
+   document.documentElement.style.setProperty('--bg-color', colors[activeTab]);
+   // Any side effects if needed
+  }, [activeTab]);
 
   return (
     <div className="w-full max-w-md mx-auto bg-gray-50 relative overflow-y-hidden safe-area-pt min-h-[100dvh]">

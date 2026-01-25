@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import MatchSummary from "@/app/components/MatchSummary";
+import MatchSummary from "@/app/components/ui/deprecated/MatchSummary";
 import { Player, Match } from "@/app/types";
 
 

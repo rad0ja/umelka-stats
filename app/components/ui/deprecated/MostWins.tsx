@@ -2,7 +2,7 @@
 
 import { Player } from "@/app/types";
 import { getSortedStats } from "@/app/utils/playerHelpers";
-import CustomBadgeForPlayer from "@/app/components/CustomBadgeForPlayer";
+import CustomBadgeForPlayer from "@/app/components/ui/deprecated/CustomBadgeForPlayer";
 
 type Props = {
     wins:Record<string, number>;

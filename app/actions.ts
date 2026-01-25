@@ -245,3 +245,140 @@ export async function sendChatMessage(content: string) {
 
     return { success: true, message }
 }
+
+// Send event chat message and trigger notifications
+export async function sendEventChatMessage(eventId: string, content: string) {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+
+    if (!user) {
+        return { success: false, error: 'Not authenticated' }
+    }
+
+    // Get sender's player name
+    const { data: player } = await supabase
+        .from('players')
+        .select('name')
+        .eq('user_id', user.id)
+        .single()
+
+    const senderName = player?.name || 'Someone'
+
+    // Get event title for notification context
+    const { data: event } = await supabase
+        .from('events')
+        .select('title')
+        .eq('id', eventId)
+        .single()
+
+    const eventTitle = event?.title || 'Event'
+
+    // Insert the message
+    const { data: message, error } = await supabase
+        .from('event_chat_messages')
+        .insert({
+            event_id: eventId,
+            user_id: user.id,
+            content: content.trim()
+        })
+        .select()
+        .single()
+
+    if (error) {
+        console.error('[sendEventChatMessage] Error sending message:', error)
+        return { success: false, error: 'Failed to send message' }
+    }
+
+    // Send push notifications to event participants (excluding sender)
+    try {
+        await sendEventChatNotification(eventId, user.id, senderName, eventTitle, content)
+    } catch (err) {
+        console.error('[sendEventChatMessage] Error sending notifications:', err)
+    }
+
+    return { success: true, message }
+}
+
+// Send push notification to event participants
+export async function sendEventChatNotification(
+    eventId: string,
+    senderUserId: string,
+    senderName: string,
+    eventTitle: string,
+    messageContent: string
+) {
+    const supabase = await createClient()
+
+    // Get participants of this event (excluding sender) with status yes or tentative
+    const { data: participants } = await supabase
+        .from('event_participants')
+        .select('user_id')
+        .eq('event_id', eventId)
+        .neq('user_id', senderUserId)
+        .in('status', ['yes', 'tentative', 'queued'])
+
+    if (!participants || participants.length === 0) {
+        return { success: true, sent: 0 }
+    }
+
+    const participantIds = participants.map(p => p.user_id).filter(Boolean) as string[]
+
+    // Get subscriptions for these participants
+    const { data: subscriptions } = await supabase
+        .from('push_subscriptions')
+        .select('subscription, user_id')
+        .in('user_id', participantIds)
+
+    if (!subscriptions || subscriptions.length === 0) {
+        return { success: true, sent: 0 }
+    }
+
+    initVapid()
+
+    const truncatedMessage = messageContent.length > 100
+        ? messageContent.substring(0, 100) + '...'
+        : messageContent
+
+    const payload = JSON.stringify({
+        title: `${senderName} in ${eventTitle}`,
+        body: truncatedMessage,
+        icon: '/icon.png',
+        data: {
+            type: 'event_chat',
+            eventId: eventId,
+            url: `/event/${eventId}`
+        }
+    })
+
+    let sentCount = 0
+    const failedUserIds: string[] = []
+
+    await Promise.all(
+        subscriptions.map(async ({ subscription, user_id }) => {
+            try {
+                await webpush.sendNotification(
+                    subscription as unknown as PushSubscription,
+                    payload
+                )
+                sentCount++
+            } catch (error: unknown) {
+                if (error && typeof error === 'object' && 'statusCode' in error) {
+                    const statusCode = (error as { statusCode: number }).statusCode
+                    if (statusCode === 404 || statusCode === 410) {
+                        failedUserIds.push(user_id!)
+                    }
+                }
+            }
+        })
+    )
+
+    // Clean up invalid subscriptions
+    if (failedUserIds.length > 0) {
+        await supabase
+            .from('push_subscriptions')
+            .delete()
+            .in('user_id', failedUserIds)
+    }
+
+    return { success: true, sent: sentCount }
+}

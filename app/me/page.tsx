@@ -1,6 +1,6 @@
 'use client';
 
-import LogoutButton from "@/app/components/LogoutButton";
+import LogoutButton from "@/app/components/ui/deprecated/LogoutButton";
 import {usePlayerCalculatedScore} from "@/app/hooks/usePlayerCalculatedScore";
 
 export default function MyProfilePage() {

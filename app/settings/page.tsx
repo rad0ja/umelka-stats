@@ -1,6 +1,6 @@
 'use client'
 
-import SeasonPicker from "@/app/components/SeasonPicker";
+import SeasonPicker from "@/app/components/ui/deprecated/SeasonPicker";
 
 export default function Settings() {
    return (

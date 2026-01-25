@@ -2,10 +2,17 @@
 
 import { motion } from 'motion/react';
 import { Trash2 } from 'lucide-react';
-import { ChatMessage as ChatMessageType } from '../hooks/useChat';
+
+type BaseChatMessage = {
+  id: string;
+  user_id: string;
+  content: string;
+  created_at: string;
+  player_name: string;
+};
 
 type Props = {
-  message: ChatMessageType;
+  message: BaseChatMessage;
   isOwnMessage: boolean;
   index: number;
   onDelete?: (messageId: string) => void;

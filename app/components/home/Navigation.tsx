@@ -1,9 +1,9 @@
 'use client'
 
 import { Menu, X, Home, Calendar, Users, Trophy, Bell } from 'lucide-react';
-import Dropdown from "@/app/components/Dropdown";
-import SeasonPicker from "@/app/components/SeasonPicker";
-import LogoutButton from "@/app/components/LogoutButton";
+import Dropdown from "@/app/components/ui/deprecated/Dropdown";
+import SeasonPicker from "@/app/components/ui/deprecated/SeasonPicker";
+import LogoutButton from "@/app/components/ui/deprecated/LogoutButton";
 import { useState } from "react";
 
 interface NavigationProps {

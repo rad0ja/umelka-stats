@@ -2,13 +2,13 @@
 
 import { usePlayerMatchData } from "@/app/hooks/usePlayerMatchData";
 import { usePlayerStats } from "@/app/hooks/usePlayerStats";
-import TopScorers from "@/app/components/TopScorers";
-import MostWins from "@/app/components/MostWins";
-import MatchesPlayed from "@/app/components/MatchesPlayed";
-import WinRatios from "@/app/components/WinRatios";
-import GoalsPerGame from "@/app/components/GoalsPerGame";
+import TopScorers from "@/app/components/ui/deprecated/TopScorers";
+import MostWins from "@/app/components/ui/deprecated/MostWins";
+import MatchesPlayed from "@/app/components/ui/deprecated/MatchesPlayed";
+import WinRatios from "@/app/components/ui/deprecated/WinRatios";
+import GoalsPerGame from "@/app/components/ui/deprecated/GoalsPerGame";
 
-import MVPScore from "@/app/components/MVPScore";
+import MVPScore from "@/app/components/ui/deprecated/MVPScore";
 
 export default function StatsFull() {
     const { players, matches, loading } = usePlayerMatchData();

@@ -1,6 +1,6 @@
 'use client';
 
-import RecentFormBadge from "@/app/components/RecentFormBadge";
+import RecentFormBadge from "@/app/components/ui/deprecated/RecentFormBadge";
 import { getRecentForm } from "@/app/utils/form-utils";
 import { usePlayerMatchData } from "@/app/hooks/usePlayerMatchData";
 

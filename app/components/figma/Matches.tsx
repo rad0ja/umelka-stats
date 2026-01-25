@@ -1,14 +1,12 @@
 'use client';
 
 import { useMatches } from './hooks/useMatches';
-import { useRsvp } from './hooks/useRsvp';
 import { UpcomingMatchCard } from './components/UpcomingMatchCard';
 import { PastMatchCard } from './components/PastMatchCard';
 import { MatchSection } from './components/MatchSection';
 
 export function Matches() {
-  const { loading, upcomingMatches, completedMatches, refetchEvents } = useMatches();
-  const { handleRsvp, rsvpLoading } = useRsvp(refetchEvents);
+  const { loading, upcomingMatches, completedMatches } = useMatches();
 
   if (loading) {
     return (
@@ -38,8 +36,6 @@ export function Matches() {
               key={match.id}
               match={match}
               index={index}
-              onRsvp={handleRsvp}
-              isLoading={rsvpLoading[match.id] || false}
             />
           ))}
         </MatchSection>

@@ -1,16 +1,16 @@
 // app/players/[id]/page.tsx
 'use client';
 
-import PlayerCard from '@/app/components/PlayerCard';
+import PlayerCard from '@/app/components/ui/deprecated/PlayerCard';
 import { getTrophy } from '@/app/utils/playerHelpers';
 import { usePlayerCalculatedScore } from "@/app/hooks/usePlayerCalculatedScore";
 import { usePlayerMatchData } from "@/app/hooks/usePlayerMatchData";
-import PlayerMatchHistory from "@/app/components/PlayerMatchHistory";
+import PlayerMatchHistory from "@/app/components/ui/deprecated/PlayerMatchHistory";
 import { playerMatchHistory } from "@/app/utils/playerMatchHistory";
 import { getAllMVPs } from "@/app/utils/getAllMVPs";
 import {SeasonProvider} from "@/app/context/SeasonContext";
-import SeasonPicker from "@/app/components/SeasonPicker";
-import {GoalProgress} from "@/app/components/GoalProgress";
+import SeasonPicker from "@/app/components/ui/deprecated/SeasonPicker";
+import {GoalProgress} from "@/app/components/ui/deprecated/GoalProgress";
 
 export default function PlayerDetailPage() {
     const { playerCalc, goalsCalc, matchesPlayedCalc, winsCalc, drawsCalc } = usePlayerCalculatedScore();

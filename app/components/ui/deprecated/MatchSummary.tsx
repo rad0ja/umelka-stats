@@ -2,7 +2,7 @@
 
 import {Match, Player} from "@/app/types";
 import { getPlayerName } from "@/app/utils/playerHelpers";
-import RecentFormBadge from "@/app/components/RecentFormBadge";
+import RecentFormBadge from "@/app/components/ui/deprecated/RecentFormBadge";
 import { getRecentForm } from "@/app/utils/form-utils";
 import { usePlayerMatchData } from "@/app/hooks/usePlayerMatchData";
 import Link from "next/link";

@@ -1,6 +1,6 @@
 import { User, Mail, Phone, MapPin, Calendar, Award, Activity } from 'lucide-react';
 import { motion } from 'motion/react';
-import LogoutButton from '../LogoutButton';
+import LogoutButton from '../ui/deprecated/LogoutButton';
 import InstallPrompt from '@/app/notif/InstallPrompt';
 import PushNotificationManager from '@/app/notif/PushNotificationManager';
 

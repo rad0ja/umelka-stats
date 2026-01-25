@@ -4,9 +4,9 @@ import { useEffect, useState } from 'react';
 import { getAllMVPs } from '@/app/utils/getAllMVPs';
 import { supabase } from '@/lib/supabase';
 import { getTrophy } from "@/app/utils/playerHelpers";
-import MVPDialog from "@/app/components/MVPDialog";
+import MVPDialog from "@/app/components/ui/deprecated/MVPDialog";
 import {useSeason} from "@/app/context/SeasonContext";
-import CustomBadgeForPlayer from "@/app/components/CustomBadgeForPlayer";
+import CustomBadgeForPlayer from "@/app/components/ui/deprecated/CustomBadgeForPlayer";
 
 type MVPPlayer = {
     id: string;
