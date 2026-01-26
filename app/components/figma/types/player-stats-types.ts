@@ -18,10 +18,10 @@ export interface PlayerStatsData {
 }
 
 export interface StatCardProps {
-  icon: React.ComponentType<{ className?: string }>
+  icon: React.ComponentType<{ className?: string; strokeWidth?: number; style?: React.CSSProperties }>
   label: string
   value: string
-  color: string
+  variant: 'win' | 'goal'
 }
 
 export interface TopScorerCardProps {

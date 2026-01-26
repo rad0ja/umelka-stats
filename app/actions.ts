@@ -26,13 +26,23 @@ export async function setSeason(seasonId: string) {
 }
 
 function initVapid() {
-    if (process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY) {
-        webpush.setVapidDetails(
-            'mailto:janrdch@gmail.com',
-            process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY,
-            process.env.VAPID_PRIVATE_KEY
-        )
+    const publicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY
+    const privateKey = process.env.VAPID_PRIVATE_KEY
+
+    console.log('[initVapid] Public key exists:', !!publicKey)
+    console.log('[initVapid] Private key exists:', !!privateKey)
+
+    if (!publicKey || !privateKey) {
+        console.error('[initVapid] VAPID keys are not configured!')
+        return false
     }
+
+    webpush.setVapidDetails(
+        'mailto:janrdch@gmail.com',
+        publicKey,
+        privateKey
+    )
+    return true
 }
 
 export async function subscribeUser(sub: PushSubscription) {
@@ -105,7 +115,9 @@ export async function sendNotification(message: string) {
         throw new Error('No subscription available')
     }
 
-    initVapid()
+    if (!initVapid()) {
+        throw new Error('VAPID keys not configured in production environment')
+    }
 
     try {
         await webpush.sendNotification(
@@ -143,7 +155,10 @@ export async function sendChatNotification(senderUserId: string, senderName: str
         return { success: true, sent: 0 }
     }
 
-    initVapid()
+    if (!initVapid()) {
+        console.error('[Chat Notification] Cannot send - VAPID keys not configured')
+        return { success: false, sent: 0, error: 'VAPID keys not configured' }
+    }
 
     const truncatedMessage = messageContent.length > 100
         ? messageContent.substring(0, 100) + '...'
@@ -333,7 +348,10 @@ export async function sendEventChatNotification(
         return { success: true, sent: 0 }
     }
 
-    initVapid()
+    if (!initVapid()) {
+        console.error('[Event Chat Notification] Cannot send - VAPID keys not configured')
+        return { success: false, sent: 0, error: 'VAPID keys not configured' }
+    }
 
     const truncatedMessage = messageContent.length > 100
         ? messageContent.substring(0, 100) + '...'

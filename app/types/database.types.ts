@@ -150,21 +150,21 @@ export type Database = {
         Row: {
           created_at: string | null
           id: string
-          max_players: number
+          max_participants: number
           start_time: string
           title: string
         }
         Insert: {
           created_at?: string | null
           id?: string
-          max_players: number
+          max_participants: number
           start_time: string
           title: string
         }
         Update: {
           created_at?: string | null
           id?: string
-          max_players?: number
+          max_participants?: number
           start_time?: string
           title?: string
         }

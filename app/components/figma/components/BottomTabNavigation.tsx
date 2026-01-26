@@ -2,6 +2,7 @@
 
 import { BarChart3, Calendar, User, MessageCircle } from "lucide-react";
 import { motion } from "motion/react";
+import { useKeyboardVisibility } from "../hooks/useKeyboardVisibilty";
 
 export type TabType = 'stats' | 'matches' | 'chat' | 'profile';
 
@@ -24,7 +25,11 @@ type Props = {
 }
 
 export function BottomTabNavigation({ activeTab, onTabChange }: Props) {
-   return (
+  const isKeyboardOpen = useKeyboardVisibility(); 
+  
+  if (isKeyboardOpen) return null;
+  
+  return (
     <div className="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-xl border-t border-gray-200/50 safe-area-pb">
       <div className="flex items-center justify-around px-2 pt-2 pb-6">
         {tabs.map(({ id, label, icon: Icon }) => {

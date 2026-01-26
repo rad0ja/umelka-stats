@@ -4,6 +4,15 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  /* Clean Sports App Palette */
+  --stats-bg: #0f1318;
+  --stats-card: #1a1f26;
+  --stats-accent: #00ff87;
+  --stats-purple: #7c3aed;
+  --stats-text: #ffffff;
+  --stats-text-dim: #9ca3af;
+  --stats-border: rgba(255,255,255,0.08);
 }
 
 @theme inline {
@@ -24,4 +33,15 @@ body {
   background: var(--bg-color);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Stats typography */
+.stats-heading {
+  font-family: var(--font-barlow), system-ui, sans-serif;
+  font-weight: 700;
+}
+
+.stats-value {
+  font-family: var(--font-bebas), system-ui, sans-serif;
+  letter-spacing: 0.02em;
 }

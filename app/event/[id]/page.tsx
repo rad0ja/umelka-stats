@@ -119,7 +119,7 @@ export default function EventPage({ params }: EventPageProps) {
             <RSVPSection
               eventId={event.id}
               participants={event.participants}
-              maxPlayers={event.max_players}
+              maxPlayers={event.max_participants}
               currentUserStatus={event.currentUserStatus}
               onRsvp={handleRsvp}
               isLoading={rsvpLoading[event.id] || false}
@@ -137,7 +137,7 @@ export default function EventPage({ params }: EventPageProps) {
           <div className="flex items-center gap-2 mb-4">
             <Users className="w-5 h-5 text-gray-600 dark:text-gray-400" />
             <h2 className="font-semibold text-gray-900 dark:text-white">
-              Participants ({event.participants.going.length}/{event.max_players})
+              Participants ({event.participants.going.length}/{event.max_participants})
             </h2>
           </div>
 

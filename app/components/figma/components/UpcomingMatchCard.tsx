@@ -42,7 +42,7 @@ export function UpcomingMatchCard({ match, index }: UpcomingMatchCardProps) {
         </div>
         <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
           <Users className="w-4 h-4" />
-          <span>{match.participants.going.length} going</span>
+          <span>{match.participants.going.length} / {match.max_participants} going</span>
         </div>
       </motion.div>
     </Link>
