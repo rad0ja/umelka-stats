@@ -113,7 +113,8 @@ export function Chat() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.8 }}
               onClick={() => scrollToBottom()}
-              className="fixed bottom-36 right-4 w-10 h-10 bg-white dark:bg-gray-800 rounded-full shadow-lg flex items-center justify-center border border-gray-200 dark:border-gray-700"
+              aria-label="Scroll to bottom"
+              className="fixed bottom-36 right-4 w-10 h-10 bg-white dark:bg-gray-800 rounded-full shadow-lg flex items-center justify-center border border-gray-200 dark:border-gray-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
             >
               <ArrowDown className="w-5 h-5 text-gray-600 dark:text-gray-300" />
             </motion.button>
@@ -126,6 +127,7 @@ export function Chat() {
         <form onSubmit={handleSubmit} className="flex items-end gap-2">
           <div className="flex-1 relative">
             <textarea
+              name="message"
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
               onKeyDown={handleKeyDown}
@@ -140,7 +142,8 @@ export function Chat() {
             type="submit"
             disabled={!newMessage.trim() || sending}
             whileTap={{ scale: 0.9 }}
-            className={`p-3 rounded-full transition-colors ${
+            aria-label="Send message"
+            className={`p-3 rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 ${
               newMessage.trim() && !sending
                 ? 'bg-blue-500 text-white'
                 : 'bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500'

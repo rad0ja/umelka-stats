@@ -14,10 +14,10 @@ export function ParticipantsList({ going, tentative, queued, isExpanded }: Parti
     <AnimatePresence>
       {isExpanded && (
         <motion.div
-          initial={{ height: 0, opacity: 0 }}
-          animate={{ height: 'auto', opacity: 1 }}
-          exit={{ height: 0, opacity: 0 }}
-          className="overflow-hidden"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
         >
           <div className="mt-3 pt-3 border-t border-gray-100 dark:border-gray-800 space-y-3">
             {/* Going */}

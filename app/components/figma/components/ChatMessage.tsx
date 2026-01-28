@@ -82,7 +82,8 @@ export function ChatMessage({ message, isOwnMessage, index, onDelete }: Props) {
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={() => onDelete(message.id)}
-            className="absolute -left-8 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity p-1.5 rounded-full bg-red-100 dark:bg-red-900/30 text-red-500"
+            aria-label="Delete message"
+            className="absolute -left-8 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity p-1.5 rounded-full bg-red-100 dark:bg-red-900/30 text-red-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
           >
             <Trash2 className="w-3.5 h-3.5" />
           </motion.button>

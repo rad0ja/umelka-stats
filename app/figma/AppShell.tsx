@@ -4,13 +4,21 @@ import { useEffect, useState } from 'react';
 import MainContent from '../components/figma/components/MainContent';
 import { BottomTabNavigation, TabType } from '../components/figma/components/BottomTabNavigation';
 import { PlayerStatsData } from '../components/figma/types/player-stats-types';
+import { registerPushToken } from '@/lib/firebase-client';
 
 type Props = {
   playerStats: PlayerStatsData; // replace with real type
+  userId?: string;
 };
 
-export default function AppShell({ playerStats }: Props) {
+export default function AppShell({ playerStats, userId }: Props) {
   const [activeTab, setActiveTab] = useState<TabType>('stats');
+
+  useEffect(() => {
+    if (userId) {
+      registerPushToken(userId);
+    }
+  }, [userId]);
 
   useEffect(() => {
    const colors = {
@@ -21,7 +29,6 @@ export default function AppShell({ playerStats }: Props) {
    };
 
    document.documentElement.style.setProperty('--bg-color', colors[activeTab]);
-   // Any side effects if needed
   }, [activeTab]);
 
   return (

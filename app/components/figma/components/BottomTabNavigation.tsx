@@ -39,7 +39,9 @@ export function BottomTabNavigation({ activeTab, onTabChange }: Props) {
             <motion.button
               key={id}
               onClick={() => onTabChange(id)}
-              className="flex flex-col items-center gap-1 px-6 py-2 relative"
+              aria-label={label}
+              aria-current={isActive ? 'page' : undefined}
+              className="flex flex-col items-center gap-1 px-6 py-2 relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 rounded-lg"
               whileTap={{ scale: 0.9 }}
             >
               <motion.div

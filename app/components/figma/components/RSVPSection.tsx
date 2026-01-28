@@ -54,7 +54,9 @@ export function RSVPSection({
           whileTap={{ scale: 0.95 }}
           onClick={() => onRsvp(eventId, 'yes')}
           disabled={isLoading}
-          className={`flex-1 py-3 rounded-xl font-semibold transition-colors ${
+          aria-label={currentUserStatus === 'queued' ? 'Queued - click to change RSVP' : 'RSVP Yes'}
+          aria-pressed={currentUserStatus === 'yes' || currentUserStatus === 'queued'}
+          className={`flex-1 py-3 rounded-xl font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2 ${
             currentUserStatus === 'yes'
               ? 'bg-green-500 text-white'
               : currentUserStatus === 'queued'
@@ -79,7 +81,9 @@ export function RSVPSection({
           whileTap={{ scale: 0.95 }}
           onClick={() => onRsvp(eventId, 'tentative')}
           disabled={isLoading}
-          className={`flex-1 py-3 rounded-xl font-semibold transition-colors ${
+          aria-label="RSVP Maybe"
+          aria-pressed={currentUserStatus === 'tentative'}
+          className={`flex-1 py-3 rounded-xl font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2 ${
             currentUserStatus === 'tentative'
               ? 'bg-orange-500 text-white'
               : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300'
@@ -93,7 +97,9 @@ export function RSVPSection({
           whileTap={{ scale: 0.95 }}
           onClick={() => onRsvp(eventId, 'no')}
           disabled={isLoading}
-          className={`flex-1 py-3 rounded-xl font-semibold transition-colors ${
+          aria-label="RSVP No"
+          aria-pressed={currentUserStatus === 'no'}
+          className={`flex-1 py-3 rounded-xl font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 ${
             currentUserStatus === 'no'
               ? 'bg-red-500 text-white'
               : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300'

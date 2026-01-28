@@ -9,8 +9,7 @@ export function PlayerLeaderboardItem({ player, rank, index }: PlayerLeaderboard
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: index * 0.05 }}
-      whileTap={{ scale: 0.98 }}
-      className="bg-white dark:bg-gray-900 rounded-2xl p-4 shadow-sm active:shadow-md transition-shadow"
+      className="bg-white dark:bg-gray-900 rounded-2xl p-4 shadow-sm"
     >
       <div className="flex items-center gap-4">
         <div className="text-2xl font-bold text-gray-300 dark:text-gray-600 w-8">
@@ -26,11 +25,11 @@ export function PlayerLeaderboardItem({ player, rank, index }: PlayerLeaderboard
         <div className="text-right">
           <div className="flex items-center gap-4 text-sm">
             <div>
-              <div className="font-semibold text-gray-900 dark:text-white">{player.goals}</div>
+              <div className="font-semibold text-gray-900 dark:text-white tabular-nums">{player.goals}</div>
               <div className="text-xs text-gray-500 dark:text-gray-400">Goals</div>
             </div>
             <div>
-              <div className="font-semibold text-gray-900 dark:text-white">{player.assists}</div>
+              <div className="font-semibold text-gray-900 dark:text-white tabular-nums">{player.assists}</div>
               <div className="text-xs text-gray-500 dark:text-gray-400">Assists</div>
             </div>
           </div>

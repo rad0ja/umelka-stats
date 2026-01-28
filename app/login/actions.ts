@@ -5,7 +5,6 @@ import { redirect } from 'next/navigation'
 import { cookies } from 'next/headers'
 import { createClient } from "@/lib/server";
 
-
 export async function login(formData: FormData) {
     const supabase = await createClient();
 
@@ -28,4 +27,4 @@ export async function login(formData: FormData) {
 
     revalidatePath('/', 'layout')
     redirect('/figma')
-}
+}    

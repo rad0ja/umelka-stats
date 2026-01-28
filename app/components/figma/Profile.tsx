@@ -1,4 +1,4 @@
-import { User, Mail, Phone, MapPin, Calendar, Award, Activity } from 'lucide-react';
+import { Mail, Phone, Calendar, Award, Activity } from 'lucide-react';
 import { motion } from 'motion/react';
 import LogoutButton from '../ui/deprecated/LogoutButton';
 import InstallPrompt from '@/app/notif/InstallPrompt';
@@ -47,19 +47,19 @@ export function Profile() {
           <h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Season Stats</h2>
           <div className="grid grid-cols-2 gap-4">
             <div className="text-center p-4 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/30 dark:to-blue-800/30 rounded-2xl">
-              <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-1">{userStats.personalStats.goals}</div>
+              <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-1 tabular-nums">{userStats.personalStats.goals}</div>
               <div className="text-sm text-gray-600 dark:text-gray-400">Goals</div>
             </div>
             <div className="text-center p-4 bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/30 dark:to-purple-800/30 rounded-2xl">
-              <div className="text-3xl font-bold text-purple-600 dark:text-purple-400 mb-1">{userStats.personalStats.assists}</div>
+              <div className="text-3xl font-bold text-purple-600 dark:text-purple-400 mb-1 tabular-nums">{userStats.personalStats.assists}</div>
               <div className="text-sm text-gray-600 dark:text-gray-400">Assists</div>
             </div>
             <div className="text-center p-4 bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/30 dark:to-green-800/30 rounded-2xl">
-              <div className="text-3xl font-bold text-green-600 dark:text-green-400 mb-1">{userStats.personalStats.matches}</div>
+              <div className="text-3xl font-bold text-green-600 dark:text-green-400 mb-1 tabular-nums">{userStats.personalStats.matches}</div>
               <div className="text-sm text-gray-600 dark:text-gray-400">Matches</div>
             </div>
             <div className="text-center p-4 bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-900/30 dark:to-yellow-800/30 rounded-2xl">
-              <div className="text-3xl font-bold text-yellow-600 dark:text-yellow-400 mb-1">{userStats.personalStats.mvp}</div>
+              <div className="text-3xl font-bold text-yellow-600 dark:text-yellow-400 mb-1 tabular-nums">{userStats.personalStats.mvp}</div>
               <div className="text-sm text-gray-600 dark:text-gray-400">MVP Awards</div>
             </div>
           </div>
@@ -106,8 +106,7 @@ export function Profile() {
       <div className="px-4 pt-6 pb-6">
         <h2 className="text-xl font-semibold mb-3 px-2 dark:text-white">Achievements</h2>
         <div className="space-y-3">
-          <motion.div
-            whileTap={{ scale: 0.98 }}
+          <div
             className="bg-gradient-to-br from-yellow-400 to-orange-500 dark:from-yellow-500 dark:to-orange-600 rounded-2xl p-5 text-white shadow-lg"
           >
             <div className="flex items-center gap-4">
@@ -119,9 +118,8 @@ export function Profile() {
                 <div className="text-sm opacity-90 dark:opacity-80">Most assists this season</div>
               </div>
             </div>
-          </motion.div>
-          <motion.div
-            whileTap={{ scale: 0.98 }}
+          </div>
+          <div
             className="bg-gradient-to-br from-green-500 to-emerald-600 dark:from-green-600 dark:to-emerald-700 rounded-2xl p-5 text-white shadow-lg"
           >
             <div className="flex items-center gap-4">
@@ -133,7 +131,7 @@ export function Profile() {
                 <div className="text-sm opacity-90 dark:opacity-80">Played all matches</div>
               </div>
             </div>
-          </motion.div>
+          </div>
           <LogoutButton />
           <InstallPrompt />
           <PushNotificationManager />

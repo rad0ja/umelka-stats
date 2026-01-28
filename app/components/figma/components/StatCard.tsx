@@ -17,7 +17,6 @@ export function StatCard({ icon: Icon, label, value, variant }: StatCardProps) {
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      whileTap={{ scale: 0.98 }}
       transition={{ duration: 0.3, delay: variant === 'win' ? 0.1 : 0.15 }}
       className="flex-1 rounded-xl p-4"
       style={{ background: 'var(--stats-card)' }}

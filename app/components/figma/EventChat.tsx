@@ -64,7 +64,9 @@ export function EventChat({ eventId }: EventChatProps) {
       {/* Header - clickable to expand/collapse */}
       <button
         onClick={() => setIsExpanded(!isExpanded)}
-        className="w-full flex items-center justify-between p-5"
+        aria-expanded={isExpanded}
+        aria-controls="event-chat-content"
+        className="w-full flex items-center justify-between p-5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-inset"
       >
         <div className="flex items-center gap-2">
           <MessageCircle className="w-5 h-5 text-gray-600 dark:text-gray-400" />
@@ -89,6 +91,7 @@ export function EventChat({ eventId }: EventChatProps) {
       <AnimatePresence>
         {isExpanded && (
           <motion.div
+            id="event-chat-content"
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
@@ -131,6 +134,7 @@ export function EventChat({ eventId }: EventChatProps) {
                 <form onSubmit={handleSubmit} className="flex items-end gap-2">
                   <div className="flex-1">
                     <textarea
+                      name="event-message"
                       value={newMessage}
                       onChange={(e) => setNewMessage(e.target.value)}
                       onKeyDown={handleKeyDown}
@@ -145,7 +149,8 @@ export function EventChat({ eventId }: EventChatProps) {
                     type="submit"
                     disabled={!newMessage.trim() || sending}
                     whileTap={{ scale: 0.9 }}
-                    className={`p-3 rounded-full transition-colors ${
+                    aria-label="Send message"
+                    className={`p-3 rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 ${
                       newMessage.trim() && !sending
                         ? 'bg-blue-500 text-white'
                         : 'bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500'

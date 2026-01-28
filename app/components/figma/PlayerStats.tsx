@@ -31,14 +31,17 @@ export function PlayerStats({ data }: PlayerStatsProps) {
 
   return (
     <div
-      className="h-full overflow-y-auto pb-24"
+      className="flex h-full flex-col bg-gray-50 dark:bg-gray-950"
       style={{ background: 'var(--stats-bg)' }}
     >
       {/* Header */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="pt-14 pb-6 px-5"
+        className="sticky top-0 z-50
+    bg-white dark:bg-gray-900
+    pt-14 pb-4 px-6
+    border-b border-gray-100 dark:border-gray-800"
       >
         <h1 className="stats-heading text-2xl text-white">Stats</h1>
       </motion.div>

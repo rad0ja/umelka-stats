@@ -25,6 +25,7 @@ export function TopScorerCard({ name, goals, avatar }: TopScorerCardProps) {
             background: 'linear-gradient(135deg, #00ff87, #00cc6a)',
             color: '#0f1318',
           }}
+          aria-hidden="true"
         >
           {avatar}
         </div>

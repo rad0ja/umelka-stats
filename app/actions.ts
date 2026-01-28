@@ -400,3 +400,62 @@ export async function sendEventChatNotification(
 
     return { success: true, sent: sentCount }
 }
+
+// Send push notification when a user is promoted from queue to attending
+export async function sendPromotionNotification(
+    userId: string,
+    eventId: string,
+    eventTitle: string
+) {
+    const supabase = await createClient()
+
+    // Get subscription for the promoted user
+    const { data: subData } = await supabase
+        .from('push_subscriptions')
+        .select('subscription')
+        .eq('user_id', userId)
+        .single()
+
+    if (!subData?.subscription) {
+        console.log('[Promotion Notification] No subscription for user:', userId)
+        return { success: true, sent: 0 }
+    }
+
+    if (!initVapid()) {
+        console.error('[Promotion Notification] Cannot send - VAPID keys not configured')
+        return { success: false, sent: 0, error: 'VAPID keys not configured' }
+    }
+
+    const payload = JSON.stringify({
+        title: "You're in! 🎉",
+        body: `A spot opened up in ${eventTitle}. You're now attending!`,
+        icon: '/icon.png',
+        data: {
+            type: 'promotion',
+            eventId: eventId,
+            url: `/event/${eventId}`
+        }
+    })
+
+    try {
+        await webpush.sendNotification(
+            subData.subscription as unknown as PushSubscription,
+            payload
+        )
+        console.log('[Promotion Notification] Sent to user:', userId)
+        return { success: true, sent: 1 }
+    } catch (error: unknown) {
+        console.error('[Promotion Notification] Failed to send:', error)
+        // Clean up invalid subscription
+        if (error && typeof error === 'object' && 'statusCode' in error) {
+            const statusCode = (error as { statusCode: number }).statusCode
+            if (statusCode === 404 || statusCode === 410) {
+                await supabase
+                    .from('push_subscriptions')
+                    .delete()
+                    .eq('user_id', userId)
+            }
+        }
+        return { success: false, sent: 0, error: 'Failed to send notification' }
+    }
+}
