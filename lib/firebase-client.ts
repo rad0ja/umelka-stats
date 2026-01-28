@@ -2,6 +2,7 @@
 
 import { initializeApp, getApps } from "firebase/app"
 import { getMessaging, getToken } from "firebase/messaging"
+import { createClient } from "@/lib/client"
 
 const firebaseConfig = {
     apiKey: "AIzaSyBXa4Ph4MkICouj9fu6CZoPlkL49wDG7Ow",
@@ -20,7 +21,7 @@ function getFirebaseApp() {
     return getApps()[0];
 }
 
-export async function registerPushToken(userId: string) {
+export async function registerPushToken() {
     if (typeof window === 'undefined') {
         console.log('Push notifications only work in the browser');
         return;
@@ -54,13 +55,22 @@ export async function registerPushToken(userId: string) {
             return;
         }
 
+        // Get user's session token for authorization
+        const supabase = createClient();
+        const { data: { session } } = await supabase.auth.getSession();
+
+        if (!session?.access_token) {
+            console.log('No session found');
+            return;
+        }
+
         const response = await fetch("https://qmlrwxnezaqfitmnhhlz.supabase.co/functions/v1/save-fcm-token", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`
+                "Authorization": `Bearer ${session.access_token}`
             },
-            body: JSON.stringify({ token, userId })
+            body: JSON.stringify({ token })
         });
 
         const responseText = await response.text();

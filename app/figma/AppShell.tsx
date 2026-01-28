@@ -7,18 +7,15 @@ import { PlayerStatsData } from '../components/figma/types/player-stats-types';
 import { registerPushToken } from '@/lib/firebase-client';
 
 type Props = {
-  playerStats: PlayerStatsData; // replace with real type
-  userId?: string;
+  playerStats: PlayerStatsData;
 };
 
-export default function AppShell({ playerStats, userId }: Props) {
+export default function AppShell({ playerStats }: Props) {
   const [activeTab, setActiveTab] = useState<TabType>('stats');
 
   useEffect(() => {
-    if (userId) {
-      registerPushToken(userId);
-    }
-  }, [userId]);
+    registerPushToken();
+  }, []);
 
   useEffect(() => {
    const colors = {
