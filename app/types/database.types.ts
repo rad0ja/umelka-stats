@@ -41,54 +41,54 @@ export type Database = {
     Tables: {
       chat_messages: {
         Row: {
-          id: string
-          user_id: string
           content: string
           created_at: string | null
+          id: string
+          user_id: string
         }
         Insert: {
-          id?: string
-          user_id: string
           content: string
           created_at?: string | null
+          id?: string
+          user_id: string
         }
         Update: {
-          id?: string
-          user_id?: string
           content?: string
           created_at?: string | null
+          id?: string
+          user_id?: string
         }
         Relationships: [
           {
             foreignKeyName: "chat_messages_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
+            referencedRelation: "player_users_view"
+            referencedColumns: ["user_id"]
           },
         ]
       }
       event_chat_messages: {
         Row: {
-          id: string
-          event_id: string
-          user_id: string
           content: string
           created_at: string | null
+          event_id: string
+          id: string
+          user_id: string
         }
         Insert: {
-          id?: string
-          event_id: string
-          user_id: string
           content: string
           created_at?: string | null
+          event_id: string
+          id?: string
+          user_id: string
         }
         Update: {
-          id?: string
-          event_id?: string
-          user_id?: string
           content?: string
           created_at?: string | null
+          event_id?: string
+          id?: string
+          user_id?: string
         }
         Relationships: [
           {
@@ -102,8 +102,8 @@ export type Database = {
             foreignKeyName: "event_chat_messages_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
+            referencedRelation: "player_users_view"
+            referencedColumns: ["user_id"]
           },
         ]
       }
@@ -169,6 +169,38 @@ export type Database = {
           title?: string
         }
         Relationships: []
+      }
+      fcm_subscription: {
+        Row: {
+          created_at: string | null
+          id: string
+          token: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          token: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          token?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fcm_subscription_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "player_users_view"
+            referencedColumns: ["user_id"]
+          },
+        ]
       }
       feedback: {
         Row: {
@@ -315,8 +347,8 @@ export type Database = {
             foreignKeyName: "push_subscriptions_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: "players"
-            referencedColumns: ["id"]
+            referencedRelation: "player_users_view"
+            referencedColumns: ["user_id"]
           },
         ]
       }

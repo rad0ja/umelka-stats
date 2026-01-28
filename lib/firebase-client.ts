@@ -56,11 +56,15 @@ export async function registerPushToken(userId: string) {
 
         const response = await fetch("https://qmlrwxnezaqfitmnhhlz.supabase.co/functions/v1/save-fcm-token", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`
+            },
             body: JSON.stringify({ token, userId })
         });
 
-        console.log('Save token response:', response.status);
+        const responseText = await response.text();
+        console.log('Save token response:', response.status, responseText);
         return token;
     } catch (error) {
         console.error('Error registering push token:', error);
