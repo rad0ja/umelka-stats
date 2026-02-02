@@ -29,7 +29,7 @@ export default function AppShell({ playerStats }: Props) {
   }, [activeTab]);
 
   return (
-    <div className="w-full max-w-md mx-auto bg-gray-50 relative overflow-y-hidden safe-area-pt min-h-[100dvh]">
+    <div className="w-full max-w-md mx-auto bg-gray-50 relative overflow-hidden safe-area-pt h-full flex flex-col">
       <MainContent
         activeTab={activeTab}
         playerStats={playerStats}

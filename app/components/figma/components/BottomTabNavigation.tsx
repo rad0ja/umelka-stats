@@ -30,8 +30,8 @@ export function BottomTabNavigation({ activeTab, onTabChange }: Props) {
   if (isKeyboardOpen) return null;
   
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-xl border-t border-gray-200/50 safe-area-pb">
-      <div className="flex items-center justify-around px-2 pt-2 pb-6">
+    <div className="shrink-0 bg-white/80 backdrop-blur-xl border-t border-gray-200/50 safe-area-pb">
+      <div className="flex items-center justify-around px-2 pt-2 pb-2">
         {tabs.map(({ id, label, icon: Icon }) => {
           const isActive = activeTab === id;
 

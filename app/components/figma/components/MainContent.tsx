@@ -14,7 +14,7 @@ type Props = {
 
 export default function MainContent({ activeTab, playerStats }: Props) {
     return (
-        <div className="h-full">
+        <div className="flex-1 min-h-0 safe-area-pt">
             {activeTab === 'stats' && <PlayerStats data={playerStats} />}
             {activeTab === 'matches' && <Matches />}
             {activeTab === 'chat' && <Chat />}

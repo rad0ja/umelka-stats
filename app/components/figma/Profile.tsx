@@ -21,9 +21,9 @@ export function Profile() {
   };
 
   return (
-    <div className="h-full overflow-y-auto pb-24 bg-gray-50 dark:bg-gray-950">
-      {/* Header */}
-      <div className="bg-gradient-to-br from-blue-500 to-purple-600 dark:from-blue-600 dark:to-purple-700 pt-14 pb-8 px-6">
+    <div className="h-full flex flex-col bg-gray-50 dark:bg-gray-950">
+      {/* Header — outside scroll */}
+      <div className="shrink-0 bg-gradient-to-br from-blue-500 to-purple-600 dark:from-blue-600 dark:to-purple-700 pt-14 pb-8 px-6">
         <div className="flex flex-col items-center text-white">
           <div className="w-24 h-24 rounded-full bg-white/20 dark:bg-white/10 backdrop-blur-sm flex items-center justify-center text-3xl font-bold mb-4 border-4 border-white/30 dark:border-white/20">
             JL
@@ -37,8 +37,11 @@ export function Profile() {
         </div>
       </div>
 
+      {/* Scrollable content — overlaps header gradient */}
+      <div className="flex-1 min-h-0 overflow-y-auto -mt-6 relative z-10">
+
       {/* Personal Stats */}
-      <div className="px-4 -mt-6">
+      <div className="px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -136,6 +139,7 @@ export function Profile() {
           <InstallPrompt />
           <PushNotificationManager />
         </div>
+      </div>
       </div>
     </div>
   );
