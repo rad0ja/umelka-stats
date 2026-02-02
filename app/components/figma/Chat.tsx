@@ -62,48 +62,50 @@ export function Chat() {
 
   return (
     <div className="h-full flex flex-col bg-gray-50 dark:bg-gray-950">
-      {/* Header */}
-      <div className="bg-white dark:bg-gray-900 pt-14 pb-4 px-6 border-b border-gray-100 dark:border-gray-800">
+      {/* Header — outside scroll */}
+      <div className="shrink-0 bg-white dark:bg-gray-900 pt-14 pb-4 px-6 border-b border-gray-100 dark:border-gray-800">
         <h1 className="text-4xl font-bold mb-1 dark:text-white">Chat</h1>
         <p className="text-gray-500 dark:text-gray-400">Team conversation</p>
       </div>
 
-      {/* Messages Container */}
-      <div
-        ref={messagesContainerRef}
-        onScroll={handleScroll}
-        className="flex-1 overflow-y-auto px-4 py-4 relative"
-      >
-        {messages.length === 0 ? (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="flex flex-col items-center justify-center h-full text-center px-6"
-          >
-            <div className="w-16 h-16 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center mb-4">
-              <MessageCircle className="w-8 h-8 text-blue-500" />
-            </div>
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-              No messages yet
-            </h3>
-            <p className="text-gray-500 dark:text-gray-400 text-sm">
-              Be the first to start the conversation!
-            </p>
-          </motion.div>
-        ) : (
-          <AnimatePresence mode="popLayout">
-            {messages.map((message, index) => (
-              <ChatMessage
-                key={message.id}
-                message={message}
-                isOwnMessage={message.user_id === currentUserId}
-                index={index}
-                onDelete={message.user_id === currentUserId ? deleteMessage : undefined}
-              />
-            ))}
-          </AnimatePresence>
-        )}
-        <div ref={messagesEndRef} />
+      {/* Messages — only scroll container */}
+      <div className="flex-1 min-h-0 relative">
+        <div
+          ref={messagesContainerRef}
+          onScroll={handleScroll}
+          className="h-full overflow-y-auto px-4 py-4"
+        >
+          {messages.length === 0 ? (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex flex-col items-center justify-center h-full text-center px-6"
+            >
+              <div className="w-16 h-16 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center mb-4">
+                <MessageCircle className="w-8 h-8 text-blue-500" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                No messages yet
+              </h3>
+              <p className="text-gray-500 dark:text-gray-400 text-sm">
+                Be the first to start the conversation!
+              </p>
+            </motion.div>
+          ) : (
+            <AnimatePresence mode="popLayout">
+              {messages.map((message, index) => (
+                <ChatMessage
+                  key={message.id}
+                  message={message}
+                  isOwnMessage={message.user_id === currentUserId}
+                  index={index}
+                  onDelete={message.user_id === currentUserId ? deleteMessage : undefined}
+                />
+              ))}
+            </AnimatePresence>
+          )}
+          <div ref={messagesEndRef} />
+        </div>
 
         {/* Scroll to bottom button */}
         <AnimatePresence>
@@ -114,7 +116,7 @@ export function Chat() {
               exit={{ opacity: 0, scale: 0.8 }}
               onClick={() => scrollToBottom()}
               aria-label="Scroll to bottom"
-              className="fixed bottom-36 right-4 w-10 h-10 bg-white dark:bg-gray-800 rounded-full shadow-lg flex items-center justify-center border border-gray-200 dark:border-gray-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+              className="absolute bottom-4 right-4 w-10 h-10 bg-white dark:bg-gray-800 rounded-full shadow-lg flex items-center justify-center border border-gray-200 dark:border-gray-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
             >
               <ArrowDown className="w-5 h-5 text-gray-600 dark:text-gray-300" />
             </motion.button>
@@ -122,8 +124,8 @@ export function Chat() {
         </AnimatePresence>
       </div>
 
-      {/* Message Input */}
-      <div className="bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 px-4 py-3 pb-24">
+      {/* Message Input — outside scroll */}
+      <div className="shrink-0 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 px-4 py-3">
         <form onSubmit={handleSubmit} className="flex items-end gap-2">
           <div className="flex-1 relative">
             <textarea
@@ -133,7 +135,7 @@ export function Chat() {
               onKeyDown={handleKeyDown}
               placeholder="Type a message..."
               rows={1}
-              className="w-full px-4 py-3 bg-gray-100 dark:bg-gray-800 rounded-2xl text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+              className="w-full px-4 py-3 bg-gray-100 dark:bg-gray-800 rounded-2xl text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 text-base"
               style={{ maxHeight: '120px' }}
             />
           </div>
