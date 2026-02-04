@@ -3,7 +3,7 @@
 
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/client";
-import { useSeason } from "@/app/context/SeasonContext";
+import { useSeason } from "@/oldAPP/ios/context/SeasonContext";
 
 export function usePlayerMatchData() {
     const { seasonId } = useSeason();

@@ -54,7 +54,7 @@ export default function EventPage({ params }: EventPageProps) {
   const isUpcoming = eventDate >= new Date();
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 pb-8">
+    <div className="flex h-full flex-col bg-gray-50 dark:bg-gray-950 pb-8">
       {/* Header */}
       <div className="bg-white dark:bg-gray-900 pt-14 pb-6 px-4">
         <motion.button
@@ -86,7 +86,9 @@ export default function EventPage({ params }: EventPageProps) {
         </motion.div>
       </div>
 
-      {/* Event Details */}
+      <div className="flex-1 min-h-0 overflow-y-auto">
+
+               {/* Event Details */}
       <div className="px-4 pt-6 space-y-4">
         {/* Date & Time Card */}
         <motion.div
@@ -165,6 +167,10 @@ export default function EventPage({ params }: EventPageProps) {
           <EventChat eventId={event.id} />
         </motion.div>
       </div>
+        
+      </div>
+
+     
     </div>
   );
 }

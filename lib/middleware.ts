@@ -2,6 +2,16 @@ import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
 export async function updateSession(request: NextRequest) {
+    // Redirect old /figma routes to new tab routes
+    if (request.nextUrl.pathname === '/figma' || request.nextUrl.pathname.startsWith('/figma/')) {
+        const url = request.nextUrl.clone()
+        const tab = request.nextUrl.searchParams.get('tab')
+        const validTabs = ['stats', 'matches', 'chat', 'profile']
+        url.pathname = tab && validTabs.includes(tab) ? `/${tab}` : '/stats'
+        url.search = ''
+        return NextResponse.redirect(url, 308)
+    }
+
     let supabaseResponse = NextResponse.next({
         request,
     })

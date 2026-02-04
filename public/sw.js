@@ -9,7 +9,7 @@ self.addEventListener('push', function (event) {
             data: {
                 dateOfArrival: Date.now(),
                 type: data.data?.type || 'general',
-                url: data.data?.url || '/figma',
+                url: data.data?.url || '/stats',
             },
             tag: data.data?.type === 'chat' ? 'chat-message' : 'general',
             renotify: true,
@@ -21,13 +21,16 @@ self.addEventListener('push', function (event) {
 self.addEventListener('notificationclick', function (event) {
     event.notification.close()
 
-    const urlToOpen = event.notification.data?.url || '/figma'
+    const urlToOpen = event.notification.data?.url || '/stats'
+
+    const appPaths = ['/stats', '/matches', '/chat', '/profile']
 
     event.waitUntil(
         clients.matchAll({ type: 'window', includeUncontrolled: true }).then(function (clientList) {
             // Check if there's already a window open
             for (const client of clientList) {
-                if (client.url.includes('/figma') && 'focus' in client) {
+                if (appPaths.some(function (p) { return client.url.includes(p) }) && 'focus' in client) {
+                    client.navigate(urlToOpen)
                     return client.focus()
                 }
             }

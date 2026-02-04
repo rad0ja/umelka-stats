@@ -38,15 +38,16 @@ export function PlayerStats({ data }: PlayerStatsProps) {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="sticky top-0 z-50
+        className="shrink-0
     dark:bg-gray-900
     pt-14 pb-4 px-6
-    border-b border-gray-100 dark:border-gray-800"
+    dark:border-gray-800"
       >
         <h1 className="stats-heading text-2xl text-white">Stats</h1>
       </motion.div>
 
-      {/* Quick Stats */}
+      <div className="flex-1 min-h-0 overflow-y-auto relative z-10">
+        {/* Quick Stats */}
       <div className="px-5 pb-4">
         <div className="flex gap-3">
           <StatCard
@@ -74,66 +75,6 @@ export function PlayerStats({ data }: PlayerStatsProps) {
       </div>
 
       {/* Season Stats */}
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.25 }}
-        className="px-5 pb-4"
-      >
-        <div className="rounded-xl p-4" style={{ background: 'var(--stats-card)' }}>
-          <h2 className="text-sm font-semibold text-white mb-4">Season Summary</h2>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <div className="stats-value text-2xl text-white">{stats.matchesPlayed}</div>
-              <div className="text-xs" style={{ color: 'var(--stats-text-dim)' }}>Matches</div>
-            </div>
-            <div>
-              <div className="stats-value text-2xl text-white">{stats.wins}</div>
-              <div className="text-xs" style={{ color: 'var(--stats-text-dim)' }}>Wins</div>
-            </div>
-            <div>
-              <div className="stats-value text-2xl text-white">{stats.draws}</div>
-              <div className="text-xs" style={{ color: 'var(--stats-text-dim)' }}>Draws</div>
-            </div>
-            <div>
-              <div className="stats-value text-2xl text-white">{stats.goalsPerGame}</div>
-              <div className="text-xs" style={{ color: 'var(--stats-text-dim)' }}>Goals/Game</div>
-            </div>
-          </div>
-        </div>
-      </motion.div>
-
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.25 }}
-        className="px-5 pb-4"
-      >
-        <div className="rounded-xl p-4" style={{ background: 'var(--stats-card)' }}>
-          <h2 className="text-sm font-semibold text-white mb-4">Season Summary</h2>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <div className="stats-value text-2xl text-white">{stats.matchesPlayed}</div>
-              <div className="text-xs" style={{ color: 'var(--stats-text-dim)' }}>Matches</div>
-            </div>
-            <div>
-              <div className="stats-value text-2xl text-white">{stats.wins}</div>
-              <div className="text-xs" style={{ color: 'var(--stats-text-dim)' }}>Wins</div>
-            </div>
-            <div>
-              <div className="stats-value text-2xl text-white">{stats.draws}</div>
-              <div className="text-xs" style={{ color: 'var(--stats-text-dim)' }}>Draws</div>
-            </div>
-            <div>
-              <div className="stats-value text-2xl text-white">{stats.goalsPerGame}</div>
-              <div className="text-xs" style={{ color: 'var(--stats-text-dim)' }}>Goals/Game</div>
-            </div>
-          </div>
-        </div>
-      </motion.div>
-
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
@@ -194,6 +135,9 @@ export function PlayerStats({ data }: PlayerStatsProps) {
         </div>
       </motion.div>
 
+      </div>
+
+      
     </div>
       
   

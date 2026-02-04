@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { Send, MessageCircle, ChevronDown } from 'lucide-react';
+import { motion } from 'motion/react';
+import { Send, MessageCircle } from 'lucide-react';
 import { useEventChat } from './hooks/useEventChat';
 import { ChatMessage } from './components/ChatMessage';
 
@@ -13,20 +13,12 @@ interface EventChatProps {
 export function EventChat({ eventId }: EventChatProps) {
   const { messages, loading, currentUserId, sending, sendMessage, deleteMessage } = useEventChat(eventId);
   const [newMessage, setNewMessage] = useState('');
-  const [isExpanded, setIsExpanded] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
 
-  // Auto-scroll to bottom when new messages arrive (only if expanded)
   const scrollToBottom = (behavior: ScrollBehavior = 'smooth') => {
     messagesEndRef.current?.scrollIntoView({ behavior });
   };
-
-  useEffect(() => {
-    if (isExpanded) {
-      scrollToBottom();
-    }
-  }, [messages, isExpanded]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -61,44 +53,21 @@ export function EventChat({ eventId }: EventChatProps) {
 
   return (
     <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm overflow-hidden">
-      {/* Header - clickable to expand/collapse */}
-      <button
-        onClick={() => setIsExpanded(!isExpanded)}
-        aria-expanded={isExpanded}
-        aria-controls="event-chat-content"
-        className="w-full flex items-center justify-between p-5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-inset"
-      >
-        <div className="flex items-center gap-2">
-          <MessageCircle className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-          <h2 className="font-semibold text-gray-900 dark:text-white">
-            Event Chat
-          </h2>
-          {messages.length > 0 && (
-            <span className="bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 text-xs px-2 py-0.5 rounded-full">
-              {messages.length}
-            </span>
-          )}
-        </div>
-        <motion.div
-          animate={{ rotate: isExpanded ? 180 : 0 }}
-          transition={{ duration: 0.2 }}
-        >
-          <ChevronDown className="w-5 h-5 text-gray-400" />
-        </motion.div>
-      </button>
+      {/* Header */}
+      <div className="flex items-center gap-2 p-5">
+        <MessageCircle className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+        <h2 className="font-semibold text-gray-900 dark:text-white">
+          Event Chat
+        </h2>
+        {messages.length > 0 && (
+          <span className="bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 text-xs px-2 py-0.5 rounded-full">
+            {messages.length}
+          </span>
+        )}
+      </div>
 
-      {/* Expandable content */}
-      <AnimatePresence>
-        {isExpanded && (
-          <motion.div
-            id="event-chat-content"
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="overflow-hidden"
-          >
-            <div className="border-t border-gray-100 dark:border-gray-800">
+      {/* Chat content */}
+      <div className="border-t border-gray-100 dark:border-gray-800">
               {/* Messages Container */}
               <div
                 ref={messagesContainerRef}
@@ -160,10 +129,7 @@ export function EventChat({ eventId }: EventChatProps) {
                   </motion.button>
                 </form>
               </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      </div>
     </div>
   );
 }

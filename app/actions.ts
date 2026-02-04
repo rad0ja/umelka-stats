@@ -170,7 +170,7 @@ export async function sendChatNotification(senderUserId: string, senderName: str
         icon: '/icon.png',
         data: {
             type: 'chat',
-            url: '/figma'
+            url: '/chat'
         }
     })
 
