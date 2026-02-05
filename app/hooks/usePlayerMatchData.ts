@@ -3,7 +3,7 @@
 
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/client";
-import { useSeason } from "@/oldAPP/ios/context/SeasonContext";
+import { useSeason } from "@/app/components/figma/components/SeasonContext";
 
 export function usePlayerMatchData() {
     const { seasonId } = useSeason();

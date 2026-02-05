@@ -2,9 +2,9 @@
 
 import { Mail, Phone, Calendar, Award, Activity } from 'lucide-react';
 import { motion } from 'motion/react';
-import LogoutButton from '../../../oldAPP/deprecated/LogoutButton';
-import InstallPrompt from '@/oldAPP/notif/InstallPrompt';
-import PushNotificationManager from '@/oldAPP/notif/PushNotificationManager';
+import LogoutButton from './components/LogoutButton';
+import InstallPrompt from '@/app/components/figma/components/InstallPrompt';
+import PushNotificationManager from '@/app/components/figma/components/PushNotificationManager';
 
 export function Profile() {
   const userStats = {

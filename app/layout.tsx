@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Bebas_Neue, Barlow } from "next/font/google";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/next";
-import { SeasonProvider } from "@/oldAPP/ios/context/SeasonContext";
+import { SeasonProvider } from "@/app/components/figma/components/SeasonContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
