@@ -1,4 +1,5 @@
 import { BottomTabNavigation } from '@/app/components/figma/components/BottomTabNavigation';
+import NotificationPromptBanner from '@/app/components/figma/components/NotificationPromptBanner';
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -6,6 +7,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       <div className="flex-1 min-h-0 safe-area-pt">
         {children}
       </div>
+      <NotificationPromptBanner />
       <BottomTabNavigation />
     </div>
   );
