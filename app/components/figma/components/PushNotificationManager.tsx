@@ -31,7 +31,7 @@ export default function PushNotificationManager() {
         }, [])
     
         async function registerServiceWorker() {
-            const registration = await navigator.serviceWorker.register('/sw.js', {
+            const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js', {
                 scope: '/',
                 updateViaCache: 'none',
             })
