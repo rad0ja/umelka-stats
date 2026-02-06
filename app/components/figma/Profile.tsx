@@ -5,6 +5,7 @@ import { motion } from 'motion/react';
 import LogoutButton from './components/LogoutButton';
 import InstallPrompt from '@/app/components/figma/components/InstallPrompt';
 import PushNotificationManager from '@/app/components/figma/components/PushNotificationManager';
+import { PlayerHeader } from './components/PlayerHeader';
 
 export function Profile() {
   const userStats = {
@@ -25,7 +26,7 @@ export function Profile() {
   return (
     <div className="h-full flex flex-col bg-gray-50 dark:bg-gray-950">
       {/* Header — outside scroll */}
-      <div className="shrink-0 bg-gradient-to-br from-blue-500 to-purple-600 dark:from-blue-600 dark:to-purple-700 pt-14 pb-8 px-6">
+      {/* <div className="shrink-0 bg-gradient-to-br from-blue-500 to-purple-600 dark:from-blue-600 dark:to-purple-700 pt-14 pb-8 px-6">
         <div className="flex flex-col items-center text-white">
           <div className="w-24 h-24 rounded-full bg-white/20 dark:bg-white/10 backdrop-blur-sm flex items-center justify-center text-3xl font-bold mb-4 border-4 border-white/30 dark:border-white/20">
             JL
@@ -37,10 +38,11 @@ export function Profile() {
             <span className="text-lg">#{userStats.number}</span>
           </div>
         </div>
-      </div>
+      </div> */}
+      <PlayerHeader />
 
       {/* Scrollable content — overlaps header gradient */}
-      <div className="flex-1 min-h-0 overflow-y-auto -mt-6 relative z-10">
+      <div className="flex-1 min-h-0 overflow-y-auto relative z-10">
 
         {/* Personal Stats */}
         <div className="px-4">

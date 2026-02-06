@@ -63,9 +63,8 @@ export function Chat() {
   return (
     <div className="h-full flex flex-col bg-gray-50 dark:bg-gray-950">
       {/* Header — outside scroll */}
-      <div className="shrink-0 bg-white dark:bg-gray-900 pt-14 pb-4 px-6 border-b border-gray-100 dark:border-gray-800">
-        <h1 className="text-4xl font-bold mb-1 dark:text-white">Chat</h1>
-        <p className="text-gray-500 dark:text-gray-400">Team conversation</p>
+      <div className="shrink-0 dark:bg-gray-900 pt-14 pb-4 px-6 border-b border-gray-100 dark:border-gray-800">
+        <h1 className="text-2xl font-bold mb-1 dark:text-white">Chat</h1>
       </div>
 
       {/* Messages — only scroll container */}

@@ -16,9 +16,15 @@ export function EventChat({ eventId }: EventChatProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
 
+  // Auto-scroll to bottom when new messages arrive
   const scrollToBottom = (behavior: ScrollBehavior = 'smooth') => {
     messagesEndRef.current?.scrollIntoView({ behavior });
   };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

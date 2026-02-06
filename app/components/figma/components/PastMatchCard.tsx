@@ -1,4 +1,4 @@
-import { Users } from 'lucide-react';
+import { Link, Users } from 'lucide-react';
 import { motion } from 'motion/react';
 import { EventWithParticipants } from '../types/match-types';
 

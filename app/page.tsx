@@ -11,31 +11,42 @@ export default async function Home() {
     }
 
     return (
-        <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-blue-50 to-white pt-safe">
-            <div className="text-center space-y-8 px-4">
-                <h1 className="text-5xl font-bold text-gray-900">
-                    Welcome to Your App
-                </h1>
-
-                <p className="text-xl text-gray-600 max-w-2xl">
-                    A modern authentication system built with Next.js 15 and Supabase
-                </p>
-
-                <div className="flex gap-4 justify-center">
-                    <Link
-                        href="/signup"
-                        className="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 font-medium transition-colors"
-                    >
-                        Get Started
-                    </Link>
-                    <Link
-                        href="/login"
-                        className="bg-white text-blue-600 px-8 py-3 rounded-lg border-2 border-blue-600 hover:bg-blue-50 font-medium transition-colors"
-                    >
-                        Sign In
-                    </Link>
-                </div>
-            </div>
+    <div className="relative size-full flex items-center justify-center overflow-hidden">
+      {/* Stadium Background with Opacity */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center"
+        style={{
+          backgroundImage: `url('https://images.unsplash.com/photo-1489944440615-453fc2b6a9a9?q=80&w=2646&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')`,
+        }}
+      />
+      
+      {/* Dark Overlay for Better Text Readability */}
+      <div className="absolute inset-0 bg-black/60" />
+      
+      {/* Content */}
+      <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
+        <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
+          myFotbalek
+        </h1>
+        
+        <p className="text-xl md:text-2xl text-white/90 mb-4 max-w-2xl mx-auto">
+          The best app for the worst players
+        </p>
+        
+        {/* Action Buttons */}
+        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <Link href="/login"
+            className="bg-white text-black/90 px-8 py-3 hover:scale-105 rounded-lg border-2 border-white-600 font-medium transition-colors"
+          >
+            Log In
+          </Link>
+          <Link href="/signup"
+            className="bg-transparent text-white/90 px-8 py-3 hover:scale-105 rounded-lg border-2 border-white-600 font-medium transition-colors"
+          >
+            Sign Up
+          </Link>
         </div>
-    )
+      </div>
+    </div>
+  );
 }

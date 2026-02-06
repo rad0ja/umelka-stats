@@ -52,7 +52,7 @@ export default function RootLayout({
       <body
         className={`
           h-full overflow-hidden
-          bg-gray-50 dark:bg-gray-950
+          bg-green-50 dark:bg-gray-950
           ${geistSans.variable} 
           ${geistMono.variable} 
           ${bebasNeue.variable} 

@@ -2,6 +2,13 @@ import { Tables } from '@/app/types/database.types'
 
 export type Player = Tables<'players'>
 
+export interface PlayerStreaks {
+  longestWinningStreak: number
+  longestLosingStreak: number
+  longestScoringStreak: number
+  longestNonScoringStreak: number
+}
+
 export interface PlayerStats {
   goals: number
   wins: number
@@ -9,6 +16,7 @@ export interface PlayerStats {
   draws: number
   winRatio: string | number
   goalsPerGame: string | number
+  streaks?: PlayerStreaks
 }
 
 export interface PlayerStatsData {

@@ -2,11 +2,11 @@
 @import "tailwindcss-safe-area";
 
 :root {
-  --background: #ffffff;
+  --background: #19c5b7;
   --foreground: #171717;
 
   /* Clean Sports App Palette */
-  --stats-bg: #0f1318;
+  --stats-bg: #5b9494;
   --stats-card: #1a1f26;
   --stats-accent: #00ff87;
   --stats-purple: #7c3aed;

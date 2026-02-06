@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'motion/react'
-import { Trophy, Target } from 'lucide-react'
+import { Trophy, Target, Flame, TrendingUp, TrendingDown } from 'lucide-react'
 import { StatCard } from './components/StatCard'
 import { TopScorerCard } from './components/TopScorerCard'
 import { PlayerStatsData } from './types/player-stats-types'
@@ -15,7 +15,7 @@ export function PlayerStats({ data }: PlayerStatsProps) {
     return (
       <div
         className="h-full flex items-center justify-center"
-        style={{ background: 'var(--stats-bg)' }}
+      
       >
         <p className="text-sm" style={{ color: 'var(--stats-text-dim)' }}>
           No stats available
@@ -134,6 +134,54 @@ export function PlayerStats({ data }: PlayerStatsProps) {
           </div>
         </div>
       </motion.div>
+
+      {/* Streaks */}
+      {stats.streaks && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.35 }}
+          className="px-5 pb-4"
+        >
+          <div className="rounded-xl p-4" style={{ background: 'var(--stats-card)' }}>
+            <h2 className="text-sm font-semibold text-white mb-4 flex items-center gap-2">
+              <Flame className="w-4 h-4 text-orange-400" />
+              Streaks
+            </h2>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="flex items-center gap-2">
+                <TrendingUp className="w-4 h-4 text-green-400" />
+                <div>
+                  <div className="stats-value text-2xl text-white">{stats.streaks.longestWinningStreak}</div>
+                  <div className="text-xs" style={{ color: 'var(--stats-text-dim)' }}>Win Streak</div>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <TrendingDown className="w-4 h-4 text-red-400" />
+                <div>
+                  <div className="stats-value text-2xl text-white">{stats.streaks.longestLosingStreak}</div>
+                  <div className="text-xs" style={{ color: 'var(--stats-text-dim)' }}>Loss Streak</div>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <Target className="w-4 h-4 text-purple-400" />
+                <div>
+                  <div className="stats-value text-2xl text-white">{stats.streaks.longestScoringStreak}</div>
+                  <div className="text-xs" style={{ color: 'var(--stats-text-dim)' }}>Scoring Streak</div>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <Target className="w-4 h-4 text-gray-400" />
+                <div>
+                  <div className="stats-value text-2xl text-white">{stats.streaks.longestNonScoringStreak}</div>
+                  <div className="text-xs" style={{ color: 'var(--stats-text-dim)' }}>No Goals</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      )}
 
       </div>
 

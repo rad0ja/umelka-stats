@@ -19,15 +19,13 @@ export function Matches() {
   return (
     <div className="h-full flex flex-col bg-gray-50 dark:bg-gray-950">
       {/* Header — outside scroll */}
-      <div className="shrink-0 bg-white dark:bg-gray-900 pt-14 pb-6 px-6">
-        <h1 className="text-4xl font-bold mb-1 dark:text-white">Matches</h1>
-        <p className="text-gray-500 dark:text-gray-400">Schedule & Results</p>
+      <div className="shrink-0 dark:bg-gray-900 pt-14 pb-6 px-6">
+        <h1 className="text-2xl font-bold mb-1 dark:text-white">Matches</h1>
       </div>
 
       {/* Scrollable content */}
       <div className="flex-1 min-h-0 overflow-y-auto">
         {/* Upcoming Matches */}
-        <div className="px-4 pt-6 pb-4">
           <MatchSection
             title="Upcoming"
             isEmpty={upcomingMatches.length === 0}
@@ -41,7 +39,7 @@ export function Matches() {
               />
             ))}
           </MatchSection>
-        </div>
+
 
         {/* Past Events */}
         <MatchSection

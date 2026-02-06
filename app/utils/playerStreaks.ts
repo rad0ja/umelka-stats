@@ -9,9 +9,12 @@ export function playerStreaks(matches: PlayerMatchDetail[]) {
     for (const match of matches) {
         // win/loss streaks
         if (match.team_result === 'Win') {
-            win ++; loss = 0;
+            win++; loss = 0;
         } else if (match.team_result === 'Loss') {
             loss++; win = 0;
+        } else {
+            // Draw resets both streaks
+            win = 0; loss = 0;
         }
         maxWin = Math.max(maxWin, win);
         maxLoss = Math.max(maxLoss, loss);

@@ -15,21 +15,27 @@ export function UpcomingMatchCard({ match, index }: UpcomingMatchCardProps) {
 
   const isGoing = match.currentUserStatus === 'yes';
   const isNotGoing = match.currentUserStatus === 'no';
+  const isTentative = match.currentUserStatus === 'tentative';
+  const isQueued = match.currentUserStatus === 'queued';
 
   const borderClass = isGoing
     ? 'border-r-4 border-r-green-500'
     : isNotGoing
       ? 'border-r-4 border-r-red-500'
-      : '';
+      : isTentative
+        ? 'border-r-4 border-r-yellow-500'
+        : isQueued
+          ? 'border-r-4 border-r-blue-500'
+          : 'border-r-4 border-r-transparent';
 
   return (
-    <Link href={`/event/${match.id}`}>
+    <Link href={`/event/${match.id}`} className="p-5">
       <motion.div
         key={match.id}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: index * 0.1 }}
-        className={`bg-white dark:bg-gray-900 rounded-2xl p-5 shadow-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors ${borderClass}`}
+        className={`bg-white dark:bg-gray-900 rounded-2xl pb-5 p-5 shadow-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors ${borderClass}`}
       >
         <div className="flex items-center justify-between mb-3">
           <div className="flex-1">
