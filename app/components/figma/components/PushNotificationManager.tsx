@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { subscribeUser, unsubscribeUser, sendNotification } from '@/app/actions'
+import { registerPushToken } from "@/lib/firebase-client"
 
 function urlBase64ToUint8Array(base64String: string) {
     const padding = '='.repeat((4 - (base64String.length % 4)) % 4)

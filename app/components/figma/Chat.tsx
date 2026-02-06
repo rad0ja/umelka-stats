@@ -1,19 +1,25 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Send, MessageCircle, ArrowDown } from 'lucide-react';
+import { ArrowDown } from 'lucide-react';
 import { useChat } from './hooks/useChat';
 import { ChatMessage } from './components/ChatMessage';
+import { MessageInput } from './components/MessageInput';
+import { EmptyChatState } from './components/EmptyChatState';
+import { useChatForm } from './components/useChatForm';
 
 export function Chat() {
   const { messages, loading, currentUserId, sending, sendMessage, deleteMessage } = useChat();
-  const [newMessage, setNewMessage] = useState('');
   const [showScrollButton, setShowScrollButton] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
 
-  // Auto-scroll to bottom when new messages arrive
+  const { newMessage, setNewMessage, handleSubmit, handleKeyDown } = useChatForm({
+    onSendMessage: sendMessage,
+    sending,
+  });
+
   const scrollToBottom = (behavior: ScrollBehavior = 'smooth') => {
     messagesEndRef.current?.scrollIntoView({ behavior });
   };
@@ -22,34 +28,12 @@ export function Chat() {
     scrollToBottom();
   }, [messages]);
 
-  // Track scroll position to show/hide scroll button
   const handleScroll = () => {
     if (!messagesContainerRef.current) return;
 
     const { scrollTop, scrollHeight, clientHeight } = messagesContainerRef.current;
     const isNearBottom = scrollHeight - scrollTop - clientHeight < 100;
     setShowScrollButton(!isNearBottom);
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newMessage.trim() || sending) return;
-
-    const messageToSend = newMessage;
-    setNewMessage('');
-
-    try {
-      await sendMessage(messageToSend);
-    } catch {
-      setNewMessage(messageToSend);
-    }
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSubmit(e);
-    }
   };
 
   if (loading) {
@@ -75,21 +59,9 @@ export function Chat() {
           className="h-full overflow-y-auto px-4 py-4"
         >
           {messages.length === 0 ? (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="flex flex-col items-center justify-center h-full text-center px-6"
-            >
-              <div className="w-16 h-16 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center mb-4">
-                <MessageCircle className="w-8 h-8 text-blue-500" />
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                No messages yet
-              </h3>
-              <p className="text-gray-500 dark:text-gray-400 text-sm">
-                Be the first to start the conversation!
-              </p>
-            </motion.div>
+            <div className="h-full flex items-center justify-center px-6">
+              <EmptyChatState />
+            </div>
           ) : (
             <AnimatePresence mode="popLayout">
               {messages.map((message, index) => (
@@ -125,34 +97,13 @@ export function Chat() {
 
       {/* Message Input — outside scroll */}
       <div className="shrink-0 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 px-4 py-3">
-        <form onSubmit={handleSubmit} className="flex items-end gap-2">
-          <div className="flex-1 relative">
-            <textarea
-              name="message"
-              value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
-              onKeyDown={handleKeyDown}
-              placeholder="Type a message..."
-              rows={1}
-              className="w-full px-4 py-3 bg-gray-100 dark:bg-gray-800 rounded-2xl text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 text-base"
-              style={{ maxHeight: '120px' }}
-            />
-          </div>
-
-          <motion.button
-            type="submit"
-            disabled={!newMessage.trim() || sending}
-            whileTap={{ scale: 0.9 }}
-            aria-label="Send message"
-            className={`p-3 rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 ${
-              newMessage.trim() && !sending
-                ? 'bg-blue-500 text-white'
-                : 'bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500'
-            }`}
-          >
-            <Send className={`w-5 h-5 ${sending ? 'animate-pulse' : ''}`} />
-          </motion.button>
-        </form>
+        <MessageInput
+          value={newMessage}
+          onChange={setNewMessage}
+          onSubmit={handleSubmit}
+          onKeyDown={handleKeyDown}
+          sending={sending}
+        />
       </div>
     </div>
   );

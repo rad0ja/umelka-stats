@@ -1,13 +1,18 @@
 'use client';
 
+import { useMemo } from 'react';
 import { Mail, Phone, Calendar, Award, Activity } from 'lucide-react';
 import { motion } from 'motion/react';
 import LogoutButton from './components/LogoutButton';
 import InstallPrompt from '@/app/components/figma/components/InstallPrompt';
 import PushNotificationManager from '@/app/components/figma/components/PushNotificationManager';
 import { PlayerHeader } from './components/PlayerHeader';
+import { StatGrid } from './components/StatGrid';
+import { ContactInfoList } from './components/ContactInfoList';
+import { AchievementCard } from './components/AchievementCard';
 
 export function Profile() {
+  // TODO: Replace with actual user data from API/context
   const userStats = {
     name: 'Jordan Lee',
     position: 'Midfielder',
@@ -23,122 +28,106 @@ export function Profile() {
     },
   };
 
+  const statsConfig = useMemo(
+    () => [
+      {
+        value: userStats.personalStats.goals,
+        label: 'Goals',
+        gradient:
+          'bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/30 dark:to-blue-800/30',
+        color: 'text-blue-600 dark:text-blue-400',
+      },
+      {
+        value: userStats.personalStats.assists,
+        label: 'Assists',
+        gradient:
+          'bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/30 dark:to-purple-800/30',
+        color: 'text-purple-600 dark:text-purple-400',
+      },
+      {
+        value: userStats.personalStats.matches,
+        label: 'Matches',
+        gradient:
+          'bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/30 dark:to-green-800/30',
+        color: 'text-green-600 dark:text-green-400',
+      },
+      {
+        value: userStats.personalStats.mvp,
+        label: 'MVP Awards',
+        gradient:
+          'bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-900/30 dark:to-yellow-800/30',
+        color: 'text-yellow-600 dark:text-yellow-400',
+      },
+    ],
+    [userStats.personalStats]
+  );
+
+  const contactInfo = useMemo(
+    () => [
+      {
+        icon: Mail,
+        label: 'Email',
+        value: userStats.email,
+        bgColor: 'bg-blue-100 dark:bg-blue-900/50',
+        iconColor: 'text-blue-600 dark:text-blue-400',
+      },
+      {
+        icon: Phone,
+        label: 'Phone',
+        value: userStats.phone,
+        bgColor: 'bg-green-100 dark:bg-green-900/50',
+        iconColor: 'text-green-600 dark:text-green-400',
+      },
+      {
+        icon: Calendar,
+        label: 'Joined',
+        value: userStats.joinDate,
+        bgColor: 'bg-purple-100 dark:bg-purple-900/50',
+        iconColor: 'text-purple-600 dark:text-purple-400',
+      },
+    ],
+    [userStats.email, userStats.phone, userStats.joinDate]
+  );
+
   return (
     <div className="h-full flex flex-col bg-gray-50 dark:bg-gray-950">
-      {/* Header — outside scroll */}
-      {/* <div className="shrink-0 bg-gradient-to-br from-blue-500 to-purple-600 dark:from-blue-600 dark:to-purple-700 pt-14 pb-8 px-6">
-        <div className="flex flex-col items-center text-white">
-          <div className="w-24 h-24 rounded-full bg-white/20 dark:bg-white/10 backdrop-blur-sm flex items-center justify-center text-3xl font-bold mb-4 border-4 border-white/30 dark:border-white/20">
-            JL
-          </div>
-          <h1 className="text-3xl font-bold mb-1">{userStats.name}</h1>
-          <div className="flex items-center gap-2 text-white/90 dark:text-white/80">
-            <span className="text-lg">{userStats.position}</span>
-            <span className="text-white/60 dark:text-white/50">•</span>
-            <span className="text-lg">#{userStats.number}</span>
-          </div>
-        </div>
-      </div> */}
       <PlayerHeader />
 
-      {/* Scrollable content — overlaps header gradient */}
       <div className="flex-1 min-h-0 overflow-y-auto relative z-10">
 
-        {/* Personal Stats */}
         <div className="px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="bg-white dark:bg-gray-900 rounded-3xl p-6 shadow-lg"
           >
-            <h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Season Stats</h2>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="text-center p-4 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/30 dark:to-blue-800/30 rounded-2xl">
-                <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-1 tabular-nums">{userStats.personalStats.goals}</div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">Goals</div>
-              </div>
-              <div className="text-center p-4 bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/30 dark:to-purple-800/30 rounded-2xl">
-                <div className="text-3xl font-bold text-purple-600 dark:text-purple-400 mb-1 tabular-nums">{userStats.personalStats.assists}</div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">Assists</div>
-              </div>
-              <div className="text-center p-4 bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/30 dark:to-green-800/30 rounded-2xl">
-                <div className="text-3xl font-bold text-green-600 dark:text-green-400 mb-1 tabular-nums">{userStats.personalStats.matches}</div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">Matches</div>
-              </div>
-              <div className="text-center p-4 bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-900/30 dark:to-yellow-800/30 rounded-2xl">
-                <div className="text-3xl font-bold text-yellow-600 dark:text-yellow-400 mb-1 tabular-nums">{userStats.personalStats.mvp}</div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">MVP Awards</div>
-              </div>
-            </div>
+            <h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">
+              Season Stats
+            </h2>
+            <StatGrid stats={statsConfig} />
           </motion.div>
         </div>
 
-        {/* Contact Information */}
         <div className="px-4 pt-6">
           <h2 className="text-xl font-semibold mb-3 px-2 dark:text-white">Contact Info</h2>
-          <div className="bg-white dark:bg-gray-900 rounded-3xl shadow-sm overflow-hidden">
-            <div className="divide-y divide-gray-100 dark:divide-gray-800">
-              <div className="p-4 flex items-center gap-4">
-                <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center">
-                  <Mail className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                </div>
-                <div>
-                  <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">Email</div>
-                  <div className="text-gray-900 dark:text-white">{userStats.email}</div>
-                </div>
-              </div>
-              <div className="p-4 flex items-center gap-4">
-                <div className="w-10 h-10 rounded-full bg-green-100 dark:bg-green-900/50 flex items-center justify-center">
-                  <Phone className="w-5 h-5 text-green-600 dark:text-green-400" />
-                </div>
-                <div>
-                  <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">Phone</div>
-                  <div className="text-gray-900 dark:text-white">{userStats.phone}</div>
-                </div>
-              </div>
-              <div className="p-4 flex items-center gap-4">
-                <div className="w-10 h-10 rounded-full bg-purple-100 dark:bg-purple-900/50 flex items-center justify-center">
-                  <Calendar className="w-5 h-5 text-purple-600 dark:text-purple-400" />
-                </div>
-                <div>
-                  <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">Joined</div>
-                  <div className="text-gray-900 dark:text-white">{userStats.joinDate}</div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <ContactInfoList items={contactInfo} />
         </div>
 
-        {/* Achievements */}
         <div className="px-4 pt-6 pb-6">
           <h2 className="text-xl font-semibold mb-3 px-2 dark:text-white">Achievements</h2>
           <div className="space-y-3">
-            <div
-              className="bg-gradient-to-br from-yellow-400 to-orange-500 dark:from-yellow-500 dark:to-orange-600 rounded-2xl p-5 text-white shadow-lg"
-            >
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-white/20 dark:bg-white/10 backdrop-blur-sm flex items-center justify-center">
-                  <Award className="w-6 h-6" />
-                </div>
-                <div>
-                  <div className="font-semibold text-lg">Top Assister</div>
-                  <div className="text-sm opacity-90 dark:opacity-80">Most assists this season</div>
-                </div>
-              </div>
-            </div>
-            <div
-              className="bg-gradient-to-br from-green-500 to-emerald-600 dark:from-green-600 dark:to-emerald-700 rounded-2xl p-5 text-white shadow-lg"
-            >
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-white/20 dark:bg-white/10 backdrop-blur-sm flex items-center justify-center">
-                  <Activity className="w-6 h-6" />
-                </div>
-                <div>
-                  <div className="font-semibold text-lg">Perfect Attendance</div>
-                  <div className="text-sm opacity-90 dark:opacity-80">Played all matches</div>
-                </div>
-              </div>
-            </div>
+            <AchievementCard
+              icon={Award}
+              title="Top Assister"
+              description="Most assists this season"
+              gradient="bg-gradient-to-br from-yellow-400 to-orange-500 dark:from-yellow-500 dark:to-orange-600"
+            />
+            <AchievementCard
+              icon={Activity}
+              title="Perfect Attendance"
+              description="Played all matches"
+              gradient="bg-gradient-to-br from-green-500 to-emerald-600 dark:from-green-600 dark:to-emerald-700"
+            />
             <LogoutButton />
             <InstallPrompt />
             <PushNotificationManager />
