@@ -12,31 +12,6 @@ export type Database = {
   __InternalSupabase: {
     PostgrestVersion: "12.2.3 (519615d)"
   }
-  graphql_public: {
-    Tables: {
-      [_ in never]: never
-    }
-    Views: {
-      [_ in never]: never
-    }
-    Functions: {
-      graphql: {
-        Args: {
-          extensions?: Json
-          operationName?: string
-          query?: string
-          variables?: Json
-        }
-        Returns: Json
-      }
-    }
-    Enums: {
-      [_ in never]: never
-    }
-    CompositeTypes: {
-      [_ in never]: never
-    }
-  }
   public: {
     Tables: {
       chat_messages: {
@@ -170,7 +145,7 @@ export type Database = {
         }
         Relationships: []
       }
-      fcm_subscription: {
+      fcm_subscriptions: {
         Row: {
           created_at: string | null
           id: string
@@ -318,35 +293,6 @@ export type Database = {
             foreignKeyName: "players_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: true
-            referencedRelation: "player_users_view"
-            referencedColumns: ["user_id"]
-          },
-        ]
-      }
-      push_subscriptions: {
-        Row: {
-          created_at: string | null
-          id: string
-          subscription: Json
-          user_id: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          id?: string
-          subscription: Json
-          user_id?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          id?: string
-          subscription?: Json
-          user_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "push_subscriptions_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
             referencedRelation: "player_users_view"
             referencedColumns: ["user_id"]
           },
@@ -528,9 +474,6 @@ export type CompositeTypes<
     : never
 
 export const Constants = {
-  graphql_public: {
-    Enums: {},
-  },
   public: {
     Enums: {
       participation_status: ["yes", "tentative", "no", "queued"],
