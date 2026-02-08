@@ -29,9 +29,18 @@ messaging.onBackgroundMessage((payload) => {
 });
 
 // --- Web Push (VAPID) messages ---
+// Only handles non-FCM push messages (e.g. chat notifications sent via web-push).
+// FCM messages are handled by onBackgroundMessage above.
 self.addEventListener('push', function (event) {
     if (event.data) {
         const data = event.data.json()
+
+        // Skip FCM messages — they are handled by onBackgroundMessage above.
+        // FCM payloads lack top-level title/body; VAPID payloads always have them.
+        if (!data.title) {
+            return
+        }
+
         const options = {
             body: data.body,
             icon: data.icon || '/icon.png',
