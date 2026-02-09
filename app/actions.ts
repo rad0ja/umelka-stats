@@ -4,8 +4,6 @@ import {revalidatePath, revalidateTag} from 'next/cache'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/server'
 import { cookies } from "next/headers";
-import * as webpush from 'web-push'
-import { PushSubscription } from 'web-push'
 
 export async function logout() {
     const supabase = await createClient()
@@ -25,194 +23,39 @@ export async function setSeason(seasonId: string) {
     revalidateTag('matches')
 }
 
-function initVapid() {
-    const publicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY
-    const privateKey = process.env.VAPID_PRIVATE_KEY
-
-    console.log('[initVapid] Public key exists:', !!publicKey)
-    console.log('[initVapid] Private key exists:', !!privateKey)
-
-    if (!publicKey || !privateKey) {
-        console.error('[initVapid] VAPID keys are not configured!')
-        return false
-    }
-
-    webpush.setVapidDetails(
-        'mailto:janrdch@gmail.com',
-        publicKey,
-        privateKey
-    )
-    return true
-}
-
-export async function subscribeUser(sub: PushSubscription) {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-
-    if (!user) {
-        return { success: false, error: 'Not authenticated' }
-    }
-
-    // Delete existing subscriptions for this user (one subscription per user)
-    await supabase
-        .from('push_subscriptions')
-        .delete()
-        .eq('user_id', user.id)
-
-    // Store new subscription in database
-    const { error } = await supabase
-        .from('push_subscriptions')
-        .insert({
-            user_id: user.id,
-            subscription: sub as unknown as Record<string, unknown>
-        })
-
-    if (error) {
-        console.error('Error saving subscription:', error)
-        return { success: false, error: 'Failed to save subscription' }
-    }
-
-    return { success: true }
-}
-
-export async function unsubscribeUser() {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-
-    if (!user) {
-        return { success: false, error: 'Not authenticated' }
-    }
-
-    const { error } = await supabase
-        .from('push_subscriptions')
-        .delete()
-        .eq('user_id', user.id)
-
-    if (error) {
-        console.error('Error removing subscription:', error)
-        return { success: false, error: 'Failed to remove subscription' }
-    }
-
-    return { success: true }
-}
-
-export async function sendNotification(message: string) {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-
-    if (!user) {
-        throw new Error('Not authenticated')
-    }
-
-    // Get user's subscription
-    const { data: subData } = await supabase
-        .from('push_subscriptions')
-        .select('subscription')
-        .eq('user_id', user.id)
-        .single()
-
-    if (!subData?.subscription) {
-        throw new Error('No subscription available')
-    }
-
-    if (!initVapid()) {
-        throw new Error('VAPID keys not configured in production environment')
-    }
+// Helper: send FCM notifications via the send-notification edge function
+async function sendFcmNotification(
+    accessToken: string,
+    userIds: string[],
+    title: string,
+    body: string,
+    data?: { type?: string; url?: string; eventId?: string }
+) {
+    if (userIds.length === 0) return
 
     try {
-        await webpush.sendNotification(
-            subData.subscription as unknown as PushSubscription,
-            JSON.stringify({
-                title: 'Test Notification',
-                body: message,
-                icon: '/icon.png',
-            })
-        )
-        return { success: true }
-    } catch (error) {
-        console.error('Error sending push notification:', error)
-        return { success: false, error: 'Failed to send notification' }
-    }
-}
-
-// Send push notification to all users except the sender
-export async function sendChatNotification(senderUserId: string, senderName: string, messageContent: string) {
-    const supabase = await createClient()
-
-    // Get all subscriptions except the sender's
-    const { data: subscriptions, error: fetchError } = await supabase
-        .from('push_subscriptions')
-        .select('subscription, user_id')
-        .neq('user_id', senderUserId)
-
-    console.log('[Chat Notification] Sender:', senderUserId)
-    console.log('[Chat Notification] Found subscriptions:', subscriptions?.length ?? 0)
-    if (fetchError) {
-        console.error('[Chat Notification] Error fetching subscriptions:', fetchError)
-    }
-
-    if (!subscriptions || subscriptions.length === 0) {
-        return { success: true, sent: 0 }
-    }
-
-    if (!initVapid()) {
-        console.error('[Chat Notification] Cannot send - VAPID keys not configured')
-        return { success: false, sent: 0, error: 'VAPID keys not configured' }
-    }
-
-    const truncatedMessage = messageContent.length > 100
-        ? messageContent.substring(0, 100) + '...'
-        : messageContent
-
-    const payload = JSON.stringify({
-        title: `${senderName}`,
-        body: truncatedMessage,
-        icon: '/icon.png',
-        data: {
-            type: 'chat',
-            url: '/chat'
-        }
-    })
-
-    let sentCount = 0
-    const failedUserIds: string[] = []
-
-    await Promise.all(
-        subscriptions.map(async ({ subscription, user_id }) => {
-            try {
-                console.log('[Chat Notification] Sending to user:', user_id)
-                await webpush.sendNotification(
-                    subscription as unknown as PushSubscription,
-                    payload
-                )
-                sentCount++
-                console.log('[Chat Notification] Successfully sent to user:', user_id)
-            } catch (error: unknown) {
-                console.error(`[Chat Notification] Failed to send to user ${user_id}:`, error)
-                // If subscription is invalid (expired/unsubscribed), mark for cleanup
-                if (error && typeof error === 'object' && 'statusCode' in error) {
-                    const statusCode = (error as { statusCode: number }).statusCode
-                    if (statusCode === 404 || statusCode === 410) {
-                        failedUserIds.push(user_id!)
-                    }
-                }
+        const res = await fetch(
+            `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/send-notification`,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${accessToken}`,
+                },
+                body: JSON.stringify({ user_ids: userIds, title, body, data }),
             }
-        })
-    )
+        )
 
-    // Clean up invalid subscriptions
-    if (failedUserIds.length > 0) {
-        await supabase
-            .from('push_subscriptions')
-            .delete()
-            .in('user_id', failedUserIds)
+        if (!res.ok) {
+            const errText = await res.text()
+            console.error('[sendFcmNotification] Edge function error:', res.status, errText)
+        }
+    } catch (err) {
+        console.error('[sendFcmNotification] Fetch error:', err)
     }
-
-    console.log('[Chat Notification] Total sent:', sentCount)
-    return { success: true, sent: sentCount }
 }
 
-// Send chat message and trigger notifications
+// Send chat message and trigger FCM notifications
 export async function sendChatMessage(content: string) {
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
@@ -220,8 +63,6 @@ export async function sendChatMessage(content: string) {
     if (!user) {
         return { success: false, error: 'Not authenticated' }
     }
-
-    console.log('[sendChatMessage] User ID:', user.id)
 
     // Get sender's player name
     const { data: player } = await supabase
@@ -231,7 +72,6 @@ export async function sendChatMessage(content: string) {
         .single()
 
     const senderName = player?.name || 'Someone'
-    console.log('[sendChatMessage] Sender name:', senderName)
 
     // Insert the message
     const { data: message, error } = await supabase
@@ -248,20 +88,37 @@ export async function sendChatMessage(content: string) {
         return { success: false, error: 'Failed to send message' }
     }
 
-    console.log('[sendChatMessage] Message inserted, sending notifications...')
+    // Send FCM notifications to all other players
+    const { data: { session } } = await supabase.auth.getSession()
+    if (session?.access_token) {
+        // Get all player user_ids except the sender
+        const { data: allPlayers } = await supabase
+            .from('players')
+            .select('user_id')
+            .neq('user_id', user.id)
+            .not('user_id', 'is', null)
 
-    // Send push notifications to other users
-    try {
-        const notifResult = await sendChatNotification(user.id, senderName, content)
-        console.log('[sendChatMessage] Notification result:', notifResult)
-    } catch (err) {
-        console.error('[sendChatMessage] Error sending chat notifications:', err)
+        const recipientIds = (allPlayers || [])
+            .map(p => p.user_id)
+            .filter(Boolean) as string[]
+
+        const truncatedMessage = content.length > 100
+            ? content.substring(0, 100) + '...'
+            : content
+
+        await sendFcmNotification(
+            session.access_token,
+            recipientIds,
+            senderName,
+            truncatedMessage,
+            { type: 'chat', url: '/chat' }
+        )
     }
 
     return { success: true, message }
 }
 
-// Send event chat message and trigger notifications
+// Send event chat message and trigger FCM notifications
 export async function sendEventChatMessage(eventId: string, content: string) {
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
@@ -304,158 +161,32 @@ export async function sendEventChatMessage(eventId: string, content: string) {
         return { success: false, error: 'Failed to send message' }
     }
 
-    // Send push notifications to event participants (excluding sender)
-    try {
-        await sendEventChatNotification(eventId, user.id, senderName, eventTitle, content)
-    } catch (err) {
-        console.error('[sendEventChatMessage] Error sending notifications:', err)
+    // Send FCM notifications to event participants (excluding sender)
+    const { data: { session } } = await supabase.auth.getSession()
+    if (session?.access_token) {
+        const { data: participants } = await supabase
+            .from('event_participants')
+            .select('user_id')
+            .eq('event_id', eventId)
+            .neq('user_id', user.id)
+            .in('status', ['yes', 'tentative', 'queued'])
+
+        const recipientIds = (participants || [])
+            .map(p => p.user_id)
+            .filter(Boolean) as string[]
+
+        const truncatedMessage = content.length > 100
+            ? content.substring(0, 100) + '...'
+            : content
+
+        await sendFcmNotification(
+            session.access_token,
+            recipientIds,
+            `${senderName} in ${eventTitle}`,
+            truncatedMessage,
+            { type: 'event_chat', eventId, url: `/event/${eventId}` }
+        )
     }
 
     return { success: true, message }
-}
-
-// Send push notification to event participants
-export async function sendEventChatNotification(
-    eventId: string,
-    senderUserId: string,
-    senderName: string,
-    eventTitle: string,
-    messageContent: string
-) {
-    const supabase = await createClient()
-
-    // Get participants of this event (excluding sender) with status yes or tentative
-    const { data: participants } = await supabase
-        .from('event_participants')
-        .select('user_id')
-        .eq('event_id', eventId)
-        .neq('user_id', senderUserId)
-        .in('status', ['yes', 'tentative', 'queued'])
-
-    if (!participants || participants.length === 0) {
-        return { success: true, sent: 0 }
-    }
-
-    const participantIds = participants.map(p => p.user_id).filter(Boolean) as string[]
-
-    // Get subscriptions for these participants
-    const { data: subscriptions } = await supabase
-        .from('push_subscriptions')
-        .select('subscription, user_id')
-        .in('user_id', participantIds)
-
-    if (!subscriptions || subscriptions.length === 0) {
-        return { success: true, sent: 0 }
-    }
-
-    if (!initVapid()) {
-        console.error('[Event Chat Notification] Cannot send - VAPID keys not configured')
-        return { success: false, sent: 0, error: 'VAPID keys not configured' }
-    }
-
-    const truncatedMessage = messageContent.length > 100
-        ? messageContent.substring(0, 100) + '...'
-        : messageContent
-
-    const payload = JSON.stringify({
-        title: `${senderName} in ${eventTitle}`,
-        body: truncatedMessage,
-        icon: '/icon.png',
-        data: {
-            type: 'event_chat',
-            eventId: eventId,
-            url: `/event/${eventId}`
-        }
-    })
-
-    let sentCount = 0
-    const failedUserIds: string[] = []
-
-    await Promise.all(
-        subscriptions.map(async ({ subscription, user_id }) => {
-            try {
-                await webpush.sendNotification(
-                    subscription as unknown as PushSubscription,
-                    payload
-                )
-                sentCount++
-            } catch (error: unknown) {
-                if (error && typeof error === 'object' && 'statusCode' in error) {
-                    const statusCode = (error as { statusCode: number }).statusCode
-                    if (statusCode === 404 || statusCode === 410) {
-                        failedUserIds.push(user_id!)
-                    }
-                }
-            }
-        })
-    )
-
-    // Clean up invalid subscriptions
-    if (failedUserIds.length > 0) {
-        await supabase
-            .from('push_subscriptions')
-            .delete()
-            .in('user_id', failedUserIds)
-    }
-
-    return { success: true, sent: sentCount }
-}
-
-// Send push notification when a user is promoted from queue to attending
-export async function sendPromotionNotification(
-    userId: string,
-    eventId: string,
-    eventTitle: string
-) {
-    const supabase = await createClient()
-
-    // Get subscription for the promoted user
-    const { data: subData } = await supabase
-        .from('push_subscriptions')
-        .select('subscription')
-        .eq('user_id', userId)
-        .single()
-
-    if (!subData?.subscription) {
-        console.log('[Promotion Notification] No subscription for user:', userId)
-        return { success: true, sent: 0 }
-    }
-
-    if (!initVapid()) {
-        console.error('[Promotion Notification] Cannot send - VAPID keys not configured')
-        return { success: false, sent: 0, error: 'VAPID keys not configured' }
-    }
-
-    const payload = JSON.stringify({
-        title: "You're in! 🎉",
-        body: `A spot opened up in ${eventTitle}. You're now attending!`,
-        icon: '/icon.png',
-        data: {
-            type: 'promotion',
-            eventId: eventId,
-            url: `/event/${eventId}`
-        }
-    })
-
-    try {
-        await webpush.sendNotification(
-            subData.subscription as unknown as PushSubscription,
-            payload
-        )
-        console.log('[Promotion Notification] Sent to user:', userId)
-        return { success: true, sent: 1 }
-    } catch (error: unknown) {
-        console.error('[Promotion Notification] Failed to send:', error)
-        // Clean up invalid subscription
-        if (error && typeof error === 'object' && 'statusCode' in error) {
-            const statusCode = (error as { statusCode: number }).statusCode
-            if (statusCode === 404 || statusCode === 410) {
-                await supabase
-                    .from('push_subscriptions')
-                    .delete()
-                    .eq('user_id', userId)
-            }
-        }
-        return { success: false, sent: 0, error: 'Failed to send notification' }
-    }
 }

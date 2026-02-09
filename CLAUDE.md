@@ -9,7 +9,7 @@
 - **Framework**: Next.js 15 (App Router, Turbopack) + React 19 + TypeScript 5
 - **Styling**: Tailwind CSS 4, Motion (animations), Lucide React (icons)
 - **Backend**: Supabase (PostgreSQL, Auth, Realtime subscriptions)
-- **Notifications**: Firebase Cloud Messaging (FCM) + Web Push API
+- **Notifications**: Firebase Cloud Messaging (FCM) via Supabase Edge Functions
 - **Analytics**: Vercel Analytics
 - **Deployment**: Vercel
 
@@ -67,12 +67,11 @@ public/
 NEXT_PUBLIC_SUPABASE_URL
 NEXT_PUBLIC_SUPABASE_ANON_KEY
 NEXT_PUBLIC_FCM_VAPID_KEY
-VAPID_PRIVATE_KEY
 ```
 
 ## Database
 
-PostgreSQL via Supabase. Key tables: `players`, `matches`, `events`, `event_participants`, `chat_messages`, `event_chat_messages`, `push_subscriptions`. Types auto-generated in `app/types/database.types.ts`.
+PostgreSQL via Supabase. Key tables: `players`, `matches`, `events`, `event_participants`, `chat_messages`, `event_chat_messages`, `fcm_subscriptions`. Types auto-generated in `app/types/database.types.ts`.
 
 Migrations live in `supabase/migrations/`. Use `apply_migration` for DDL changes.
 

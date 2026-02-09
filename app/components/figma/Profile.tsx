@@ -5,7 +5,6 @@ import { Mail, Phone, Calendar, Award, Activity } from 'lucide-react';
 import { motion } from 'motion/react';
 import LogoutButton from './components/LogoutButton';
 import InstallPrompt from '@/app/components/figma/components/InstallPrompt';
-import PushNotificationManager from '@/app/components/figma/components/PushNotificationManager';
 import { PlayerHeader } from './components/PlayerHeader';
 import { StatGrid } from './components/StatGrid';
 import { ContactInfoList } from './components/ContactInfoList';
@@ -130,7 +129,6 @@ export function Profile() {
             />
             <LogoutButton />
             <InstallPrompt />
-            <PushNotificationManager />
           </div>
         </div>
       </div>

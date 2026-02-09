@@ -13,52 +13,25 @@ firebase.initializeApp({
 
 const messaging = firebase.messaging();
 
-// --- FCM background messages (data-only and notification payloads) ---
+// All push notifications (chat, event chat, promotion) arrive as FCM data-only messages
 messaging.onBackgroundMessage((payload) => {
     console.log('Received background message:', payload);
 
-    // Support both notification payloads and data-only payloads
     const notificationTitle = payload.notification?.title || payload.data?.title || 'New notification';
     const notificationOptions = {
         body: payload.notification?.body || payload.data?.body || '',
         icon: '/icon-192x192.png',
-        data: payload.data
+        badge: '/badge.png',
+        vibrate: [100, 50, 100],
+        data: payload.data,
+        tag: payload.data?.type === 'chat' ? 'chat-message' : 'general',
+        renotify: true,
     };
 
     self.registration.showNotification(notificationTitle, notificationOptions);
 });
 
-// --- Web Push (VAPID) messages ---
-// Only handles non-FCM push messages (e.g. chat notifications sent via web-push).
-// FCM messages are handled by onBackgroundMessage above.
-self.addEventListener('push', function (event) {
-    if (event.data) {
-        const data = event.data.json()
-
-        // Skip FCM messages — they are handled by onBackgroundMessage above.
-        // FCM payloads lack top-level title/body; VAPID payloads always have them.
-        if (!data.title) {
-            return
-        }
-
-        const options = {
-            body: data.body,
-            icon: data.icon || '/icon.png',
-            badge: '/badge.png',
-            vibrate: [100, 50, 100],
-            data: {
-                dateOfArrival: Date.now(),
-                type: data.data?.type || 'general',
-                url: data.data?.url || '/stats',
-            },
-            tag: data.data?.type === 'chat' ? 'chat-message' : 'general',
-            renotify: true,
-        }
-        event.waitUntil(self.registration.showNotification(data.title, options))
-    }
-})
-
-// --- Notification click handler (shared by both FCM and Web Push) ---
+// Notification click handler — routes to the appropriate page
 self.addEventListener('notificationclick', function (event) {
     event.notification.close()
 
