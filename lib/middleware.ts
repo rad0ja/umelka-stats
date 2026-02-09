@@ -76,5 +76,32 @@ export async function updateSession(request: NextRequest) {
         }
     }
 
+    // Team membership check — redirect users without a team to onboarding
+    const teamExemptRoutes = ['/onboarding']
+    const isTeamExemptRoute = teamExemptRoutes.includes(request.nextUrl.pathname)
+
+    if (user && !isPublicRoute && !isTeamExemptRoute) {
+        const hasTeam = request.cookies.get('hasTeam')?.value
+        if (!hasTeam) {
+            // DB check — only runs once until cookie is set
+            const { data: membership } = await supabase
+                .from('team_members')
+                .select('id')
+                .eq('user_id', user.id)
+                .limit(1)
+                .single()
+
+            if (membership) {
+                // User has a team but missing cookie — set it
+                supabaseResponse.cookies.set('hasTeam', 'true', { path: '/' })
+            } else {
+                // No team — redirect to onboarding
+                const url = request.nextUrl.clone()
+                url.pathname = '/onboarding'
+                return NextResponse.redirect(url)
+            }
+        }
+    }
+
     return supabaseResponse
 }

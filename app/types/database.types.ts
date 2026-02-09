@@ -127,6 +127,7 @@ export type Database = {
           id: string
           max_participants: number
           start_time: string
+          team_id: string | null
           title: string
         }
         Insert: {
@@ -134,6 +135,7 @@ export type Database = {
           id?: string
           max_participants: number
           start_time: string
+          team_id?: string | null
           title: string
         }
         Update: {
@@ -141,9 +143,18 @@ export type Database = {
           id?: string
           max_participants?: number
           start_time?: string
+          team_id?: string | null
           title?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "events_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       fcm_subscriptions: {
         Row: {
@@ -208,6 +219,7 @@ export type Database = {
           season_id: number | null
           team_a: string[]
           team_b: string[]
+          team_id: string | null
         }
         Insert: {
           date: string
@@ -218,6 +230,7 @@ export type Database = {
           season_id?: number | null
           team_a: string[]
           team_b: string[]
+          team_id?: string | null
         }
         Update: {
           date?: string
@@ -228,6 +241,7 @@ export type Database = {
           season_id?: number | null
           team_a?: string[]
           team_b?: string[]
+          team_id?: string | null
         }
         Relationships: [
           {
@@ -235,6 +249,13 @@ export type Database = {
             columns: ["season_id"]
             isOneToOne: false
             referencedRelation: "seasons"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "matches_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
             referencedColumns: ["id"]
           },
         ]
@@ -274,21 +295,31 @@ export type Database = {
           goal_target: number | null
           id: string
           name: string
+          team_id: string | null
           user_id: string | null
         }
         Insert: {
           goal_target?: number | null
           id?: string
           name: string
+          team_id?: string | null
           user_id?: string | null
         }
         Update: {
           goal_target?: number | null
           id?: string
           name?: string
+          team_id?: string | null
           user_id?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "players_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "players_user_id_fkey"
             columns: ["user_id"]
@@ -319,6 +350,77 @@ export type Database = {
         }
         Relationships: []
       }
+      team_members: {
+        Row: {
+          id: string
+          joined_at: string | null
+          role: Database["public"]["Enums"]["team_role"]
+          team_id: string
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          joined_at?: string | null
+          role?: Database["public"]["Enums"]["team_role"]
+          team_id: string
+          user_id: string
+        }
+        Update: {
+          id?: string
+          joined_at?: string | null
+          role?: Database["public"]["Enums"]["team_role"]
+          team_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "team_members_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "team_members_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "player_users_view"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
+      teams: {
+        Row: {
+          created_at: string | null
+          created_by: string
+          id: string
+          invite_code: string
+          name: string
+        }
+        Insert: {
+          created_at?: string | null
+          created_by: string
+          id?: string
+          invite_code: string
+          name: string
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string
+          id?: string
+          invite_code?: string
+          name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "teams_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "player_users_view"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
     }
     Views: {
       player_users_view: {
@@ -338,6 +440,7 @@ export type Database = {
       }
     }
     Functions: {
+      generate_invite_code: { Args: never; Returns: string }
       join_event: {
         Args: {
           p_event_id: string
@@ -349,6 +452,7 @@ export type Database = {
     }
     Enums: {
       participation_status: "yes" | "tentative" | "no" | "queued"
+      team_role: "owner" | "admin" | "member"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -477,6 +581,7 @@ export const Constants = {
   public: {
     Enums: {
       participation_status: ["yes", "tentative", "no", "queued"],
+      team_role: ["owner", "admin", "member"],
     },
   },
 } as const
