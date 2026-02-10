@@ -1,4 +1,5 @@
 import { motion } from 'motion/react'
+import { Target } from 'lucide-react'
 
 interface GoalProgressCardProps {
   currentGoals: number
@@ -15,29 +16,43 @@ export function GoalProgressCard({ currentGoals, targetGoals, progress }: GoalPr
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: ANIMATION_DELAY }}
-      className="px-5 pb-4"
+      className="stats-glass-card rounded-2xl p-4"
     >
-      <div className="rounded-xl p-4" style={{ background: 'var(--stats-card)' }}>
-        <div className="flex justify-between items-center mb-3">
-          <span className="text-sm font-medium text-white">Goal Target</span>
-          <span className="text-sm" style={{ color: 'var(--stats-text-dim)' }}>
-            {currentGoals} / {targetGoals}
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-2">
+          <div
+            className="w-7 h-7 rounded-lg flex items-center justify-center"
+            style={{ background: 'var(--stats-purple-light)' }}
+          >
+            <Target className="w-3.5 h-3.5" style={{ color: 'var(--stats-purple)' }} aria-hidden="true" />
+          </div>
+          <span className="text-sm font-semibold" style={{ color: 'var(--stats-text)' }}>
+            Goal Target
           </span>
         </div>
-
-        <div
-          className="h-2 rounded-full overflow-hidden"
-          style={{ background: 'rgba(255,255,255,0.1)' }}
-        >
-          <motion.div
-            initial={{ width: 0 }}
-            animate={{ width: `${progress}%` }}
-            transition={{ delay: PROGRESS_ANIMATION_DELAY, duration: 0.6, ease: 'easeOut' }}
-            className="h-full rounded-full"
-            style={{ background: 'linear-gradient(90deg, #7c3aed, #a855f7)' }}
-          />
-        </div>
+        <span className="stats-value text-lg" style={{ color: 'var(--stats-text-secondary)' }}>
+          {currentGoals}&nbsp;/&nbsp;{targetGoals}
+        </span>
       </div>
+
+      <div
+        className="h-3 rounded-full overflow-hidden"
+        style={{ background: '#e2e8f0' }}
+      >
+        <motion.div
+          initial={{ width: 0 }}
+          animate={{ width: `${progress}%` }}
+          transition={{ delay: PROGRESS_ANIMATION_DELAY, duration: 0.6, ease: 'easeOut' }}
+          className="h-full rounded-full"
+          style={{ background: 'linear-gradient(90deg, var(--stats-purple), #a78bfa)' }}
+        />
+      </div>
+
+      {progress >= 100 && (
+        <p className="text-xs font-semibold mt-2" style={{ color: 'var(--stats-accent)' }}>
+          Target reached!
+        </p>
+      )}
     </motion.div>
   )
 }

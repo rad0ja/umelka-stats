@@ -76,5 +76,21 @@ export async function updateSession(request: NextRequest) {
         }
     }
 
+    // Team membership check — redirect users without a team to onboarding
+    // Cookie is set by login action and onboarding actions.
+    // If missing, redirect to /onboarding which does a server-side DB check
+    // and redirects back to /stats if the user already has a team.
+    const teamExemptRoutes = ['/onboarding']
+    const isTeamExemptRoute = teamExemptRoutes.includes(request.nextUrl.pathname)
+
+    if (user && !isPublicRoute && !isTeamExemptRoute) {
+        const hasTeam = request.cookies.get('hasTeam')?.value
+        if (!hasTeam) {
+            const url = request.nextUrl.clone()
+            url.pathname = '/onboarding'
+            return NextResponse.redirect(url)
+        }
+    }
+
     return supabaseResponse
 }

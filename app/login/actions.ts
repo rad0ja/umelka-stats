@@ -25,6 +25,21 @@ export async function login(formData: FormData) {
         cookieStore.set('seasonId', '2')
     }
 
+    // Check if user has a team and set cookie to skip middleware DB check
+    const { data: { user } } = await supabase.auth.getUser()
+    if (user) {
+        const { data: membership } = await supabase
+            .from('team_members')
+            .select('id')
+            .eq('user_id', user.id)
+            .limit(1)
+            .single()
+
+        if (membership) {
+            cookieStore.set('hasTeam', 'true', { path: '/' })
+        }
+    }
+
     revalidatePath('/', 'layout')
     redirect('/stats')
 }    
