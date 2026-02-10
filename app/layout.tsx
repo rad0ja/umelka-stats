@@ -41,7 +41,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full overflow-hidden bg-gray-50 dark:bg-gray-950">
+    <html lang="en" className="h-full overflow-hidden">
        <head>
            <meta name="mobile-web-app-capable" content="yes" />
            <meta
@@ -52,7 +52,6 @@ export default function RootLayout({
       <body
         className={`
           h-full overflow-hidden
-          bg-green-50 dark:bg-gray-950
           ${geistSans.variable} 
           ${geistMono.variable} 
           ${bebasNeue.variable} 
