@@ -51,7 +51,7 @@ export default function RootLayout({
        </head>
       <body
         className={`
-          h-full overflow-hidden
+          h-[100dvh] overflow-hidden
           ${geistSans.variable} 
           ${geistMono.variable} 
           ${bebasNeue.variable} 
