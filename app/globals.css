@@ -5,14 +5,22 @@
   --background: #19c5b7;
   --foreground: #171717;
 
-  /* Clean Sports App Palette */
-  --stats-bg: #5b9494;
-  --stats-card: #1a1f26;
-  --stats-accent: #00ff87;
-  --stats-purple: #7c3aed;
-  --stats-text: #ffffff;
-  --stats-text-dim: #9ca3af;
-  --stats-border: rgba(255,255,255,0.08);
+  /* Breezy Football Palette */
+  --stats-bg: linear-gradient(165deg, #e8faf4 0%, #f0fdf4 30%, #f8fafc 100%);
+  --stats-card: rgba(255, 255, 255, 0.72);
+  --stats-card-border: rgba(16, 185, 129, 0.12);
+  --stats-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 16px rgba(16, 185, 129, 0.06);
+  --stats-accent: #10b981;
+  --stats-accent-light: #d1fae5;
+  --stats-purple: #8b5cf6;
+  --stats-purple-light: #ede9fe;
+  --stats-orange: #f59e0b;
+  --stats-orange-light: #fef3c7;
+  --stats-text: #0f172a;
+  --stats-text-secondary: #475569;
+  --stats-text-dim: #94a3b8;
+  --stats-border: rgba(16, 185, 129, 0.08);
+  --stats-glass-blur: 12px;
 }
 
 @theme inline {
@@ -39,9 +47,32 @@ body {
 .stats-heading {
   font-family: var(--font-barlow), system-ui, sans-serif;
   font-weight: 700;
+  text-wrap: balance;
 }
 
 .stats-value {
   font-family: var(--font-bebas), system-ui, sans-serif;
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Glass card */
+.stats-glass-card {
+  background: var(--stats-card);
+  backdrop-filter: blur(var(--stats-glass-blur));
+  -webkit-backdrop-filter: blur(var(--stats-glass-blur));
+  border: 1px solid var(--stats-card-border);
+  box-shadow: var(--stats-card-shadow);
+}
+
+/* Accent badge chip */
+.stats-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font-size: 0.6875rem;
+  font-weight: 600;
   letter-spacing: 0.02em;
 }

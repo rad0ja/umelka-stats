@@ -2,6 +2,7 @@
 
 import { useMemo } from 'react'
 import { motion } from 'motion/react'
+import { Activity } from 'lucide-react'
 import { QuickStats } from './components/QuickStats'
 import { TopScorerCard } from './components/TopScorerCard'
 import { SeasonSummary } from './components/SeasonSummary'
@@ -38,10 +39,13 @@ export function PlayerStats({ data }: PlayerStatsProps) {
 
   if (!computedStats) {
     return (
-      <div className="h-full flex items-center justify-center">
-        <p className="text-sm" style={{ color: 'var(--stats-text-dim)' }}>
-          No stats available
-        </p>
+      <div className="h-full flex items-center justify-center" style={{ background: 'var(--stats-bg)' }}>
+        <div className="text-center">
+          <Activity className="w-10 h-10 mx-auto mb-3" style={{ color: 'var(--stats-text-dim)' }} aria-hidden="true" />
+          <p className="text-sm font-medium" style={{ color: 'var(--stats-text-dim)' }}>
+            No stats available yet
+          </p>
+        </div>
       </div>
     )
   }
@@ -50,24 +54,34 @@ export function PlayerStats({ data }: PlayerStatsProps) {
 
   return (
     <div
-      className="flex h-full flex-col bg-gray-50 dark:bg-gray-950"
+      className="flex h-full flex-col"
       style={{ background: 'var(--stats-bg)' }}
     >
       {/* Header */}
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        className="shrink-0 dark:bg-gray-900 pt-14 pb-4 px-6 dark:border-gray-800"
+        initial={{ opacity: 0, y: -8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+        className="shrink-0 pt-14 pb-2 px-6"
       >
-        <h1 className="stats-heading text-2xl text-white">Stats</h1>
+        <div className="flex items-center gap-2.5">
+          <div
+            className="w-8 h-8 rounded-lg flex items-center justify-center"
+            style={{ background: 'var(--stats-accent-light)' }}
+          >
+            <Activity className="w-4 h-4" style={{ color: 'var(--stats-accent)' }} aria-hidden="true" />
+          </div>
+          <h1 className="stats-heading text-2xl" style={{ color: 'var(--stats-text)' }}>
+            Your Stats
+          </h1>
+        </div>
       </motion.div>
 
-      <div className="flex-1 min-h-0 overflow-y-auto relative z-10">
+      {/* Scrollable Content */}
+      <div className="flex-1 min-h-0 overflow-y-auto relative z-10 px-5 pt-3 pb-6 space-y-3">
         <QuickStats winRate={winRate} currentGoals={stats.goals} targetGoals={goalTarget} />
 
-        <div className="px-5 pb-4">
-          <TopScorerCard name={player.name} goals={stats.goals} avatar={avatar} />
-        </div>
+        <TopScorerCard name={player.name} goals={stats.goals} avatar={avatar} />
 
         <SeasonSummary
           matchesPlayed={stats.matchesPlayed}
