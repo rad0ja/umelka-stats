@@ -51,7 +51,7 @@ export default function RootLayout({
        </head>
       <body
         className={`
-          h-[100dvh] overflow-hidden
+          h-[100dvh] pb-[env(safe-area-inset-bottom)]
           ${geistSans.variable} 
           ${geistMono.variable} 
           ${bebasNeue.variable} 
