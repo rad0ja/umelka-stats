@@ -1,14 +1,16 @@
 'use client';
 
-import { use } from 'react';
+import { use, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Calendar, MapPin, Users, Clock } from 'lucide-react';
+import { ArrowLeft, Calendar, Users, MessageCircle, Info } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useEvent } from '@/app/components/figma/hooks/useEvent';
 import { useRsvp } from '@/app/components/figma/hooks/useRsvp';
 import { RSVPSection } from '@/app/components/figma/components/RSVPSection';
 import { ParticipantsList } from '@/app/components/figma/components/ParticipantsList';
-import { EventChat } from '@/app/components/figma/EventChat';
+import { EventChatTab } from './EventChatTab';
+
+type Tab = 'details' | 'chat';
 
 interface EventPageProps {
   params: Promise<{ id: string }>;
@@ -19,6 +21,7 @@ export default function EventPage({ params }: EventPageProps) {
   const router = useRouter();
   const { event, loading, refetchEvent } = useEvent(id);
   const { handleRsvp, rsvpLoading } = useRsvp(refetchEvent);
+  const [activeTab, setActiveTab] = useState<Tab>('details');
 
   if (loading) {
     return (
@@ -54,7 +57,7 @@ export default function EventPage({ params }: EventPageProps) {
   const isUpcoming = eventDate >= new Date();
 
   return (
-    <div className="flex h-full flex-col bg-gray-50 dark:bg-gray-950 pb-8">
+    <div className={`flex h-full flex-col bg-gray-50 dark:bg-gray-950 ${activeTab === 'details' ? 'pb-8' : ''}`}>
       {/* Header */}
       <div className="bg-white dark:bg-gray-900 pt-14 pb-6 px-4">
         <motion.button
@@ -84,90 +87,110 @@ export default function EventPage({ params }: EventPageProps) {
             </div>
           </div>
         </motion.div>
-      </div>
 
-      <div className="flex-1 min-h-0 overflow-y-auto">
-
-               {/* Event Details */}
-      <div className="px-4 pt-6 space-y-4">
-        {/* Date & Time Card */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="bg-white dark:bg-gray-900 rounded-2xl p-5 shadow-sm"
-        >
-          <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center">
-              <Calendar className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-            </div>
-            <div>
-              <div className="text-sm text-gray-500 dark:text-gray-400">Date & Time</div>
-              <div className="font-semibold text-gray-900 dark:text-white">{dateStr}</div>
-              <div className="text-sm text-gray-600 dark:text-gray-300">{timeStr}</div>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* RSVP Section - Only for upcoming events */}
-        {isUpcoming && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="bg-white dark:bg-gray-900 rounded-2xl p-5 shadow-sm"
+        {/* Tab Navigation */}
+        <div className="flex gap-2 mt-4">
+          <button
+            onClick={() => setActiveTab('details')}
+            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+              activeTab === 'details'
+                ? 'bg-blue-600 text-white'
+                : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400'
+            }`}
           >
-            <h2 className="font-semibold text-gray-900 dark:text-white mb-4">Your Response</h2>
-            <RSVPSection
-              eventId={event.id}
-              participants={event.participants}
-              maxPlayers={event.max_participants}
-              currentUserStatus={event.currentUserStatus}
-              onRsvp={handleRsvp}
-              isLoading={rsvpLoading[event.id] || false}
-            />
-          </motion.div>
-        )}
-
-        {/* Participants */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="bg-white dark:bg-gray-900 rounded-2xl p-5 shadow-sm"
-        >
-          <div className="flex items-center gap-2 mb-4">
-            <Users className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-            <h2 className="font-semibold text-gray-900 dark:text-white">
-              Participants ({event.participants.going.length}/{event.max_participants})
-            </h2>
-          </div>
-
-          {/* Always expanded participants list */}
-          <ParticipantsList
-            going={event.participants.going}
-            tentative={event.participants.tentative}
-            queued={event.participants.queued}
-            isExpanded={true}
-          />
-
-          {event.participants.going.length === 0 &&
-           event.participants.tentative.length === 0 &&
-           event.participants.queued.length === 0 && (
-            <p className="text-gray-500 dark:text-gray-400 text-sm">No participants yet</p>
-          )}
-        </motion.div>
-
-        {/* Event Chat */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-        >
-          <EventChat eventId={event.id} />
-        </motion.div>
+            <Info className="w-4 h-4" />
+            Details
+          </button>
+          <button
+            onClick={() => setActiveTab('chat')}
+            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+              activeTab === 'chat'
+                ? 'bg-blue-600 text-white'
+                : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400'
+            }`}
+          >
+            <MessageCircle className="w-4 h-4" />
+            Chat
+          </button>
+        </div>
       </div>
-        
+
+      <div className={`flex-1 min-h-0 ${activeTab === 'details' ? 'overflow-y-auto' : 'flex flex-col'}`}>
+        {activeTab === 'details' ? (
+          /* Event Details */
+          <div className="px-4 pt-6 space-y-4 pb-8">
+            {/* Date & Time Card */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="bg-white dark:bg-gray-900 rounded-2xl p-5 shadow-sm"
+            >
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center">
+                  <Calendar className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                </div>
+                <div>
+                  <div className="text-sm text-gray-500 dark:text-gray-400">Date & Time</div>
+                  <div className="font-semibold text-gray-900 dark:text-white">{dateStr}</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-300">{timeStr}</div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* RSVP Section - Only for upcoming events */}
+            {isUpcoming && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                className="bg-white dark:bg-gray-900 rounded-2xl p-5 shadow-sm"
+              >
+                <h2 className="font-semibold text-gray-900 dark:text-white mb-4">Your Response</h2>
+                <RSVPSection
+                  eventId={event.id}
+                  participants={event.participants}
+                  maxPlayers={event.max_participants}
+                  currentUserStatus={event.currentUserStatus}
+                  onRsvp={handleRsvp}
+                  isLoading={rsvpLoading[event.id] || false}
+                />
+              </motion.div>
+            )}
+
+            {/* Participants */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+              className="bg-white dark:bg-gray-900 rounded-2xl p-5 shadow-sm"
+            >
+              <div className="flex items-center gap-2 mb-4">
+                <Users className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                <h2 className="font-semibold text-gray-900 dark:text-white">
+                  Participants ({event.participants.going.length}/{event.max_participants})
+                </h2>
+              </div>
+
+              {/* Always expanded participants list */}
+              <ParticipantsList
+                going={event.participants.going}
+                tentative={event.participants.tentative}
+                queued={event.participants.queued}
+                isExpanded={true}
+              />
+
+              {event.participants.going.length === 0 &&
+               event.participants.tentative.length === 0 &&
+               event.participants.queued.length === 0 && (
+                <p className="text-gray-500 dark:text-gray-400 text-sm">No participants yet</p>
+              )}
+            </motion.div>
+          </div>
+        ) : (
+          /* Chat Tab */
+          <EventChatTab eventId={event.id} />
+        )}
       </div>
 
      
