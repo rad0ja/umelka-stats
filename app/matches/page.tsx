@@ -44,6 +44,9 @@ export default function MatchesPage() {
                         <div className="text-xs text-gray-500 text-center mt-2">
                             {new Date(match.date).toLocaleDateString()}
                         </div>
+                        <div className="text-xs text-gray-500 mt-2">
+                            Comments: {match.comments || "No comments"}
+                        </div>
                     </div>
                 ))}
         </div>

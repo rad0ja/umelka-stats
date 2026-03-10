@@ -1,7 +1,9 @@
 'use client';
+import { useState } from "react";
 import { supabase } from "@/lib/supabase";
 
 export default function LiveMatchSummary({ teamA, teamB, goals, onDone }: any) {
+    const [comments, setComments] = useState('');
     const totalA = teamA.reduce((sum: any, p: { id: string | number; }) => sum + (goals[p.id] || 0), 0);
     const totalB = teamB.reduce((sum: any, p: { id: string | number; }) => sum + (goals[p.id] || 0), 0);
 
@@ -15,6 +17,7 @@ export default function LiveMatchSummary({ teamA, teamB, goals, onDone }: any) {
             score_a: totalA,
             score_b: totalB,
             goals,
+            comments,
             date: new Date().toISOString().slice(0, 10),
             season_id: 2
         });
@@ -59,6 +62,13 @@ export default function LiveMatchSummary({ teamA, teamB, goals, onDone }: any) {
                         <p className="text-sm text-gray-500">No goals scored</p>
                     )}
                 </div>
+            </div>
+            <div>
+                <textarea 
+                    value={comments} 
+                    onChange={e => setComments(e.target.value)} 
+                    placeholder="Add comments about the match..." 
+                    className="w-full p-2 border rounded mb-4" />
             </div>
 
             <button onClick={submitMatch} className="w-full bg-green-600 text-white py-2 rounded">
