@@ -22,10 +22,11 @@ export default function PlayerMatchHistory({ playerId, history, allMVPs = [] }: 
 
     const playerMatches = history[playerId]?.matches || [];
     const sortedPlayerMatches = [...playerMatches].sort((a,b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    const sortedPlayerMatchesByEarliest = [...playerMatches].sort((a,b) => new Date(a.date).getTime() - new Date(b.date).getTime());
     const streaks = playerStreaks(sortedPlayerMatches);
 
     let cumulative = 0;
-    const chartData = playerMatches.map(match => {
+    const chartData = sortedPlayerMatchesByEarliest.map(match => {
         cumulative += match.goals_scored;
         return {
             date: match.date,

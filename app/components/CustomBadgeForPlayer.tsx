@@ -12,12 +12,12 @@ type Props = {
 export default function CustomBadgeForPlayer({ id, players, index }: Props) {
     const playerName = getPlayerName(players, id);
     const trophy = getTrophy(index);
-    const playerIds = ["653c6fe7-2bb5-4ea5-8261-fb1aa6f6f6f0", "56d7386b-39d2-4a14-ade4-83138a7b5c3b"];
+    const playerIds: string[] = [];
 
     return (
         <span>
             <span className="text-xl">{trophy}</span> {playerName}
-            {playerIds.includes(id) && (
+            {playerIds.length > 0 && playerIds.includes(id) && (
                 <span>
                 🙂
                 </span>
