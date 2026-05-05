@@ -23,6 +23,7 @@ export default function MatchSummary({ match, players }: Props) {
             <tr className="bg-gray-100 dark:bg-gray-700 border-b">
                 <th className="p-2 text-left dark:border-white">Player</th>
                 <th className="p-2 text-left">Goals</th>
+                <th className="p-2 text-left">Assists</th>
             </tr>
             </thead>
             <tbody>
@@ -38,6 +39,8 @@ export default function MatchSummary({ match, players }: Props) {
                         <span><RecentFormBadge form={recentForm[playerId] || []}/></span>
                     </td>
                     <td className="p-2">{match.goals[playerId] || 0}
+                    </td>
+                    <td className="p-2">{match.assists[playerId] || 0}
                     </td>
                 </tr>
             ))}

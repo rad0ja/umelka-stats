@@ -2,13 +2,18 @@
 import { useState } from "react";
 import { supabase } from "@/lib/supabase";
 
-export default function LiveMatchSummary({ teamA, teamB, goals, onDone }: any) {
+export default function LiveMatchSummary({ teamA, teamB, goals, assists = {}, onDone }: any) {
     const [comments, setComments] = useState('');
     const totalA = teamA.reduce((sum: any, p: { id: string | number; }) => sum + (goals[p.id] || 0), 0);
     const totalB = teamB.reduce((sum: any, p: { id: string | number; }) => sum + (goals[p.id] || 0), 0);
 
-    const scorersA = teamA.filter((p: any) => (goals[p.id] || 0) > 0);
-    const scorersB = teamB.filter((p: any) => (goals[p.id] || 0) > 0);
+    const scorersA = teamA.filter((p: any) => {
+        return (goals[p.id] || 0) > 0 || (assists[p.id] || 0) > 0;
+    });
+
+    const scorersB = teamB.filter((p: any) => {
+        return (goals[p.id] || 0) > 0 || (assists[p.id] || 0) > 0;
+    });
 
     const submitMatch = async () => {
         const { error } = await supabase.from('matches').insert({
@@ -18,8 +23,9 @@ export default function LiveMatchSummary({ teamA, teamB, goals, onDone }: any) {
             score_b: totalB,
             goals,
             comments,
+            assists,
             date: new Date().toISOString().slice(0, 10),
-            season_id: 2
+            season_id: 5
         });
         if (error) console.error(error);
         else onDone();
@@ -40,7 +46,7 @@ export default function LiveMatchSummary({ teamA, teamB, goals, onDone }: any) {
                         <ul className="list-disc pl-5 space-y-1">
                             {scorersA.map((p: any) => (
                                 <li key={p.id}>
-                                    {p.name || p.id}: {goals[p.id]}
+                                    {p.name || p.id}: G: {goals[p.id] || 0} A: {assists[p.id] || 0}
                                 </li>
                             ))}
                         </ul>
@@ -54,7 +60,7 @@ export default function LiveMatchSummary({ teamA, teamB, goals, onDone }: any) {
                         <ul className="list-disc pl-5 space-y-1">
                             {scorersB.map((p: any) => (
                                 <li key={p.id}>
-                                    {p.name || p.id}: {goals[p.id]}
+                                    {p.name || p.id}: G: {goals[p.id] || 0} A: {assists[p.id] || 0}
                                 </li>
                             ))}
                         </ul>

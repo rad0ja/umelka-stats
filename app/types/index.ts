@@ -11,6 +11,7 @@ export type Match = {
     score_a: number;
     score_b: number;
     goals: Record<string, number>;
+    assists: Record<string, number>;
 };
 
 export type PlayerStat = {

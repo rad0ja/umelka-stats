@@ -8,6 +8,7 @@ export function usePlayerStats(matches: Match[]) {
         const goals: Record<string, number> = {};
         const wins: Record<string, number> = {};
         const appearances: Record<string, number> = {};
+        const assists: Record<string, number> = {};
 
         const allPlayersIds = new Set<string>();
 
@@ -15,6 +16,12 @@ export function usePlayerStats(matches: Match[]) {
             // Count goals
             for (const [playerId, goalCount] of Object.entries(match.goals)) {
                 goals[playerId] = (goals[playerId] || 0) + goalCount;
+                allPlayersIds.add(playerId);
+            }
+
+            // Count goals assists
+            for (const [playerId, assistCount] of Object.entries(match.assists)) {
+                assists[playerId] = (assists[playerId] || 0) + assistCount;
                 allPlayersIds.add(playerId);
             }
 

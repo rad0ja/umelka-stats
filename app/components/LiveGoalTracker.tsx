@@ -2,14 +2,21 @@
 import { useState } from 'react';
 import { Player } from "@/app/types";
 
-export default function LiveGoalTracker({ teamA, teamB, onFinish }: { teamA: Player[]; teamB: Player[]; onFinish: (goals: Record<string, number>) => void }) {
+export default function LiveGoalTracker({ teamA, teamB, onFinish }: { teamA: Player[]; teamB: Player[]; onFinish: (goals: Record<string, number>, assists: Record<string, number>) => void }) {
     const [goals, setGoals] = useState<Record<string, number>>({});
+    const [assists, setAssists] = useState<Record<string, number>>({});
 
     const addGoal = (id: string) =>
         setGoals(prev => ({ ...prev, [id]: (prev[id] || 0) + 1 }));
 
+    const addAssist = (id: string) =>
+        setAssists(prev => ({ ...prev, [id]: (prev[id] || 0) + 1 }));
+
     const removeGoal = (id: string) =>
         setGoals(prev => ({ ...prev, [id]: (prev[id] || 0) - 1 }));
+
+    const removeAssist = (id: string) =>
+        setAssists(prev => ({ ...prev, [id]: (prev[id] || 0) - 1 }));
 
     const totalA = teamA.reduce((sum: number, p: Player) => sum + (goals[p.id] || 0), 0);
     const totalB = teamB.reduce((sum: number, p: Player) => sum + (goals[p.id] || 0), 0);
@@ -24,14 +31,28 @@ export default function LiveGoalTracker({ teamA, teamB, onFinish }: { teamA: Pla
                         <h3 className="font-semibold mb-2">{label}</h3>
                         {team.map((p: Player) => (
                             <div key={p.id} className="mb-3">
+                                {p.name}
                                 <button
                                     onClick={() => addGoal(p.id)}
                                     className="w-4/5 bg-blue-500 text-white py-2 rounded-md"
                                 >
-                                    {p.name} ({goals[p.id] || 0})
+                                    Goals ({goals[p.id] || 0})
                                 </button>
                                 <button
                                     onClick={() => removeGoal(p.id)}
+                                    className="w-1/5 bg-red-600 text-white py-2 rounded-md"
+                                >
+                                    -
+                                </button>
+
+                                <button
+                                    onClick={() => addAssist(p.id)}
+                                    className="w-4/5 bg-orange-300 text-white py-2 rounded-md"
+                                >
+                                    Assists ({assists[p.id] || 0})
+                                </button>
+                                <button
+                                    onClick={() => removeAssist(p.id)}
                                     className="w-1/5 bg-red-600 text-white py-2 rounded-md"
                                 >
                                     -
@@ -47,7 +68,7 @@ export default function LiveGoalTracker({ teamA, teamB, onFinish }: { teamA: Pla
             </div>
 
             <button
-                onClick={() => onFinish(goals)}
+                onClick={() => onFinish(goals, assists)}
                 className="mt-4 w-full bg-green-600 text-white py-2 rounded"
             >
                 ✅ Finish Match

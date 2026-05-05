@@ -8,6 +8,7 @@ export default function LiveMatchFlow({ players }: any) {
     const [phase, setPhase] = useState<'setup' | 'tracking' | 'summary'>('setup');
     const [teams, setTeams] = useState<any>(null);
     const [goals, setGoals] = useState<any>(null);
+    const [assists, setAssists] = useState<any>(null);
 
     return (
         <div className="max-w-lg mx-auto">
@@ -15,10 +16,10 @@ export default function LiveMatchFlow({ players }: any) {
                 <LiveMatchSetup players={players} onStart={(t) => { setTeams(t); setPhase('tracking'); }} />
             )}
             {phase === 'tracking' && (
-                <LiveGoalTracker {...teams} onFinish={(g: any) => { setGoals(g); setPhase('summary'); }} />
+                <LiveGoalTracker {...teams} onFinish={(g: any, a: any) => { setGoals(g); setAssists(a); setPhase('summary'); }} />
             )}
             {phase === 'summary' && (
-                <LiveMatchSummary {...teams} goals={goals} onDone={() => setPhase('setup')} />
+                <LiveMatchSummary {...teams} goals={goals} assists={assists} onDone={() => setPhase('setup')} />
             )}
         </div>
     );
