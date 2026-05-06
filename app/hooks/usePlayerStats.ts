@@ -44,6 +44,7 @@ export function usePlayerStats(matches: Match[]) {
         allPlayersIds.forEach((playerId) => {
             if (!(playerId in wins)) wins[playerId] = 0;
             if (!(playerId in goals)) goals[playerId] = 0;
+            if (!(playerId in assists)) assists[playerId] = 0;
         });
 
         const getWinRatio = (id: string) => {
@@ -65,7 +66,8 @@ export function usePlayerStats(matches: Match[]) {
             wins,
             appearances,
             getWinRatio,
-            getGoalsPerGame
+            getGoalsPerGame,
+            assists
         };
     }, [matches]);
 }

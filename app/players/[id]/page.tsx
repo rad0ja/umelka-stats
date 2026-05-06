@@ -14,7 +14,7 @@ import { computeMostWinsLossesWith } from "@/app/utils/playerVsPlayer";
 export default function PlayerDetailPage() {
     const { id } = useParams();
     const playerID = id as string
-    const { playerCalc, goalsCalc, matchesPlayedCalc, winsCalc, drawsCalc } = usePlayerCalculatedScore();
+    const { playerCalc, goalsCalc, matchesPlayedCalc, winsCalc, drawsCalc, assistsCalc } = usePlayerCalculatedScore();
     const { matches , players} = usePlayerMatchData();
     const allData = playerMatchHistory(matches);
     const allMvps = getAllMVPs(players, matches)
@@ -29,6 +29,7 @@ export default function PlayerDetailPage() {
             <PlayerCard
                     name={playerCalc.name}
                     goals={goalsCalc}
+                    assists={assistsCalc}
                     wins={winsCalc}
                     draws={drawsCalc}
                     matchesPlayed={matchesPlayedCalc}

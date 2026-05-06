@@ -5,6 +5,7 @@ import StatCard from "@/app/components/StatCard";
 type Props = {
     name: string;
     goals: number;
+    assists: number;
     wins: number;
     matchesPlayed: number;
     trophy?: string;
@@ -13,7 +14,7 @@ type Props = {
     draws: number;
 };
 
-export default function PlayerCard({ name, goals, wins, matchesPlayed, totalMatches, score, draws }: Props) {
+export default function PlayerCard({ name, goals, assists, wins, matchesPlayed, totalMatches, score, draws }: Props) {
     const winRatio = matchesPlayed === 0 ? '0%' : `${((wins / matchesPlayed) * 100).toFixed(1)}%`;
 
     return (
@@ -37,6 +38,12 @@ export default function PlayerCard({ name, goals, wins, matchesPlayed, totalMatc
                     title="Goals scored"
                     /*subtitle="Ujde to"*/
                     emoji="🥅"
+                />
+
+                <StatCard
+                    value={assists}
+                    title="Assists"
+                    emoji="🤝"
                 />
 
                 <StatCard

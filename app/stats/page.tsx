@@ -9,10 +9,11 @@ import WinRatios from "@/app/components/WinRatios";
 import GoalsPerGame from "@/app/components/GoalsPerGame";
 
 import MVPScore from "@/app/components/MVPScore";
+import TopAssist from "@/app/components/TopAssist";
 
 export default function StatsFull() {
     const { players, matches, loading } = usePlayerMatchData();
-    const { goals, wins, appearances} = usePlayerStats(matches);
+    const { goals, wins, appearances, assists} = usePlayerStats(matches);
 
     if (loading) return <div className="text-center">Loading...</div>
 
@@ -25,6 +26,12 @@ export default function StatsFull() {
 
                 <TopScorers
                     goals={goals}
+                    players={players}
+                    showAll={true}
+                />
+
+                <TopAssist
+                    assists={assists}
                     players={players}
                     showAll={true}
                 />
