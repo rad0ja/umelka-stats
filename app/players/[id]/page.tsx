@@ -19,8 +19,7 @@ export default function PlayerDetailPage() {
     const allData = playerMatchHistory(matches);
     const allMvps = getAllMVPs(players, matches)
     const PvP = computeMostWinsLossesWith(matches, playerID, players)
-
-    const MVPScore = (((2 * goalsCalc / matchesPlayedCalc) + (1.5 * winsCalc / matchesPlayedCalc) + (matchesPlayedCalc)) * 10).toFixed(1);
+    const { mvpScore } = getAllMVPs(players, matches).find(p => p.id === playerID) || { mvpScore: 0 };
 
     if (!playerCalc) return <div className="p-6 text-center">Loading...</div>;
 
@@ -34,7 +33,7 @@ export default function PlayerDetailPage() {
                     draws={drawsCalc}
                     matchesPlayed={matchesPlayedCalc}
                     totalMatches={matches.length}
-                    score={MVPScore}
+                    score={mvpScore.toFixed(1)}
                     trophy={getTrophy(0)} // optional
                 />
             <h2 className="mb-2 text-xl font-semibold">Most wins with: {PvP.mostWinsWithName} - {PvP.winsCount}</h2>

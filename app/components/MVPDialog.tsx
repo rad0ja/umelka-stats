@@ -37,11 +37,13 @@ export default function MVPDialog() {
                                         </DialogTitle>
                                         <div className="mt-2">
                                             <p className="text-lg text-gray-500 dark:text-gray-400">
-                                                mvpScore =
-                                                (goalRate * 40) +
-                                                (winRate * 25) +
-                                                (Math.log1p(matchesPlayed) * 10) +
-                                                (goals * 2);
+                                                 mvpScore =
+                                                    (goalRate * 40) +
+                                                    (assistRate * 20) +
+                                                    (winRate * 25) +
+                                                    (Math.log1p(matchesPlayed) * 10) +
+                                                    (goals * 2) +
+                                                    (assists * 2);
                                             </p>
                                         </div>
                                     </div>

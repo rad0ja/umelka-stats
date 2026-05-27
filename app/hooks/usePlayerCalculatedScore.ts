@@ -58,7 +58,11 @@ export function usePlayerCalculatedScore() {
 
                 if (won) w += 1;
 
-                if (match.score_a == match.score_b) d += 1;
+                const isDraw = 
+                    (inTeamA && match.score_a === match.score_b) ||
+                    (inTeamB && match.score_b === match.score_a);
+
+                if (isDraw) d += 1;
             });
 
             setGoals(g);
