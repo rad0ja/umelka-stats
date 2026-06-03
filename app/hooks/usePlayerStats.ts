@@ -61,12 +61,26 @@ export function usePlayerStats(matches: Match[]) {
             return `${(goal / played).toFixed(1)} goals`
         }
 
+        const matchesPlayedRatio = (id: string) => {
+            const played = appearances[id] || 0;
+            if (matches.length === 0) return '0%';
+            return `${((played / matches.length) * 100).toFixed(1)}%`;
+        }
+
+        const canadianPoints = (id: string) => {
+            const goal = goals[id] || 0;
+            const assist = assists[id] || 0;
+            return goal + assist;
+        }
+
         return {
             goals,
             wins,
             appearances,
             getWinRatio,
             getGoalsPerGame,
+            matchesPlayedRatio,
+            canadianPoints,
             assists
         };
     }, [matches]);

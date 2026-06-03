@@ -7,6 +7,7 @@ import MostWins from "@/app/components/MostWins";
 import MatchesPlayed from "@/app/components/MatchesPlayed";
 import WinRatios from "@/app/components/WinRatios";
 import GoalsPerGame from "@/app/components/GoalsPerGame";
+import CanadianPoints from "@/app/components/CanadianPoints";
 
 import MVPScore from "@/app/components/MVPScore";
 import TopAssist from "@/app/components/TopAssist";
@@ -33,6 +34,13 @@ export default function StatsFull() {
                 <TopAssist
                     assists={assists}
                     players={players}
+                    showAll={true}
+                />
+
+                <CanadianPoints
+                    players={players}
+                    goals={goals}
+                    assists={assists}
                     showAll={true}
                 />
 
