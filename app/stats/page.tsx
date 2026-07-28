@@ -11,6 +11,8 @@ import CanadianPoints from "@/app/components/CanadianPoints";
 
 import MVPScore from "@/app/components/MVPScore";
 import TopAssist from "@/app/components/TopAssist";
+import CanadianPointsPerGame from "../components/CanadianPointsPerGame";
+import AssistsPerGame from "../components/AssistsPerGame";
 
 export default function StatsFull() {
     const { players, matches, loading } = usePlayerMatchData();
@@ -44,6 +46,14 @@ export default function StatsFull() {
                     showAll={true}
                 />
 
+                  <CanadianPointsPerGame
+                    players={players}
+                    appearances={appearances}
+                    goals={goals}
+                    assists={assists}
+                    showAll={true}
+                />
+
                 <MostWins
                     wins={wins}
                     players={players}
@@ -68,6 +78,11 @@ export default function StatsFull() {
                     goals={goals}
                 />
 
+                <AssistsPerGame
+                    appearances={appearances}
+                    players={players}
+                    assists={assists}
+                />
             </div>
         </div>
     );

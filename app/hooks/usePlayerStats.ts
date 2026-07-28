@@ -58,7 +58,14 @@ export function usePlayerStats(matches: Match[]) {
             const goal = goals[id] || 0;
             const played = appearances[id] || 0;
             if (played == 0) return '0';
-            return `${(goal / played).toFixed(1)} goals`
+            return (goal / played).toFixed(1)
+        }
+
+        const getAssistsPerGame = (id: string) => {
+            const assist = assists[id] || 0;
+            const played = appearances[id] || 0;
+            if (played == 0) return '0';
+            return (assist / played).toFixed(1)
         }
 
         const matchesPlayedRatio = (id: string) => {
@@ -67,11 +74,18 @@ export function usePlayerStats(matches: Match[]) {
             return `${((played / matches.length) * 100).toFixed(1)}%`;
         }
 
-        const canadianPoints = (id: string) => {
+        const canadianPointsTotal = (id: string) => {
             const goal = goals[id] || 0;
             const assist = assists[id] || 0;
             return goal + assist;
         }
+
+        const getCanadianPointsPerGame = (id: string) => {
+            const canadianPoints = canadianPointsTotal(id);
+            const played = appearances[id] || 0;
+            if (played == 0) return '0';
+            return `${(canadianPoints / played).toFixed(1)} PPG`;
+        };
 
         return {
             goals,
@@ -80,8 +94,10 @@ export function usePlayerStats(matches: Match[]) {
             getWinRatio,
             getGoalsPerGame,
             matchesPlayedRatio,
-            canadianPoints,
-            assists
+            canadianPointsTotal,
+            assists,
+            getCanadianPointsPerGame,
+            getAssistsPerGame
         };
     }, [matches]);
 }
