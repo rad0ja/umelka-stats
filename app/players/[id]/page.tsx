@@ -10,6 +10,7 @@ import { playerMatchHistory } from "@/app/utils/playerMatchHistory";
 import { getAllMVPs } from "@/app/utils/getAllMVPs";
 import { useParams } from "next/navigation";
 import { computeMostWinsLossesWith } from "@/app/utils/playerVsPlayer";
+import { maskCount, maskName, maskScore, STATS_HIDDEN } from "@/app/utils/statsMask";
 
 export default function PlayerDetailPage() {
     const { id } = useParams();
@@ -23,23 +24,34 @@ export default function PlayerDetailPage() {
 
     if (!playerCalc) return <div className="p-6 text-center">Loading...</div>;
 
+    // Same keys as usePlayerStats, so the profile matches the (masked) leaderboards
+    const matchesPlayed = STATS_HIDDEN
+        ? Math.min(Math.max(maskCount(matchesPlayedCalc, `appearances:${playerID}`), 1), matches.length)
+        : matchesPlayedCalc;
+    const wins = Math.min(maskCount(winsCalc, `wins:${playerID}`), matchesPlayed);
+    const draws = Math.min(maskCount(drawsCalc, `draws:${playerID}`), matchesPlayed - wins);
+
     return (
         <div className="max-w-2xl mx-auto p-6">
             <PlayerCard
-                    name={playerCalc.name}
-                    goals={goalsCalc}
-                    assists={assistsCalc}
-                    wins={winsCalc}
-                    draws={drawsCalc}
-                    matchesPlayed={matchesPlayedCalc}
+                    name={maskName(playerCalc.name)}
+                    goals={maskCount(goalsCalc, `goals:${playerID}`)}
+                    assists={maskCount(assistsCalc, `assists:${playerID}`)}
+                    wins={wins}
+                    draws={draws}
+                    matchesPlayed={matchesPlayed}
                     totalMatches={matches.length}
-                    score={mvpScore.toFixed(1)}
+                    score={maskScore(mvpScore, `mvp:${playerID}`).toFixed(1)}
                     trophy={getTrophy(0)} // optional
                 />
-            <h2 className="mb-2 text-xl font-semibold">Most wins with: {PvP.mostWinsWithName} - {PvP.winsCount}</h2>
-            <h2 className="mb-2 text-xl font-semibold">Most loses with: {PvP.mostLossesWithName} - {PvP.lossesCount}</h2>
+            <h2 className="mb-2 text-xl font-semibold">Most wins with: {PvP.mostWinsWithName && maskName(PvP.mostWinsWithName)} - {maskCount(PvP.winsCount, `pvpWins:${playerID}`)}</h2>
+            <h2 className="mb-2 text-xl font-semibold">Most loses with: {PvP.mostLossesWithName && maskName(PvP.mostLossesWithName)} - {maskCount(PvP.lossesCount, `pvpLosses:${playerID}`)}</h2>
             {/*<GoalProgress />*/}
-            <PlayerMatchHistory playerId={playerCalc.id} history={allData} allMVPs={allMvps}/>
+            {STATS_HIDDEN ? (
+                <p className="text-center text-gray-500 mt-6">🤫 Match history is hidden until the end of the season</p>
+            ) : (
+                <PlayerMatchHistory playerId={playerCalc.id} history={allData} allMVPs={allMvps}/>
+            )}
         </div>
     );
 }

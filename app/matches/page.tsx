@@ -4,6 +4,7 @@
 import { usePlayerMatchData } from "@/app/hooks/usePlayerMatchData";
 import { getPlayerName } from "@/app/utils/playerHelpers";
 import Link from "next/link";
+import { maskMatchCount } from "@/app/utils/statsMask";
 
 export default function MatchesPage() {
     const { players, matches, loading } = usePlayerMatchData();
@@ -34,7 +35,7 @@ export default function MatchesPage() {
 
                                                     <span>{getPlayerName(players, id)}</span>
                                                 </Link>
-                                                <span>{match.goals[id] || 0} goals</span>
+                                                <span>{maskMatchCount(match.goals[id] || 0)} goals</span>
                                             </li>
                                         ))}
                                     </ul>

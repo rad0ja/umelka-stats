@@ -7,6 +7,7 @@ import { getTrophy } from "@/app/utils/playerHelpers";
 import MVPDialog from "@/app/components/MVPDialog";
 import {useSeason} from "@/app/context/SeasonContext";
 import CustomBadgeForPlayer from "@/app/components/CustomBadgeForPlayer";
+import { maskName, maskScore } from "@/app/utils/statsMask";
 
 type MVPPlayer = {
     id: string;
@@ -28,7 +29,8 @@ export default function MVPScore() {
                 return;
             }
 
-            const allMVPs = getAllMVPs(playersData, matchesData);
+            const allMVPs = getAllMVPs(playersData, matchesData)
+                .map((p) => ({ ...p, name: maskName(p.name), mvpScore: maskScore(p.mvpScore, `mvp:${p.id}`) }));
             const sorted = allMVPs.sort((a, b) => b.mvpScore - a.mvpScore);
             const nonZero = sorted.filter((p) => p.mvpScore > 0);
             setMvps(nonZero);

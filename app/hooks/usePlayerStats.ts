@@ -2,13 +2,14 @@
 
 import { useMemo } from "react";
 import { Match } from "@/app/types";
+import { maskRecord, STATS_HIDDEN } from "@/app/utils/statsMask";
 
 export function usePlayerStats(matches: Match[]) {
     return useMemo(() => {
-        const goals: Record<string, number> = {};
-        const wins: Record<string, number> = {};
-        const appearances: Record<string, number> = {};
-        const assists: Record<string, number> = {};
+        let goals: Record<string, number> = {};
+        let wins: Record<string, number> = {};
+        let appearances: Record<string, number> = {};
+        let assists: Record<string, number> = {};
 
         const allPlayersIds = new Set<string>();
 
@@ -46,6 +47,19 @@ export function usePlayerStats(matches: Match[]) {
             if (!(playerId in goals)) goals[playerId] = 0;
             if (!(playerId in assists)) assists[playerId] = 0;
         });
+
+        if (STATS_HIDDEN) {
+            goals = maskRecord(goals, 'goals');
+            assists = maskRecord(assists, 'assists');
+            appearances = maskRecord(appearances, 'appearances');
+            for (const id in appearances) {
+                appearances[id] = Math.min(Math.max(appearances[id], 1), matches.length);
+            }
+            wins = maskRecord(wins, 'wins');
+            for (const id in wins) {
+                wins[id] = Math.min(wins[id], appearances[id] || 0);
+            }
+        }
 
         const getWinRatio = (id: string) => {
             const win = wins[id] || 0;

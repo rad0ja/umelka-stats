@@ -13,6 +13,7 @@ import MVPScore from "@/app/components/MVPScore";
 import TopAssist from "@/app/components/TopAssist";
 import CanadianPointsPerGame from "../components/CanadianPointsPerGame";
 import AssistsPerGame from "../components/AssistsPerGame";
+import { STATS_HIDDEN } from "@/app/utils/statsMask";
 
 export default function StatsFull() {
     const { players, matches, loading } = usePlayerMatchData();
@@ -23,6 +24,9 @@ export default function StatsFull() {
     return (
         <div className="max-w-4xl mx-auto p-6">
             <h1 className="text-2xl font-bold mb-6 text-center">🏟️ Player Stats Dashboard - Umelka 2025</h1>
+            {STATS_HIDDEN && (
+                <p className="text-center text-sm text-gray-500 mb-6">🤫 Stats are scrambled until the last match of the season</p>
+            )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <MVPScore />

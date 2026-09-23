@@ -8,6 +8,7 @@ import TopScorers from "@/app/components/TopScorers";
 import Link from "next/link";
 import MostWins from "@/app/components/MostWins";
 import SeasonPicker from "@/app/components/SeasonPicker";
+import { STATS_HIDDEN } from "@/app/utils/statsMask";
 
 export default function Dashboard() {
     const { players, matches, loading } = usePlayerMatchData();
@@ -19,6 +20,9 @@ export default function Dashboard() {
     return (
         <div className="max-w-4xl mx-auto p-6">
             <h1 className="text-2xl font-bold mb-6 text-center">Ultimate Dashboard</h1>
+            {STATS_HIDDEN && (
+                <p className="text-center text-sm text-gray-500 mb-6">🤫 Stats are scrambled until the last match of the season</p>
+            )}
             <SeasonPicker />
             {lastMatch && <MatchSummary match={lastMatch} players={players}/>}
 

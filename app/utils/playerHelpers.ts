@@ -1,7 +1,8 @@
 import { Player, Match, PlayerStat } from "@/app/types";
+import { maskName } from "@/app/utils/statsMask";
 
 export function getPlayerName(players: Player[], id: string): string {
-    return players.find((p) => p.id === id)?.name || 'Unknown';
+    return maskName(players.find((p) => p.id === id)?.name || 'Unknown');
 }
 
 export function getTrophy(index: number): string {

@@ -6,6 +6,7 @@ import RecentFormBadge from "@/app/components/RecentFormBadge";
 import { getRecentForm } from "@/app/utils/form-utils";
 import { usePlayerMatchData } from "@/app/hooks/usePlayerMatchData";
 import Link from "next/link";
+import { maskMatchCount } from "@/app/utils/statsMask";
 
 type Props = {
     match: Match;
@@ -38,9 +39,9 @@ export default function MatchSummary({ match, players }: Props) {
                         </Link>
                         <span><RecentFormBadge form={recentForm[playerId] || []}/></span>
                     </td>
-                    <td className="p-2">{match.goals[playerId] || 0}
+                    <td className="p-2">{maskMatchCount(match.goals[playerId] || 0)}
                     </td>
-                    <td className="p-2">{match.assists[playerId] || 0}
+                    <td className="p-2">{maskMatchCount(match.assists[playerId] || 0)}
                     </td>
                 </tr>
             ))}
