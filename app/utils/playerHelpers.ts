@@ -18,7 +18,14 @@ export const getLastMatch = (matches: Match[]): Match | null => {
     )[0];
 }
 
-export const getSortedStats = (stats: Record<string, number>) => Object.entries(stats)
+// Per-game / ratio stats only include players with more than this many matches,
+// so e.g. a single won match doesn't put someone on top with a 100% win ratio.
+export const MIN_MATCHES_FOR_RATIOS = 5;
+
+export const getQualifiedPlayerIds = (appearances: Record<string, number>) => Object.keys(appearances)
+    .filter((id) => appearances[id] > MIN_MATCHES_FOR_RATIOS);
+
+export const getSortedStats =(stats: Record<string, number>) => Object.entries(stats)
     .sort((a, b) => b[1] - a[1]);
 
 export function getStatRankSubtitle(

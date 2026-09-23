@@ -2,6 +2,7 @@
 
 import {Player} from "@/app/types";
 import {getSortedStats} from "@/app/utils/playerHelpers";
+import CustomBadgeForPlayer from "@/app/components/CustomBadgeForPlayer";
 
 type Props = {
     assists: Record<string, number>;
@@ -17,10 +18,10 @@ export default function TopAssist({assists, players, showAll}: Props) {
         <div>
             <h2 className="text-xl font-semibold mb-2">🤝 Top Assists</h2>
             <ul className="space-y-1">
-                {displayedAssists.map(([id, assists]) => (
+                {displayedAssists.map(([id, assists], index) => (
                     <li key={id} className="flex justify-between border-b py-1">
                         <span>
-                            {players.find(player => player.id === id)?.name}
+                            <CustomBadgeForPlayer id={id} players={players} index={index} />
                         </span>
                         <span className="text-sm text-gray-600 dark:text-white">{assists} assists</span>
                     </li>

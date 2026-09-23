@@ -4,6 +4,7 @@ import { Player } from "@/app/types";
 import CustomBadgeForPlayer from "@/app/components/CustomBadgeForPlayer";
 import { usePlayerStats } from "@/app/hooks/usePlayerStats";
 import { usePlayerMatchData } from "@/app/hooks/usePlayerMatchData";
+import { getQualifiedPlayerIds, MIN_MATCHES_FOR_RATIOS } from "@/app/utils/playerHelpers";
 
 type Props = {
     players: Player[];
@@ -20,8 +21,9 @@ export default function CanadianPointsPerGame({players, goals, assists, appearan
     return (
         <div>
             <h2 className="text-xl font-semibold mb-2">🧮 Canadian Points Per Game</h2>
+            <p className="text-xs text-gray-500 mb-2">More than {MIN_MATCHES_FOR_RATIOS} matches played</p>
             <ul className="space-y-1">
-                    {Object.keys(appearances)
+                    {getQualifiedPlayerIds(appearances)
                                     .sort((a, b) => {
                                         const ratioA = ((goals[a] || 0) + assists[a]) / appearances[a];
                                         const ratioB = ((goals[b] || 0) + assists[b]) / appearances[b];

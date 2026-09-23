@@ -4,6 +4,7 @@ import { Player } from "@/app/types";
 import { usePlayerMatchData } from "@/app/hooks/usePlayerMatchData";
 import { usePlayerStats } from "@/app/hooks/usePlayerStats";
 import CustomBadgeForPlayer from "@/app/components/CustomBadgeForPlayer";
+import { getQualifiedPlayerIds, MIN_MATCHES_FOR_RATIOS } from "@/app/utils/playerHelpers";
 
 type Props = {
     appearances: Record<string, number>;
@@ -18,8 +19,9 @@ export default function AssistsPerGame({appearances, players, assists}: Props) {
     return (
         <div>
             <h2 className="text-xl font-semibold mb-2">🤝 Assists Per Game</h2>
+            <p className="text-xs text-gray-500 mb-2">More than {MIN_MATCHES_FOR_RATIOS} matches played</p>
             <ul className="space-y-1">
-                {Object.keys(appearances)
+                {getQualifiedPlayerIds(appearances)
                     .sort((a, b) => {
                         const ratioA = (assists[a] || 0) / appearances[a];
                         const ratioB = (assists[b] || 0) / appearances[b];
