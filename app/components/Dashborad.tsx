@@ -53,8 +53,12 @@ export default function Dashboard() {
 
             <div className="text-center mb-6 mt-6">
                 <Link href={"/stats"}
-                      className="inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+                      className="inline-block bg-blue-500 text-white px-4 py-2 mb-2 mr-2 rounded hover:bg-blue-700 transition">
                     📋 View Complete Stats
+                </Link>
+                <Link href={"/summary"}
+                      className="inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+                    🏁 Season Summary
                 </Link>
             </div>
             {/*<FeedbackForm />*/}
