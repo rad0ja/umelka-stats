@@ -3,7 +3,7 @@
 // scaled by a per-player random factor, so the real standings can't be read.
 // Set STATS_HIDDEN to false to show real stats again.
 
-export const STATS_HIDDEN = true;
+export const STATS_HIDDEN = false;
 export const HIDDEN_PLAYER_NAME = "Tom Mol";
 
 // Fixed seed so the fake numbers are the same on every reload and for every viewer
