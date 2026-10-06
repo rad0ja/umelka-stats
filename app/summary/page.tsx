@@ -211,7 +211,7 @@ function SeasonSummaryContent() {
 }
 
 export default function SummaryPage() {
-    const { seasonId } = useSeason();
+    const { seasonId, seasons } = useSeason();
 
     if (!seasonId) {
         return (
@@ -226,7 +226,7 @@ export default function SummaryPage() {
 
     return (
         <div className="max-w-4xl mx-auto p-6">
-            <h1 className="text-2xl font-bold mb-2 text-center">🏁 Season Summary - {getSeasonName(seasonId)}</h1>
+            <h1 className="text-2xl font-bold mb-2 text-center">🏁 Season Summary - {getSeasonName(seasons, seasonId)}</h1>
             {STATS_HIDDEN ? (
                 <p className="text-center text-gray-500 mt-6">🤫 Season summary unlocks after the last match of the season</p>
             ) : (
