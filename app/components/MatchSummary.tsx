@@ -37,6 +37,9 @@ export default function MatchSummary({ match, players }: Props) {
 
                             <span>{getPlayerName(players, playerId)} ➡️</span>
                         </Link>
+                        {String(match.jersey_player_id) === String(playerId) && (
+                            <span className="ml-1" title="Jersey service: washes the jerseys and brings them to the next match">👕</span>
+                        )}
                         <span><RecentFormBadge form={recentForm[playerId] || []}/></span>
                     </td>
                     <td className="p-2">{maskMatchCount(match.goals[playerId] || 0)}

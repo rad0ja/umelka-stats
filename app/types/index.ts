@@ -12,6 +12,8 @@ export type Match = {
     score_b: number;
     goals: Record<string, number>;
     assists: Record<string, number>;
+    // Player who took the jerseys home to wash and bring to the next match
+    jersey_player_id?: string | null;
 };
 
 export type PlayerStat = {

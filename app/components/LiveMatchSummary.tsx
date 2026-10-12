@@ -4,6 +4,7 @@ import { supabase } from "@/lib/supabase";
 
 export default function LiveMatchSummary({ teamA, teamB, goals, assists = {}, onDone }: any) {
     const [comments, setComments] = useState('');
+    const [jerseyPlayerId, setJerseyPlayerId] = useState('');
     const totalA = teamA.reduce((sum: any, p: { id: string | number; }) => sum + (goals[p.id] || 0), 0);
     const totalB = teamB.reduce((sum: any, p: { id: string | number; }) => sum + (goals[p.id] || 0), 0);
 
@@ -25,7 +26,8 @@ export default function LiveMatchSummary({ teamA, teamB, goals, assists = {}, on
             comments,
             assists,
             date: new Date().toISOString().slice(0, 10),
-            season_id: 7
+            season_id: 7,
+            jersey_player_id: jerseyPlayerId || null
         });
         if (error) console.error(error);
         else onDone();
@@ -75,6 +77,20 @@ export default function LiveMatchSummary({ teamA, teamB, goals, assists = {}, on
                     onChange={e => setComments(e.target.value)} 
                     placeholder="Add comments about the match..." 
                     className="w-full p-2 border rounded mb-4" />
+            </div>
+
+            <div className="mb-4">
+                <label className="block font-semibold mb-2">👕 Jersey service (takes the jerseys home)</label>
+                <select
+                    value={jerseyPlayerId}
+                    onChange={e => setJerseyPlayerId(e.target.value)}
+                    className="w-full p-2 border rounded dark:bg-black dark:text-white"
+                >
+                    <option value="">Nobody</option>
+                    {[...teamA, ...teamB].map((p: any) => (
+                        <option key={p.id} value={p.id}>{p.name || p.id}</option>
+                    ))}
+                </select>
             </div>
 
             <button onClick={submitMatch} className="w-full bg-green-600 text-white py-2 rounded">
