@@ -1,10 +1,13 @@
 'use client';
 import { useState } from "react";
+import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 
 export default function LiveMatchSummary({ teamA, teamB, goals, assists = {}, onDone }: any) {
     const [comments, setComments] = useState('');
     const [jerseyPlayerId, setJerseyPlayerId] = useState('');
+    const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'success' | 'error'>('idle');
+    const [saveError, setSaveError] = useState('');
     const totalA = teamA.reduce((sum: any, p: { id: string | number; }) => sum + (goals[p.id] || 0), 0);
     const totalB = teamB.reduce((sum: any, p: { id: string | number; }) => sum + (goals[p.id] || 0), 0);
 
@@ -17,6 +20,9 @@ export default function LiveMatchSummary({ teamA, teamB, goals, assists = {}, on
     });
 
     const submitMatch = async () => {
+        if (saveStatus === 'saving' || saveStatus === 'success') return;
+        setSaveStatus('saving');
+        setSaveError('');
         const { error } = await supabase.from('matches').insert({
             team_a: teamA.map((p: { id: any; }) => p.id),
             team_b: teamB.map((p: { id: any; }) => p.id),
@@ -26,12 +32,34 @@ export default function LiveMatchSummary({ teamA, teamB, goals, assists = {}, on
             comments,
             assists,
             date: new Date().toISOString().slice(0, 10),
-            season_id: 7,
+            season_id: 10,
             jersey_player_id: jerseyPlayerId || null
         });
-        if (error) console.error(error);
-        else onDone();
+        if (error) {
+            console.error(error);
+            setSaveError(error.message || 'Unknown error');
+            setSaveStatus('error');
+        } else {
+            setSaveStatus('success');
+        }
     };
+
+    if (saveStatus === 'success') {
+        return (
+            <div className="p-4">
+                <div role="status" className="mb-4 p-4 rounded border border-green-600 bg-green-50 text-green-800 dark:bg-green-950 dark:text-green-200">
+                    <p className="font-bold text-lg">✅ Match saved successfully!</p>
+                    <p className="text-sm mt-1">Final score: 🟦 {totalA} : {totalB} 🟥</p>
+                </div>
+                <button onClick={onDone} className="w-full bg-blue-600 text-white py-2 rounded">
+                    ➕ Start new match
+                </button>
+                <Link href="/" className="block w-full mt-2 text-center bg-gray-600 text-white py-2 rounded">
+                    🏠 Back to dashboard
+                </Link>
+            </div>
+        );
+    }
 
     return (
         <div className="p-4">
@@ -93,8 +121,19 @@ export default function LiveMatchSummary({ teamA, teamB, goals, assists = {}, on
                 </select>
             </div>
 
-            <button onClick={submitMatch} className="w-full bg-green-600 text-white py-2 rounded">
-                ✅ Confirm & Save
+            {saveStatus === 'error' && (
+                <div role="alert" className="mb-4 p-3 rounded border border-red-600 bg-red-50 text-red-800 dark:bg-red-950 dark:text-red-200">
+                    <p className="font-semibold">❌ Saving the match failed. Please try again.</p>
+                    {saveError && <p className="text-sm mt-1">{saveError}</p>}
+                </div>
+            )}
+
+            <button
+                onClick={submitMatch}
+                disabled={saveStatus === 'saving'}
+                className="w-full bg-green-600 text-white py-2 rounded disabled:opacity-60 disabled:cursor-not-allowed"
+            >
+                {saveStatus === 'saving' ? '⏳ Saving...' : saveStatus === 'error' ? '🔁 Retry Save' : '✅ Confirm & Save'}
             </button>
         </div>
     );
