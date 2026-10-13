@@ -1,5 +1,6 @@
 'use client';
 import { useState } from "react";
+import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 
 export default function LiveMatchSummary({ teamA, teamB, goals, assists = {}, onDone }: any) {
@@ -53,6 +54,9 @@ export default function LiveMatchSummary({ teamA, teamB, goals, assists = {}, on
                 <button onClick={onDone} className="w-full bg-blue-600 text-white py-2 rounded">
                     ➕ Start new match
                 </button>
+                <Link href="/" className="block w-full mt-2 text-center bg-gray-600 text-white py-2 rounded">
+                    🏠 Back to dashboard
+                </Link>
             </div>
         );
     }
