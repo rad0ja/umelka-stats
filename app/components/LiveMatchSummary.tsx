@@ -32,7 +32,7 @@ export default function LiveMatchSummary({ teamA, teamB, goals, assists = {}, on
             comments,
             assists,
             date: new Date().toISOString().slice(0, 10),
-            season_id: 7,
+            season_id: 10,
             jersey_player_id: jerseyPlayerId || null
         });
         if (error) {
