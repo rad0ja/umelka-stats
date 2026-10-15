@@ -47,10 +47,9 @@ fi
 echo "==> Loading data into the new project"
 psql "$NEW_DB_URL" --single-transaction -v ON_ERROR_STOP=1 -q -o /dev/null -f "$DUMP_FILE"
 
-echo "==> Moving identity counters past the copied ids"
+echo "==> Moving the seasons id counter past the copied ids"
 psql "$NEW_DB_URL" -v ON_ERROR_STOP=1 -q -o /dev/null <<'SQL'
 select setval(pg_get_serial_sequence('public.seasons', 'id'), coalesce((select max(id) from public.seasons), 0) + 1, false);
-select setval(pg_get_serial_sequence('public.feedback', 'id'), coalesce((select max(id) from public.feedback), 0) + 1, false);
 SQL
 
 echo "==> Row counts in the new project (compare with query 8 of inventory.sql on the old one)"

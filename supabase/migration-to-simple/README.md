@@ -1,11 +1,22 @@
 # Moving umelka-stats to the `umelka-stats-simple` Supabase project
 
-The current Supabase project is being handed over to a new app, so umelka-stats gets its own project.
-**The old project is not modified.** Every step below either reads from it or writes to the new project only.
+The old Supabase project (`umelka-stats`, ref `qmlrwxnezaqfitmnhhlz`) is shared with another app (events, teams, chat, notifications), so umelka-stats now has its own project: `umelka-stats-simple` (ref `lcwxgmnouyeqiiujhwtr`).
+**The old project was not modified.** It was only read from.
+
+## Status (2026-10-15)
+
+| Step | Status |
+|---|---|
+| 1. Inventory the old project | Done |
+| 2. Create the schema in the new project | Done (`umelka_stats_simple_init` migration) |
+| 3. Copy the data | Done, verified identical |
+| 4. Recreate auth users | **To do** |
+| 5. Point the app at the new project | **To do** |
+| 6. Check the app | **To do** |
 
 ## What the app uses
 
-Found by scanning the code. The app makes no `.rpc()` calls and doesn't use realtime or storage.
+The app makes no `.rpc()` calls and doesn't use realtime or storage.
 
 | Object | Used by |
 |---|---|
@@ -15,61 +26,59 @@ Found by scanning the code. The app makes no `.rpc()` calls and doesn't use real
 | `public.feedback` (`message`, `name`) | `app/components/FeedbackForm.tsx` |
 | Supabase Auth, email/password | `app/login/page.tsx`, `app/hooks/useAuthGuard.ts` |
 
-The repo defines no functions or triggers. Step 1 checks whether the old database has any that live only there.
+## What was done
 
-## Steps
+### 1. Inventory (`inventory.sql`, read-only)
+The old project's tables differ from what the code alone suggests:
+- `seasons.id` is `smallint` with no default, and `seasons` has `start_date` (not null) and `end_date`.
+- `matches.season_id` is `smallint`.
+- `feedback.id` is a `uuid`, and its timestamp column is `submitted_at`.
+- A `validate_match_goals_assists` trigger checks that `goals`/`assists` are `{ "<player id in team_a or team_b>": 0..50 }`.
+- The other app added columns and logic that umelka-stats doesn't use: `team_id`, `user_id` (players), `created_by`, `event_id` (matches), and a `notify_match_result` trigger that sends push notifications.
 
-### 1. Inventory the old project (read-only)
-Open the **old** project → SQL editor and run `inventory.sql`, one query at a time. It only reads the catalog.
-Compare the results with `../migrations/20261012000000_umelka_stats_simple_init.sql`:
-- **Columns and types (query 1).** If a column has a different name or type in the old database, change the init migration to match before running it. For example, the `players` goal target might be `goalTarget` instead of `goal_target`, or `team_a` might be `text[]`. Any column missing from the init migration will make the data copy fail.
-- **Triggers, functions and views (queries 4–6).** If any show up, copy their definitions into a new migration file for the new project.
-- **Policies (query 7).** The init migration lets everyone read players, seasons and matches, lets only logged-in users change them, and lets anyone send feedback. Adjust it if the old project allows more or less.
-- **Row counts (query 8).** Note them so you can compare after the copy.
+All 48 players, 4 seasons (ids 5, 6, 7, 10) and 71 matches belong to umelka-stats. `feedback` was empty.
 
-### 2. Create the schema in the new project
-In the **new** project (`umelka-stats-simple`), run the init migration. Either:
-- paste `supabase/migrations/20261012000000_umelka_stats_simple_init.sql` into the SQL editor, or
-- run `supabase link --project-ref <new-ref>` and then `supabase db push`.
+### 2. Schema
+`../migrations/20261012000000_umelka_stats_simple_init.sql` matches the old column types, keeps the length/score checks and the validation trigger, and leaves out the other app's columns and trigger. Policies:
+- Everyone can read players, seasons and matches.
+- Only logged-in users can insert, update or delete them.
+- Only logged-in users can send feedback (as before); nobody can read it through the API.
 
-The migration only creates objects and can safely be run more than once.
+### 3. Data
+Copied table by table (seasons → players → matches) through the Supabase MCP connector: each table was read from the old project as JSON and inserted into the new one with `jsonb_to_recordset`. The seasons id counter was moved to 11.
 
-### 3. Copy the data
-Option A, the script (needs `pg_dump`/`psql` at the server's major version or newer):
+Verification, run on both projects with identical results:
 
-```bash
-OLD_DB_URL='postgresql://postgres.<old-ref>:<password>@<pooler-host>:5432/postgres' \
-NEW_DB_URL='postgresql://postgres.<new-ref>:<password>@<pooler-host>:5432/postgres' \
-./supabase/migration-to-simple/copy-data.sh
+```sql
+select
+  (select count(*) || ':' || md5(string_agg(concat_ws('|', id, name, start_date, end_date), ',' order by id)) from public.seasons) as seasons,
+  (select count(*) || ':' || md5(string_agg(concat_ws('|', id, name, goal_target), ',' order by id)) from public.players) as players,
+  (select count(*) || ':' || md5(string_agg(concat_ws('|', id, date, team_a::text, team_b::text, score_a, score_b, goals::text, assists::text,
+          coalesce(comments, '<null>'), season_id, coalesce(jersey_player_id::text, '<null>')), ',' order by id)) from public.matches) as matches;
+-- seasons 4:280fafe223815cac5fcc868bcb4bd437, players 48:b12b42665f9ccc4b356a2706faf533b5, matches 71:e0dc147f9832c79dad8694e8af0eac8d
 ```
 
-The script:
-- runs a read-only `pg_dump --data-only` of the four tables from the old project;
-- loads the result into the new project in one transaction;
-- moves the `seasons` and `feedback` id counters past the copied ids;
-- prints the row counts.
+`copy-data.sh` was **not** used and doesn't work against the old project as-is: its `pg_dump --data-only` exports every column, including the other app's ones, which don't exist in the new tables.
 
-It refuses to run if both URLs point to the same database, or if the new tables already have rows.
-The dump file `umelka-stats-data.sql` is git-ignored. Delete it when you're done.
-
-Option B, no command line: in the old project's Table Editor, use **Export → CSV** for `seasons`, `players`, `matches` and `feedback`. Exporting only reads the data. Import the CSVs into the same tables in the new project, in that order (parents first). Afterwards, run the two `setval` lines from `copy-data.sh` in the new project's SQL editor.
+## Remaining steps
 
 ### 4. Auth users
 Auth users are not copied. In the new project, go to **Authentication → Users → Add user** and recreate the admin login(s).
-Then check **Authentication → URL Configuration** (site URL `https://umelka-stats.vercel.app`).
+Then set **Authentication → URL Configuration → Site URL** to `https://umelka-stats.vercel.app`.
 
 ### 5. Point the app at the new project
-From the new project's **Project Settings → API**, update these values in `.env.local` and in the Vercel project's environment variables, then redeploy:
+Update these in `.env` and in the Vercel project's environment variables, then redeploy:
 
 ```
-NEXT_PUBLIC_SUPABASE_URL=https://<new-ref>.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=<new anon/publishable key>
+NEXT_PUBLIC_SUPABASE_URL=https://lcwxgmnouyeqiiujhwtr.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=<anon or sb_publishable_ key from Project Settings → API>
 ```
+
+Matches saved in the old project after 2026-10-15 and before the redeploy are not in the new project. Copy them across the same way as in step 3.
 
 ### 6. Check
 - The home and stats pages load, and the season picker lists the seasons.
 - After logging in, `/add-match` can save a match, including the jersey player.
-- The feedback form works while logged out.
-- Optional: regenerate the types with `supabase gen types typescript --project-id <new-ref> > app/types/database.types.ts`.
+- Optional: regenerate the types with `supabase gen types typescript --project-id lcwxgmnouyeqiiujhwtr > app/types/database.types.ts`.
 
 Note: `/players-manager` is not behind `useAuthGuard`. With the new policies, adding, renaming or deleting players there only works after you log in.
