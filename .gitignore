@@ -43,3 +43,6 @@ next-env.d.ts
 #idea
 / .idea/
 CLAUDE.md
+
+# local data dump from supabase/migration-to-simple/copy-data.sh
+umelka-stats-data.sql
