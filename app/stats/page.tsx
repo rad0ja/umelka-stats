@@ -15,6 +15,8 @@ import CanadianPointsPerGame from "../components/CanadianPointsPerGame";
 import AssistsPerGame from "../components/AssistsPerGame";
 import { STATS_HIDDEN } from "@/app/utils/statsMask";
 
+import Link from "next/link";
+
 export default function StatsFull() {
     const { players, matches, loading } = usePlayerMatchData();
     const { goals, wins, appearances, assists} = usePlayerStats(matches);
@@ -24,6 +26,12 @@ export default function StatsFull() {
     return (
         <div className="max-w-4xl mx-auto p-6">
             <h1 className="text-2xl font-bold mb-6 text-center">🏟️ Player Stats Dashboard - Umelka 2025</h1>
+            <div className="text-center mt-10 mb-6">
+                <Link href={"/"}
+                      className="inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+                    ⬅️ Back to Dashboard
+                </Link>
+            </div>
             {STATS_HIDDEN && (
                 <p className="text-center text-sm text-gray-500 mb-6">🤫 Stats are scrambled until the last match of the season</p>
             )}

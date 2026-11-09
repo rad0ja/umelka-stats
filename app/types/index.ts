@@ -14,6 +14,8 @@ export type Match = {
     assists: Record<string, number>;
     // Player who took the jerseys home to wash and bring to the next match
     jersey_player_id?: string | null;
+    // Storage path of the photo of the whiteboard the score was tallied on (bucket `board-photos`)
+    board_photo_path?: string | null;
 };
 
 export type PlayerStat = {

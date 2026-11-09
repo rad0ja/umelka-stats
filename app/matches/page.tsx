@@ -5,15 +5,24 @@ import { usePlayerMatchData } from "@/app/hooks/usePlayerMatchData";
 import { getPlayerName } from "@/app/utils/playerHelpers";
 import Link from "next/link";
 import { maskMatchCount } from "@/app/utils/statsMask";
+import BoardPhoto from "@/app/components/BoardPhoto";
+import { useCurrentUser } from "@/app/hooks/useCurrentUser";
 
 export default function MatchesPage() {
     const { players, matches, loading } = usePlayerMatchData();
+    const user = useCurrentUser();
 
     if (loading) return <div className="text-center">Loading...</div>
 
     return (
         <div className="max-w-4xl mx-auto p-6">
             <h1 className="text-2xl font-bold mb-6 text-center">📋 All Matches Summary</h1>
+            <div className="text-center mt-10">
+                <Link href={"/"}
+                      className="inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+                    ⬅️ Back to Dashboard
+                </Link>
+            </div>
             {matches
                 .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
                 .map((match) => (
@@ -48,6 +57,7 @@ export default function MatchesPage() {
                         <div className="text-xs text-gray-500 mt-2">
                             Comments: {match.comments || "No comments"}
                         </div>
+                        <BoardPhoto match={match} canManage={!!user} />
                     </div>
                 ))}
         </div>
