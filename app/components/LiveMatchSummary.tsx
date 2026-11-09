@@ -1,13 +1,27 @@
 'use client';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
+import { uploadBoardPhoto } from "@/app/utils/boardPhoto";
 
 export default function LiveMatchSummary({ teamA, teamB, goals, assists = {}, onDone }: any) {
     const [comments, setComments] = useState('');
     const [jerseyPlayerId, setJerseyPlayerId] = useState('');
     const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'success' | 'error'>('idle');
     const [saveError, setSaveError] = useState('');
+    // Board photo: picked here, uploaded only after the match row exists (it's stored under the match id)
+    const [photo, setPhoto] = useState<File | null>(null);
+    const [photoPreview, setPhotoPreview] = useState('');
+    const [photoStatus, setPhotoStatus] = useState<'idle' | 'uploading' | 'done' | 'error'>('idle');
+    const [photoError, setPhotoError] = useState('');
+    const [savedMatchId, setSavedMatchId] = useState('');
+
+    useEffect(() => {
+        if (!photo) return;
+        const url = URL.createObjectURL(photo);
+        setPhotoPreview(url);
+        return () => URL.revokeObjectURL(url);
+    }, [photo]);
     const totalA = teamA.reduce((sum: any, p: { id: string | number; }) => sum + (goals[p.id] || 0), 0);
     const totalB = teamB.reduce((sum: any, p: { id: string | number; }) => sum + (goals[p.id] || 0), 0);
 
@@ -19,11 +33,25 @@ export default function LiveMatchSummary({ teamA, teamB, goals, assists = {}, on
         return (goals[p.id] || 0) > 0 || (assists[p.id] || 0) > 0;
     });
 
+    const uploadPhoto = async (matchId: string) => {
+        if (!photo) return;
+        setPhotoStatus('uploading');
+        setPhotoError('');
+        try {
+            await uploadBoardPhoto(matchId, photo);
+            setPhotoStatus('done');
+        } catch (e: any) {
+            console.error(e);
+            setPhotoError(e.message || 'Unknown error');
+            setPhotoStatus('error');
+        }
+    };
+
     const submitMatch = async () => {
         if (saveStatus === 'saving' || saveStatus === 'success') return;
         setSaveStatus('saving');
         setSaveError('');
-        const { error } = await supabase.from('matches').insert({
+        const { data, error } = await supabase.from('matches').insert({
             team_a: teamA.map((p: { id: any; }) => p.id),
             team_b: teamB.map((p: { id: any; }) => p.id),
             score_a: totalA,
@@ -34,13 +62,16 @@ export default function LiveMatchSummary({ teamA, teamB, goals, assists = {}, on
             date: new Date().toISOString().slice(0, 10),
             season_id: 10,
             jersey_player_id: jerseyPlayerId || null
-        });
+        }).select('id').single();
         if (error) {
             console.error(error);
             setSaveError(error.message || 'Unknown error');
             setSaveStatus('error');
         } else {
+            // The match is saved either way; a failed photo upload can be retried on the success screen
             setSaveStatus('success');
+            setSavedMatchId(data.id);
+            await uploadPhoto(data.id);
         }
     };
 
@@ -51,6 +82,21 @@ export default function LiveMatchSummary({ teamA, teamB, goals, assists = {}, on
                     <p className="font-bold text-lg">✅ Match saved successfully!</p>
                     <p className="text-sm mt-1">Final score: 🟦 {totalA} : {totalB} 🟥</p>
                 </div>
+                {photoStatus === 'uploading' && (
+                    <p role="status" className="mb-4 text-sm">⏳ Uploading board photo...</p>
+                )}
+                {photoStatus === 'done' && (
+                    <p role="status" className="mb-4 text-sm">🖼️ Board photo attached.</p>
+                )}
+                {photoStatus === 'error' && (
+                    <div role="alert" className="mb-4 p-3 rounded border border-red-600 bg-red-50 text-red-800 dark:bg-red-950 dark:text-red-200">
+                        <p className="font-semibold">❌ The board photo didn't upload (the match itself is saved).</p>
+                        {photoError && <p className="text-sm mt-1">{photoError}</p>}
+                        <button onClick={() => uploadPhoto(savedMatchId)} className="w-full mt-2 bg-red-600 text-white py-2 rounded">
+                            🔁 Retry photo upload
+                        </button>
+                    </div>
+                )}
                 <button onClick={onDone} className="w-full bg-blue-600 text-white py-2 rounded">
                     ➕ Start new match
                 </button>
@@ -119,6 +165,22 @@ export default function LiveMatchSummary({ teamA, teamB, goals, assists = {}, on
                         <option key={p.id} value={p.id}>{p.name || p.id}</option>
                     ))}
                 </select>
+            </div>
+
+            <div className="mb-4">
+                <label className="block font-semibold mb-2">🖼️ Board photo</label>
+                <input
+                    type="file"
+                    accept="image/*"
+                    onChange={e => setPhoto(e.target.files?.[0] ?? null)}
+                    className="w-full text-sm file:mr-3 file:px-3 file:py-1 file:rounded file:border file:border-gray-400 file:bg-transparent"
+                />
+                {photo && photoPreview ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={photoPreview} alt="Selected board photo" className="mt-2 max-h-48 rounded border" />
+                ) : (
+                    <p className="text-sm text-gray-500 mt-1">No board photo yet — you can add it later from the matches page.</p>
+                )}
             </div>
 
             {saveStatus === 'error' && (

@@ -7,6 +7,7 @@ import { getRecentForm } from "@/app/utils/form-utils";
 import { usePlayerMatchData } from "@/app/hooks/usePlayerMatchData";
 import Link from "next/link";
 import { maskMatchCount } from "@/app/utils/statsMask";
+import BoardPhoto from "@/app/components/BoardPhoto";
 
 type Props = {
     match: Match;
@@ -72,6 +73,7 @@ export default function MatchSummary({ match, players }: Props) {
             <p className="text-xs text-gray-500 text-center mt-4">
                 {new Date(match.date).toLocaleDateString()}
             </p>
+            <BoardPhoto key={match.id} match={match} />
         </div>
     );
 }

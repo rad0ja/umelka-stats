@@ -5,9 +5,12 @@ import { usePlayerMatchData } from "@/app/hooks/usePlayerMatchData";
 import { getPlayerName } from "@/app/utils/playerHelpers";
 import Link from "next/link";
 import { maskMatchCount } from "@/app/utils/statsMask";
+import BoardPhoto from "@/app/components/BoardPhoto";
+import { useCurrentUser } from "@/app/hooks/useCurrentUser";
 
 export default function MatchesPage() {
     const { players, matches, loading } = usePlayerMatchData();
+    const user = useCurrentUser();
 
     if (loading) return <div className="text-center">Loading...</div>
 
@@ -48,6 +51,7 @@ export default function MatchesPage() {
                         <div className="text-xs text-gray-500 mt-2">
                             Comments: {match.comments || "No comments"}
                         </div>
+                        <BoardPhoto match={match} canManage={!!user} />
                     </div>
                 ))}
         </div>

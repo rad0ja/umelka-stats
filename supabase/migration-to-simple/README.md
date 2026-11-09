@@ -3,16 +3,16 @@
 The old Supabase project (`umelka-stats`, ref `qmlrwxnezaqfitmnhhlz`) is shared with another app (events, teams, chat, notifications), so umelka-stats now has its own project: `umelka-stats-simple` (ref `lcwxgmnouyeqiiujhwtr`).
 **The old project was not modified.** It was only read from.
 
-## Status (2026-10-15)
+## Status (updated 2026-11-09)
 
 | Step | Status |
 |---|---|
 | 1. Inventory the old project | Done |
 | 2. Create the schema in the new project | Done (`umelka_stats_simple_init` migration) |
 | 3. Copy the data | Done, verified identical |
-| 4. Recreate auth users | **To do** |
-| 5. Point the app at the new project | **To do** |
-| 6. Check the app | **To do** |
+| 4. Recreate auth users | Done |
+| 5. Point the app at the new project | Done (live site switched; confirmed 2026-11-09) |
+| 6. Check the app | Done |
 
 ## What the app uses
 
