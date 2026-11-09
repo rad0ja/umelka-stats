@@ -9,6 +9,7 @@ import { STATS_HIDDEN } from "@/app/utils/statsMask";
 type Props = {
     match: Match;
     // Logged-in users can add, replace and remove the photo
+    // non-logged-in users can only view it (if it exists)
     canManage?: boolean;
 };
 
