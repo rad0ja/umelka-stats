@@ -17,6 +17,12 @@ export default function MatchesPage() {
     return (
         <div className="max-w-4xl mx-auto p-6">
             <h1 className="text-2xl font-bold mb-6 text-center">📋 All Matches Summary</h1>
+            <div className="text-center mt-10">
+                <Link href={"/"}
+                      className="inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+                    ⬅️ Back to Dashboard
+                </Link>
+            </div>
             {matches
                 .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
                 .map((match) => (
