@@ -1,5 +1,14 @@
 {
-    "crons": [
-        { "path": "/api/keep-alive", "schedule": "0 6 * * *" }
-    ]
+    "$schema": "https://openapi.vercel.sh/vercel.json",
+    "functions": {
+        "app/api/keep-alive/route.ts": {
+            "experimentalTriggers": [{ "type": "schedule/v1beta" }]
+        }
+    },
+    "schedules": {
+        "supabase-keep-alive": {
+            "schedule": "0 6 * * *",
+            "function": "api/keep-alive"
+        }
+    }
 }
