@@ -35,6 +35,10 @@ export default function Dashboard() {
                       className="inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
                     + Add new result
                 </Link>
+                <Link href={"/teams"}
+                      className="inline-block bg-blue-500 text-white px-4 py-2 ml-2 rounded hover:bg-blue-700 transition">
+                    ⚖️ Suggest teams
+                </Link>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
