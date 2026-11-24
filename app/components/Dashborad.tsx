@@ -26,6 +26,14 @@ export default function Dashboard() {
             <SeasonPicker />
             {lastMatch && <MatchSummary match={lastMatch} players={players}/>}
 
+            <div className="text-center mt-6 mb-8">
+                <h2 className="text-xl font-semibold mb-2">Suggested teams for the next match</h2>
+                <Link href={"/teams"}
+                      className="inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+                    ⚖️ Suggest teams
+                </Link>
+            </div>
+
             <div className="text-center mb-6">
                 <Link href={"/matches"}
                       className="inline-block bg-blue-500 text-white px-4 py-2 mb-2 mr-2 rounded hover:bg-blue-700 transition">
@@ -34,10 +42,6 @@ export default function Dashboard() {
                 <Link href={"/add-match"}
                       className="inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
                     + Add new result
-                </Link>
-                <Link href={"/teams"}
-                      className="inline-block bg-blue-500 text-white px-4 py-2 ml-2 rounded hover:bg-blue-700 transition">
-                    ⚖️ Suggest teams
                 </Link>
             </div>
 
