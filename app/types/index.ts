@@ -26,9 +26,28 @@ export type PlayerStat = {
     matchesPlayed: number;
 };
 
-export type SuggestedTeam = {
-    players: PlayerStat[];
-    totalScore: number;
+// A player's strength for team suggestions (see app/utils/teamSuggestion.ts).
+// The per-stat values are already blended season + all-time and shrunk toward the group average.
+export type PlayerRating = {
+    id: string;
+    name: string;
+    rating: number;          // ~50 = average of the attending players, ±10 ≈ one standard deviation
+    seasonMatches: number;
+    allTimeMatches: number;
+    winScore: number;        // (wins + draws/2) / matches
+    goalsPerGame: number;
+    assistsPerGame: number;
+    form: string[];          // last results, newest first ('W' | 'D' | 'L')
+    formScore: number;
+};
+
+export type TeamSplit = {
+    teamA: string[];         // player ids
+    teamB: string[];
+    strengthA: number;       // sum of ratings + chemistry (+ odd-player compensation)
+    strengthB: number;
+    diff: number;            // |strengthA - strengthB|, lower = more balanced
+    winChanceA: number;      // 0..1, rough estimate from the strength difference
 };
 
 interface GoalRecord {
