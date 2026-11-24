@@ -302,6 +302,11 @@ export default function TeamsPage() {
                             checked and the most even ones are shown. With an odd number of players the smaller team is
                             judged as if it had one average player more.
                         </p>
+                        <p className="mt-2">
+                            The number next to each player is their rating compared with the others coming to this match:
+                            50 is the group average and every 10 points is roughly one step above or below it. It changes
+                            with who&apos;s attending, so it only compares players within this match.
+                        </p>
                     </details>
                 </section>
             )}
