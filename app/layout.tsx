@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Barlow, Barlow_Condensed } from "next/font/google";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/next";
@@ -21,6 +21,14 @@ const display = Barlow_Condensed({
 export const metadata: Metadata = {
   title: "Umelka League",
   description: "Weekly football stats: tables, matchdays and player cards.",
+  applicationName: "Umelka League",
+  icons: { apple: "/icons/apple-touch-icon.png" },
+  appleWebApp: { capable: true, title: "Umelka", statusBarStyle: "black-translucent" },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#07402a",
+  viewportFit: "cover",
 };
 
 export default function RootLayout({

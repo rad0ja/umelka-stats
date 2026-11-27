@@ -2,23 +2,35 @@ import type { MetadataRoute } from 'next'
 
 export default function manifest(): MetadataRoute.Manifest {
     return {
-        name: 'Next.js PWA',
-        short_name: 'NextPWA',
-        description: 'A Progressive Web App built with Next.js',
+        name: 'Umelka League',
+        short_name: 'Umelka',
+        description: 'Weekly football stats: tables, matchdays and player cards.',
+        id: '/',
         start_url: '/',
+        scope: '/',
         display: 'standalone',
-        background_color: '#ffffff',
-        theme_color: '#000000',
+        orientation: 'portrait',
+        background_color: '#0a140f',
+        theme_color: '#07402a',
         icons: [
             {
-                src: '/icon-192x192.png',
+                src: '/icons/icon-192x192.png',
                 sizes: '192x192',
                 type: 'image/png',
+                purpose: 'any',
             },
             {
-                src: '/icon-512x512.png',
+                src: '/icons/icon-512x512.png',
                 sizes: '512x512',
                 type: 'image/png',
+                purpose: 'any',
+            },
+            {
+                // The artwork keeps to the centre 80%, so it also works as a maskable icon
+                src: '/icons/icon-512x512.png',
+                sizes: '512x512',
+                type: 'image/png',
+                purpose: 'maskable',
             },
         ],
     }
