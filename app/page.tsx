@@ -9,10 +9,8 @@ export default function HomePage() {
 
     if (!seasonId) {
         return (
-            <div className="flex flex-col items-center justify-center min-h-screen gap-6">
-                <div className="text-center text-lg font-medium">
-                    👉 Please select a season to continue
-                </div>
+            <div className="flex flex-col items-center justify-center min-h-[70vh] gap-6 px-4">
+                <h1 className="font-display text-4xl font-extrabold italic text-center">Pick your season</h1>
                 <SeasonPicker />
             </div>
         )

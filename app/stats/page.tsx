@@ -15,28 +15,20 @@ import CanadianPointsPerGame from "../components/CanadianPointsPerGame";
 import AssistsPerGame from "../components/AssistsPerGame";
 import { STATS_HIDDEN } from "@/app/utils/statsMask";
 
-import Link from "next/link";
-
 export default function StatsFull() {
     const { players, matches, loading } = usePlayerMatchData();
     const { goals, wins, appearances, assists} = usePlayerStats(matches);
 
-    if (loading) return <div className="text-center">Loading...</div>
+    if (loading) return <div className="p-10 text-center text-muted">Loading the tables…</div>
 
     return (
-        <div className="max-w-4xl mx-auto p-6">
-            <h1 className="text-2xl font-bold mb-6 text-center">🏟️ Player Stats Dashboard - Umelka 2025</h1>
-            <div className="text-center mt-10 mb-6">
-                <Link href={"/"}
-                      className="inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
-                    ⬅️ Back to Dashboard
-                </Link>
-            </div>
+        <div className="max-w-4xl mx-auto px-4 py-6">
+            <h1 className="font-display text-4xl font-extrabold italic mb-4">League tables</h1>
             {STATS_HIDDEN && (
-                <p className="text-center text-sm text-gray-500 mb-6">🤫 Stats are scrambled until the last match of the season</p>
+                <p className="text-sm text-muted mb-4">🤫 Stats are scrambled until the last match of the season</p>
             )}
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
                 <MVPScore />
 
                 <TopScorers

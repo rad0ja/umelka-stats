@@ -3,16 +3,16 @@
 
 export default function RecentFormBadge({ form }: { form: string[] }) {
     return (
-        <div className="flex space-x-1">
+        <div className="flex gap-0.5" aria-label={`Recent form: ${form.join(" ")}`}>
             {form.map((result, idx) => (
                 <span
                     key={idx}
-                    className={`text-xs font-bold px-2 py-1 rounded ${
+                    className={`num w-5 h-5 grid place-items-center rounded-sm text-xs text-white ${
                         result === "W"
-                            ? "bg-green-500 text-white"
+                            ? "bg-pitch"
                             : result === "L"
-                                ? "bg-red-500 text-white"
-                                : "bg-orange-400 text-white" // Draw
+                                ? "bg-red-card"
+                                : "bg-gray-400" // Draw
                     }`}
                 >
                     {result}

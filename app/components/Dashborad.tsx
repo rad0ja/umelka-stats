@@ -15,61 +15,40 @@ export default function Dashboard() {
     const { goals, wins } = usePlayerStats(matches);
     const lastMatch = getLastMatch(matches);
 
-    if (loading) return <div className="text-center">Loading...</div>
+    if (loading) return <div className="p-10 text-center text-muted">Loading the league…</div>
 
     return (
-        <div className="max-w-4xl mx-auto p-6">
-            <h1 className="text-2xl font-bold mb-6 text-center">Ultimate Dashboard</h1>
+        <div className="max-w-4xl mx-auto px-4 py-6">
+            <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+                <h1 className="font-display text-4xl font-extrabold italic">Matchday</h1>
+                <SeasonPicker />
+            </div>
             {STATS_HIDDEN && (
-                <p className="text-center text-sm text-gray-500 mb-6">🤫 Stats are scrambled until the last match of the season</p>
+                <p className="text-sm text-muted mb-4">🤫 Stats are scrambled until the last match of the season</p>
             )}
-            <SeasonPicker />
             {lastMatch && <MatchSummary match={lastMatch} players={players}/>}
 
-            <div className="text-center mt-6 mb-8">
-                <h2 className="text-xl font-semibold mb-2">Suggested teams for the next match</h2>
-                <Link href={"/teams"}
-                      className="inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
-                    ⚖️ Suggest teams
-                </Link>
+            <div className="panel flex flex-wrap items-center justify-between gap-3 p-4 mb-6">
+                <div>
+                    <h2 className="font-display text-xl font-bold">Next match</h2>
+                    <p className="text-sm text-muted">Balanced line-ups for the next game.</p>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                    <Link href="/teams" className="btn btn-bib">⚖️ Suggest teams</Link>
+                    <Link href="/add-match" className="btn">+ Add result</Link>
+                </div>
             </div>
 
-            <div className="text-center mb-6">
-                <Link href={"/matches"}
-                      className="inline-block bg-blue-500 text-white px-4 py-2 mb-2 mr-2 rounded hover:bg-blue-700 transition">
-                    📋 View All Matches
-                </Link>
-                <Link href={"/add-match"}
-                      className="inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
-                    + Add new result
-                </Link>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <TopScorers goals={goals} players={players} showAll={false} />
+                <MostWins wins={wins} players={players} showAll={false} />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <TopScorers
-                    goals={goals}
-                    players={players}
-                    showAll={false}
-                />
-
-                <MostWins
-                    wins={wins}
-                    players={players}
-                    showAll={false}
-                />
+            <div className="flex flex-wrap gap-2 mt-6 justify-center">
+                <Link href="/stats" className="btn btn-ghost">Full tables</Link>
+                <Link href="/matches" className="btn btn-ghost">All matches</Link>
+                <Link href="/summary" className="btn btn-ghost">🏁 Season summary</Link>
             </div>
-
-            <div className="text-center mb-6 mt-6">
-                <Link href={"/stats"}
-                      className="inline-block bg-blue-500 text-white px-4 py-2 mb-2 mr-2 rounded hover:bg-blue-700 transition">
-                    📋 View Complete Stats
-                </Link>
-                <Link href={"/summary"}
-                      className="inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
-                    🏁 Season Summary
-                </Link>
-            </div>
-            {/*<FeedbackForm />*/}
         </div>
     );
 }

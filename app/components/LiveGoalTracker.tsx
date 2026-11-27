@@ -34,26 +34,26 @@ export default function LiveGoalTracker({ teamA, teamB, onFinish }: { teamA: Pla
                                 {p.name}
                                 <button
                                     onClick={() => addGoal(p.id)}
-                                    className="w-4/5 bg-blue-500 text-white py-2 rounded-md"
+                                    className="w-4/5 bg-pitch text-white font-semibold py-2 rounded-md"
                                 >
                                     Goals ({goals[p.id] || 0})
                                 </button>
                                 <button
                                     onClick={() => removeGoal(p.id)}
-                                    className="w-1/5 bg-red-600 text-white py-2 rounded-md"
+                                    className="w-1/5 bg-red-card text-white font-semibold py-2 rounded-md"
                                 >
                                     -
                                 </button>
 
                                 <button
                                     onClick={() => addAssist(p.id)}
-                                    className="w-4/5 bg-orange-300 text-white py-2 rounded-md"
+                                    className="w-4/5 bg-bib text-ink font-semibold py-2 rounded-md"
                                 >
                                     Assists ({assists[p.id] || 0})
                                 </button>
                                 <button
                                     onClick={() => removeAssist(p.id)}
-                                    className="w-1/5 bg-red-600 text-white py-2 rounded-md"
+                                    className="w-1/5 bg-red-card text-white font-semibold py-2 rounded-md"
                                 >
                                     -
                                 </button>
@@ -69,7 +69,7 @@ export default function LiveGoalTracker({ teamA, teamB, onFinish }: { teamA: Pla
 
             <button
                 onClick={() => onFinish(goals, assists)}
-                className="mt-4 w-full bg-green-600 text-white py-2 rounded"
+                className="mt-4 w-full bg-pitch text-white font-semibold py-2 rounded"
             >
                 ✅ Finish Match
             </button>

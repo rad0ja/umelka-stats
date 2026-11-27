@@ -97,7 +97,7 @@ export default function LiveMatchSummary({ teamA, teamB, goals, assists = {}, on
                         </button>
                     </div>
                 )}
-                <button onClick={onDone} className="w-full bg-blue-600 text-white py-2 rounded">
+                <button onClick={onDone} className="w-full bg-pitch text-white font-semibold py-2 rounded">
                     ➕ Start new match
                 </button>
                 <Link href="/" className="block w-full mt-2 text-center bg-gray-600 text-white py-2 rounded">
@@ -150,7 +150,7 @@ export default function LiveMatchSummary({ teamA, teamB, goals, assists = {}, on
                     value={comments} 
                     onChange={e => setComments(e.target.value)} 
                     placeholder="Add comments about the match..." 
-                    className="w-full p-2 border rounded mb-4" />
+                    className="w-full p-2 border border-line bg-surface text-foreground placeholder:text-muted rounded mb-4" />
             </div>
 
             <div className="mb-4">
@@ -158,7 +158,7 @@ export default function LiveMatchSummary({ teamA, teamB, goals, assists = {}, on
                 <select
                     value={jerseyPlayerId}
                     onChange={e => setJerseyPlayerId(e.target.value)}
-                    className="w-full p-2 border rounded dark:bg-black dark:text-white"
+                    className="w-full p-2 border border-line bg-surface text-foreground rounded"
                 >
                     <option value="">Nobody</option>
                     {[...teamA, ...teamB].map((p: any) => (
@@ -173,11 +173,11 @@ export default function LiveMatchSummary({ teamA, teamB, goals, assists = {}, on
                     type="file"
                     accept="image/*"
                     onChange={e => setPhoto(e.target.files?.[0] ?? null)}
-                    className="w-full text-sm file:mr-3 file:px-3 file:py-1 file:rounded file:border file:border-gray-400 file:bg-transparent"
+                    className="w-full text-sm file:mr-3 file:px-3 file:py-1 file:rounded file:border file:border-line file:bg-surface-2 file:text-foreground"
                 />
                 {photo && photoPreview ? (
                     // eslint-disable-next-line @next/next/no-img-element
-                    <img src={photoPreview} alt="Selected board photo" className="mt-2 max-h-48 rounded border" />
+                    <img src={photoPreview} alt="Selected board photo" className="mt-2 max-h-48 rounded border border-line" />
                 ) : (
                     <p className="text-sm text-gray-500 mt-1">No board photo yet — you can add it later from the matches page.</p>
                 )}
@@ -193,7 +193,7 @@ export default function LiveMatchSummary({ teamA, teamB, goals, assists = {}, on
             <button
                 onClick={submitMatch}
                 disabled={saveStatus === 'saving'}
-                className="w-full bg-green-600 text-white py-2 rounded disabled:opacity-60 disabled:cursor-not-allowed"
+                className="w-full bg-pitch text-white font-semibold py-2 rounded disabled:opacity-60 disabled:cursor-not-allowed"
             >
                 {saveStatus === 'saving' ? '⏳ Saving...' : saveStatus === 'error' ? '🔁 Retry Save' : '✅ Confirm & Save'}
             </button>

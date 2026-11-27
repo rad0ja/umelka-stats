@@ -12,24 +12,19 @@ export default function MatchesPage() {
     const { players, matches, loading } = usePlayerMatchData();
     const user = useCurrentUser();
 
-    if (loading) return <div className="text-center">Loading...</div>
+    if (loading) return <div className="p-10 text-center text-muted">Loading matches…</div>
 
     return (
-        <div className="max-w-4xl mx-auto p-6">
-            <h1 className="text-2xl font-bold mb-6 text-center">📋 All Matches Summary</h1>
-            <div className="text-center mt-10">
-                <Link href={"/"}
-                      className="inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
-                    ⬅️ Back to Dashboard
-                </Link>
-            </div>
+        <div className="max-w-4xl mx-auto px-4 py-6">
+            <h1 className="font-display text-4xl font-extrabold italic mb-4">All matches</h1>
             {matches
                 .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
                 .map((match) => (
-                    <div key={match.id} className="bg-white shadow-md rounded-lg p-4 mb-4 dark:bg-black">
-                        <div className="text-center text-lg font-semibold mb-2">
-                            <span className="text-base">Team A</span> {match.score_a} : {match.score_b} <span
-                            className="text-base">Team B</span>
+                    <div key={match.id} className="panel p-4 mb-4">
+                        <div className="text-center mb-3 flex items-center justify-center gap-4">
+                            <span className="font-display text-lg font-semibold flex-1 text-right">Team A</span>
+                            <span className="num italic text-5xl leading-none">{match.score_a}<span className="text-pitch px-1">:</span>{match.score_b}</span>
+                            <span className="font-display text-lg font-semibold flex-1 text-left">Team B</span>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {[match.team_a, match.team_b].map((team, i) => (

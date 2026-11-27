@@ -1,7 +1,7 @@
 'use client';
 
 import { Player } from "@/app/types";
-import CustomBadgeForPlayer from "@/app/components/CustomBadgeForPlayer";
+import LeagueTable from "@/app/components/LeagueTable";
 import { usePlayerStats } from "@/app/hooks/usePlayerStats";
 import { usePlayerMatchData } from "@/app/hooks/usePlayerMatchData";
 import { getQualifiedPlayerIds, MIN_MATCHES_FOR_RATIOS } from "@/app/utils/playerHelpers";
@@ -14,30 +14,20 @@ type Props = {
     showAll?: boolean;
 }
 
-export default function CanadianPointsPerGame({players, goals, assists, appearances, showAll}: Props) {
+export default function CanadianPointsPerGame({players, goals, assists, appearances}: Props) {
     const { matches } = usePlayerMatchData();
     const { getCanadianPointsPerGame, getGoalsPerGame, getAssistsPerGame } = usePlayerStats(matches);
 
+    const ids = getQualifiedPlayerIds(appearances).sort((a, b) =>
+        ((goals[b] || 0) + assists[b]) / appearances[b] - ((goals[a] || 0) + assists[a]) / appearances[a]);
+
     return (
-        <div>
-            <h2 className="text-xl font-semibold mb-2">🧮 Canadian Points Per Game</h2>
-            <p className="text-xs text-gray-500 mb-2">More than {MIN_MATCHES_FOR_RATIOS} matches played</p>
-            <ul className="space-y-1">
-                    {getQualifiedPlayerIds(appearances)
-                                    .sort((a, b) => {
-                                        const ratioA = ((goals[a] || 0) + assists[a]) / appearances[a];
-                                        const ratioB = ((goals[b] || 0) + assists[b]) / appearances[b];
-                                        return ratioB - ratioA;
-                                    })
-                                    .map((id, index) => (
-                                        <li key={id} className="flex justify-between border-b py-1">
-                                            <CustomBadgeForPlayer id={id} players={players} index={index} />
-                                            <span className="text-sm text-gray-600 dark:text-white">
-                                                {getCanadianPointsPerGame(id)} ({getGoalsPerGame(id)}G + {getAssistsPerGame(id)}A)
-                                                </span>
-                                        </li>
-                                    ))}
-            </ul>
-        </div>
+        <LeagueTable
+            title="🧮 Canadian points per game"
+            note={`More than ${MIN_MATCHES_FOR_RATIOS} matches played`}
+            unit="Per game"
+            players={players}
+            rows={ids.map((id) => ({ id, value: getCanadianPointsPerGame(id), detail: `${getGoalsPerGame(id)}G + ${getAssistsPerGame(id)}A` }))}
+        />
     )
 }

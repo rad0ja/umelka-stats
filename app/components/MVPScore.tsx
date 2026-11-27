@@ -3,10 +3,9 @@
 import { useEffect, useState } from 'react';
 import { getAllMVPs } from '@/app/utils/getAllMVPs';
 import { supabase } from '@/lib/supabase';
-import { getTrophy } from "@/app/utils/playerHelpers";
 import MVPDialog from "@/app/components/MVPDialog";
 import {useSeason} from "@/app/context/SeasonContext";
-import CustomBadgeForPlayer from "@/app/components/CustomBadgeForPlayer";
+import LeagueTable from "@/app/components/LeagueTable";
 import { maskName, maskScore } from "@/app/utils/statsMask";
 
 type MVPPlayer = {
@@ -40,26 +39,11 @@ export default function MVPScore() {
     }, [seasonId]);
 
     return (
-        <div>
-            <h2 className="text-xl font-semibold mb-2 flex items-center gap-2">🐐 MVP (aka THE GOAT)
-                <MVPDialog />
-            </h2>
-
-            <ul className="space-y-1">
-                {mvps.map((player, index) => (
-                    <li
-                        key={player.id}
-                        className="flex justify-between border-b py-1"
-                    >
-                        <div>
-                            <span className="font-medium">{getTrophy(index)} {player.name}</span>
-                        </div>
-                        <span className="text-sm text-gray-600 dark:text-white">
-              {player.mvpScore.toFixed(1)}
-            </span>
-                    </li>
-                ))}
-            </ul>
-        </div>
+        <LeagueTable
+            title="🐐 MVP (aka THE GOAT)"
+            unit="Points"
+            action={<MVPDialog />}
+            rows={mvps.map((p) => ({ id: p.id, name: p.name, value: p.mvpScore.toFixed(1) }))}
+        />
     );
 }

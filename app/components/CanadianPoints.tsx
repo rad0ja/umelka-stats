@@ -1,8 +1,7 @@
 'use client';
 
-import {  getSortedStats } from "@/app/utils/playerHelpers";
 import { Player } from "@/app/types";
-import CustomBadgeForPlayer from "@/app/components/CustomBadgeForPlayer";
+import LeagueTable from "@/app/components/LeagueTable";
 import { usePlayerStats } from "@/app/hooks/usePlayerStats";
 import { usePlayerMatchData } from "@/app/hooks/usePlayerMatchData";
 
@@ -13,29 +12,18 @@ type Props = {
     showAll?: boolean;
 }
 
-export default function CanadianPoints({players, goals, assists, showAll}: Props) {
+export default function CanadianPoints({players, goals, assists}: Props) {
     const { matches } = usePlayerMatchData();
     const { canadianPointsTotal } = usePlayerStats(matches);
 
+    const ids = Object.keys(goals).sort((a, b) => ((goals[b] || 0) + assists[b]) - ((goals[a] || 0) + assists[a]));
+
     return (
-        <div>
-            <h2 className="text-xl font-semibold mb-2">🧮 Canadian Points</h2>
-            <ul className="space-y-1">
-                    {Object.keys(goals)
-                                    .sort((a, b) => {
-                                        const ratioA = (goals[a] || 0) + assists[a];
-                                        const ratioB = (goals[b] || 0) + assists[b];
-                                        return ratioB - ratioA;
-                                    })
-                                    .map((id, index) => (
-                                        <li key={id} className="flex justify-between border-b py-1">
-                                            <CustomBadgeForPlayer id={id} players={players} index={index} />
-                                            <span className="text-sm text-gray-600 dark:text-white">
-                                                {canadianPointsTotal(id)} ({goals[id] || 0} + {assists[id] || 0})
-                                                </span>
-                                        </li>
-                                    ))}
-            </ul>
-        </div>
+        <LeagueTable
+            title="🧮 Canadian points"
+            unit="Goals + assists"
+            players={players}
+            rows={ids.map((id) => ({ id, value: canadianPointsTotal(id), detail: `${goals[id] || 0} + ${assists[id] || 0}` }))}
+        />
     )
 }

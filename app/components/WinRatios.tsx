@@ -3,7 +3,7 @@
 import { Player } from "@/app/types";
 import { usePlayerStats } from "@/app/hooks/usePlayerStats";
 import { usePlayerMatchData } from "@/app/hooks/usePlayerMatchData";
-import CustomBadgeForPlayer from "@/app/components/CustomBadgeForPlayer";
+import LeagueTable from "@/app/components/LeagueTable";
 import { getQualifiedPlayerIds, MIN_MATCHES_FOR_RATIOS } from "@/app/utils/playerHelpers";
 
 type Props = {
@@ -16,27 +16,16 @@ export default function WinRatios({appearances, players, wins}: Props)  {
     const { matches } = usePlayerMatchData();
     const { getWinRatio } = usePlayerStats(matches);
 
+    const ids = getQualifiedPlayerIds(appearances).sort((a, b) =>
+        (wins[b] || 0) / appearances[b] - (wins[a] || 0) / appearances[a]);
+
     return (
-        <div>
-            <h2 className="text-xl font-semibold mb-2">📈 Win Ratios</h2>
-            <p className="text-xs text-gray-500 mb-2">More than {MIN_MATCHES_FOR_RATIOS} matches played</p>
-            <ul className="space-y-1">
-                {getQualifiedPlayerIds(appearances)
-                    .sort((a, b) => {
-                        const ratioA = (wins[a] || 0) / appearances[a];
-                        const ratioB = (wins[b] || 0) / appearances[b];
-                        return ratioB - ratioA;
-                    })
-                    .map((id, index) => (
-                        <li key={id} className="flex justify-between border-b py-1">
-                            <CustomBadgeForPlayer id={id} players={players} index={index} />
-                            <span className="text-sm text-gray-600 dark:text-white">{getWinRatio(id)}</span>
-                        </li>
-                    ))}
-            </ul>
-        </div>
+        <LeagueTable
+            title="📈 Win ratios"
+            note={`More than ${MIN_MATCHES_FOR_RATIOS} matches played`}
+            unit="Win rate"
+            players={players}
+            rows={ids.map((id) => ({ id, value: getWinRatio(id) }))}
+        />
     )
 }
-
-
-

@@ -60,7 +60,7 @@ export default function BoardPhoto({ match, canManage = false }: Props) {
                     // The photo shows the real tallies, so it stays hidden like the rest of the stats
                     <span className="px-3 py-1 text-sm text-gray-500">🤫 Board photo hidden until the finale</span>
                 ) : (
-                    <button onClick={() => setOpen(true)} className={buttonClass}>🖼️ Board photo</button>
+                    <button onClick={() => setOpen(true)} className="btn btn-ghost">🖼️ Board photo</button>
                 ))}
                 {canManage && (
                     <>
