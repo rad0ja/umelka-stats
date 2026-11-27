@@ -11,6 +11,7 @@ import { getAllMVPs } from "@/app/utils/getAllMVPs";
 import { useParams } from "next/navigation";
 import { computeMostWinsLossesWith } from "@/app/utils/playerVsPlayer";
 import { maskCount, maskName, maskScore, STATS_HIDDEN } from "@/app/utils/statsMask";
+import { playerStreaks } from "@/app/utils/playerStreaks";
 
 export default function PlayerDetailPage() {
     const { id } = useParams();
@@ -21,6 +22,8 @@ export default function PlayerDetailPage() {
     const allMvps = getAllMVPs(players, matches)
     const PvP = computeMostWinsLossesWith(matches, playerID, players)
     const { mvpScore } = getAllMVPs(players, matches).find(p => p.id === playerID) || { mvpScore: 0 };
+
+    const streaks = playerStreaks(allData[playerID]?.matches || []);
 
     if (!playerCalc) return <div className="p-6 text-center">Loading...</div>;
 
@@ -44,16 +47,38 @@ export default function PlayerDetailPage() {
                     score={maskScore(mvpScore, `mvp:${playerID}`).toFixed(1)}
                     trophy={getTrophy(0)} // optional
                 />
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
-                <div className="panel p-4">
-                    <p className="text-sm text-muted">Wins most with</p>
-                    <p className="font-display text-2xl font-bold">{PvP.mostWinsWithName && maskName(PvP.mostWinsWithName)} <span className="text-pitch">{maskCount(PvP.winsCount, `pvpWins:${playerID}`)}</span></p>
+            <div className="panel divide-y divide-line mb-6">
+                <div className="flex items-center justify-between gap-4 p-4">
+                    <div className="min-w-0">
+                        <p className="text-sm text-muted">Wins most with</p>
+                        <p className="font-display text-2xl font-bold break-words">{PvP.mostWinsWithName && maskName(PvP.mostWinsWithName)}</p>
+                    </div>
+                    <span className="num text-4xl text-pitch">{maskCount(PvP.winsCount, `pvpWins:${playerID}`)}</span>
                 </div>
-                <div className="panel p-4">
-                    <p className="text-sm text-muted">Loses most with</p>
-                    <p className="font-display text-2xl font-bold">{PvP.mostLossesWithName && maskName(PvP.mostLossesWithName)} <span className="text-red-card">{maskCount(PvP.lossesCount, `pvpLosses:${playerID}`)}</span></p>
+                <div className="flex items-center justify-between gap-4 p-4">
+                    <div className="min-w-0">
+                        <p className="text-sm text-muted">Loses most with</p>
+                        <p className="font-display text-2xl font-bold break-words">{PvP.mostLossesWithName && maskName(PvP.mostLossesWithName)}</p>
+                    </div>
+                    <span className="num text-4xl text-red-card">{maskCount(PvP.lossesCount, `pvpLosses:${playerID}`)}</span>
                 </div>
             </div>
+            {/* Hidden with the match history: streaks would reveal the real results */}
+            {!STATS_HIDDEN && (
+                <div className="panel divide-y divide-line mb-6">
+                    {[
+                        { label: "🏆 Longest win streak", value: streaks.longestWinningStreak },
+                        { label: "💀 Longest loss streak", value: streaks.longestLosingStreak },
+                        { label: "🔥 Longest scoring streak", value: streaks.longestScoringStreak },
+                        { label: "🥶 Longest goalless streak", value: streaks.longestNonScoringStreak },
+                    ].map(({ label, value }) => (
+                        <div key={label} className="flex items-center justify-between gap-4 px-4 py-3">
+                            <p className="font-medium">{label}</p>
+                            <span className="num text-3xl">{value}</span>
+                        </div>
+                    ))}
+                </div>
+            )}
             {/*<GoalProgress />*/}
             {STATS_HIDDEN ? (
                 <p className="text-center text-gray-500 mt-6">🤫 Match history is hidden until the end of the season</p>

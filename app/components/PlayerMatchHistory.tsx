@@ -1,7 +1,5 @@
 import { PlayerMatchDetail } from "@/app/types";
 import { Line, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend, ComposedChart, Bar} from 'recharts';
-import { playerStreaks } from "@/app/utils/playerStreaks";
-import StatCard from "@/app/components/StatCard";
 import { useState } from "react";
 import { MatchAccordion } from "@/app/components/MatchAccordion";
 
@@ -23,7 +21,6 @@ export default function PlayerMatchHistory({ playerId, history, allMVPs = [] }: 
     const playerMatches = history[playerId]?.matches || [];
     const sortedPlayerMatches = [...playerMatches].sort((a,b) => new Date(b.date).getTime() - new Date(a.date).getTime());
     const sortedPlayerMatchesByEarliest = [...playerMatches].sort((a,b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-    const streaks = playerStreaks(sortedPlayerMatches);
 
     let cumulative = 0;
     const chartData = sortedPlayerMatchesByEarliest.map(match => {
@@ -39,19 +36,12 @@ export default function PlayerMatchHistory({ playerId, history, allMVPs = [] }: 
     const top3 = [...allMVPs].sort((a, b) => b.mvpScore - a.mvpScore).slice(0, 3);
 
     return (
-        <div className="p-4 max-w-2xl mx-auto">
-            <div className="grid grid-cols-2 gap-4">
-                <StatCard title="🏆 Longest Win Streak" value={streaks.longestWinningStreak}/>
-                <StatCard title="💀 Longest Loss Streak" value={streaks.longestLosingStreak}/>
-                <StatCard title="🔥 Longest Scoring Streak" value={streaks.longestScoringStreak}/>
-                <StatCard title="🥶 Longest No-Scoring Streak" value={streaks.longestNonScoringStreak}/>
-            </div>
-
+        <div>
             {playerMatches.length === 0 ? (
                 <p className="text-gray-500">No match history available.</p>
             ) : (
                 <>
-                    <div className="mb-8 pt-6">
+                    <div className="mb-8">
                         <div className="flex items-center justify-between mb-2">
                             <h3 className="text-lg font-semibold">📈 Goals Over Time</h3>
                             <button
