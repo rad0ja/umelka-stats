@@ -1,26 +1,140 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+    --background: #f1f3ec;
+    --foreground: #0e1a14;
+    --surface: #ffffff;
+    --surface-2: #e7ebe1;
+    --line: #d3d9cb;
+    --muted: #5b6b61;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+    :root {
+        --background: #0a140f;
+        --foreground: #e8eee6;
+        --surface: #12201a;
+        --surface-2: #1a2d24;
+        --line: #26392f;
+        --muted: #8fa397;
+    }
+}
+
+@theme inline {
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-surface: var(--surface);
+    --color-surface-2: var(--surface-2);
+    --color-line: var(--line);
+    --color-muted: var(--muted);
+    --font-sans: var(--font-body);
+}
+
+@theme {
+    --color-pitch: #0b5d3b;
+    --color-pitch-deep: #07402a;
+    --color-ink: #0e1a14;
+    --color-bib: #ffd60a;
+    --color-red-card: #d7263d;
+
+    /* Leftover pages still use blue-* utilities: point them at the pitch palette. */
+    --color-blue-300: #7fd6a8;
+    --color-blue-400: #4fc088;
+    --color-blue-500: #0b5d3b;
+    --color-blue-600: #0b5d3b;
+    --color-blue-700: #07402a;
+    --color-blue-800: #0b5d3b;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-body), system-ui, sans-serif;
+}
+
+@layer components {
+    .font-display {
+        font-family: var(--font-display), system-ui, sans-serif;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .num {
+        font-family: var(--font-display), system-ui, sans-serif;
+        font-variant-numeric: tabular-nums;
+        font-weight: 700;
+    }
+
+    .panel {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+    }
+
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.6rem 1.1rem;
+        border-radius: 999px;
+        font-weight: 600;
+        background: var(--color-pitch);
+        color: #fff;
+        transition: background-color 0.15s;
+    }
+
+    .btn:hover {
+        background: var(--color-pitch-deep);
+    }
+
+    .btn-bib {
+        background: var(--color-bib);
+        color: var(--color-ink);
+    }
+
+    .btn-bib:hover {
+        background: #ffe14d;
+    }
+
+    .btn-ghost {
+        background: transparent;
+        color: var(--foreground);
+        border: 1px solid var(--line);
+    }
+
+    .btn-ghost:hover {
+        background: var(--surface-2);
+    }
+
+    .mowed {
+        background-color: var(--color-pitch);
+        background-image: repeating-linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0.06) 0,
+            rgba(255, 255, 255, 0.06) 56px,
+            transparent 56px,
+            transparent 112px
+        );
+    }
+}
+
+:focus-visible {
+    outline: 3px solid var(--color-bib);
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    @keyframes whistle {
+        from {
+            transform: translateY(8px) scale(0.96);
+            opacity: 0;
+        }
+        to {
+            transform: none;
+            opacity: 1;
+        }
+    }
+
+    .scoreboard-score {
+        animation: whistle 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    }
 }

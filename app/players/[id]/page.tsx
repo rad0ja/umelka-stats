@@ -44,8 +44,16 @@ export default function PlayerDetailPage() {
                     score={maskScore(mvpScore, `mvp:${playerID}`).toFixed(1)}
                     trophy={getTrophy(0)} // optional
                 />
-            <h2 className="mb-2 text-xl font-semibold">Most wins with: {PvP.mostWinsWithName && maskName(PvP.mostWinsWithName)} - {maskCount(PvP.winsCount, `pvpWins:${playerID}`)}</h2>
-            <h2 className="mb-2 text-xl font-semibold">Most loses with: {PvP.mostLossesWithName && maskName(PvP.mostLossesWithName)} - {maskCount(PvP.lossesCount, `pvpLosses:${playerID}`)}</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+                <div className="panel p-4">
+                    <p className="text-sm text-muted">Wins most with</p>
+                    <p className="font-display text-2xl font-bold">{PvP.mostWinsWithName && maskName(PvP.mostWinsWithName)} <span className="text-pitch">{maskCount(PvP.winsCount, `pvpWins:${playerID}`)}</span></p>
+                </div>
+                <div className="panel p-4">
+                    <p className="text-sm text-muted">Loses most with</p>
+                    <p className="font-display text-2xl font-bold">{PvP.mostLossesWithName && maskName(PvP.mostLossesWithName)} <span className="text-red-card">{maskCount(PvP.lossesCount, `pvpLosses:${playerID}`)}</span></p>
+                </div>
+            </div>
             {/*<GoalProgress />*/}
             {STATS_HIDDEN ? (
                 <p className="text-center text-gray-500 mt-6">🤫 Match history is hidden until the end of the season</p>
