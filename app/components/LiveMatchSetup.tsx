@@ -38,7 +38,7 @@ export default function LiveMatchSetup({ players, onStart }: Props) {
         <div className="p-4">
             <h2 className="font-bold text-xl mb-2">⚽ Select Players</h2>
             {prefilled && (
-                <p className="text-sm text-gray-500 mb-2">Teams pre-filled from the suggestion. You can still change them.</p>
+                <p className="text-sm text-muted mb-2">Teams pre-filled from the suggestion. You can still change them.</p>
             )}
 
             <div className="grid grid-cols-2 gap-4">
@@ -48,7 +48,7 @@ export default function LiveMatchSetup({ players, onStart }: Props) {
                         <button
                             key={p.id}
                             onClick={() => toggle(setTeamA, p)}
-                            className={`block w-full px-3 py-1 mb-1 rounded ${teamA.some(x => x.id === p.id) ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+                            className={`block w-full px-3 py-1 mb-1 rounded border font-medium transition-colors ${teamA.some(x => x.id === p.id) ? 'bg-pitch border-pitch text-white' : 'bg-surface-2 border-line text-foreground hover:border-pitch'}`}
                         >
                             {p.name}
                         </button>
@@ -61,7 +61,7 @@ export default function LiveMatchSetup({ players, onStart }: Props) {
                         <button
                             key={p.id}
                             onClick={() => toggle(setTeamB, p)}
-                            className={`block w-full px-3 py-1 mb-1 rounded ${teamB.some(x => x.id === p.id) ? 'bg-red-500 text-white' : 'bg-gray-200'}`}
+                            className={`block w-full px-3 py-1 mb-1 rounded border font-medium transition-colors ${teamB.some(x => x.id === p.id) ? 'bg-red-card border-red-card text-white' : 'bg-surface-2 border-line text-foreground hover:border-red-card'}`}
                         >
                             {p.name}
                         </button>
@@ -72,7 +72,7 @@ export default function LiveMatchSetup({ players, onStart }: Props) {
             <button
                 disabled={teamA.length === 0 || teamB.length === 0}
                 onClick={() => onStart({ teamA, teamB })}
-                className="mt-4 w-full bg-green-600 text-white py-2 rounded disabled:bg-gray-400"
+                className="mt-4 w-full bg-pitch text-white font-semibold py-2 rounded disabled:bg-surface-2 disabled:text-muted"
             >
                 ✅ Start Match
             </button>
