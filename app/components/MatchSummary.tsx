@@ -27,15 +27,16 @@ export default function MatchSummary({ match, players }: Props) {
                     const goals = match.goals[playerId] || 0;
                     const assists = match.assists[playerId] || 0;
                     return (
-                        <li key={playerId} className="flex flex-wrap items-center gap-x-2 gap-y-1 py-2 px-1 border-b border-line">
-                            <Link href={`/players/${playerId}`} className="font-medium hover:underline">
-                                {getPlayerName(players, playerId)}
-                            </Link>
-                            {String(match.jersey_player_id) === String(playerId) && (
-                                <span title="Jersey service: washes the jerseys and brings them to the next match">👕</span>
-                            )}
-                            <RecentFormBadge form={recentForm[playerId] || []}/>
-                            <span className="ml-auto flex gap-1.5 shrink-0">
+                        <li key={playerId} className="grid grid-cols-[1fr_auto] items-center gap-x-2 gap-y-1 py-2 px-1 border-b border-line">
+                            <div className="min-w-0">
+                                <Link href={`/players/${playerId}`} className="font-medium hover:underline break-words">
+                                    {getPlayerName(players, playerId)}
+                                </Link>
+                                {String(match.jersey_player_id) === String(playerId) && (
+                                    <span className="ml-1" title="Jersey service: washes the jerseys and brings them to the next match">👕</span>
+                                )}
+                            </div>
+                            <span className="flex gap-1.5 shrink-0 justify-end">
                                 {goals > 0 && (
                                     <span className="num rounded-full bg-bib text-ink px-2 text-sm" title="Goals">⚽ {maskMatchCount(goals)}</span>
                                 )}
@@ -43,6 +44,9 @@ export default function MatchSummary({ match, players }: Props) {
                                     <span className="num rounded-full bg-surface-2 px-2 text-sm" title="Assists">🤝 {maskMatchCount(assists)}</span>
                                 )}
                             </span>
+                            <div className="col-span-2">
+                                <RecentFormBadge form={recentForm[playerId] || []}/>
+                            </div>
                         </li>
                     );
                 })}

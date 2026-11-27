@@ -19,10 +19,10 @@ export default function AppNav() {
     return (
         <header className="sticky top-0 z-20 bg-pitch-deep text-white shadow-md">
             <div className="max-w-4xl mx-auto flex flex-col sm:flex-row sm:items-center gap-x-4 px-4">
-                <Link href="/" className="font-display italic font-extrabold text-2xl pt-2 sm:py-2 whitespace-nowrap">
+                <Link href="/" className="font-display italic font-extrabold text-2xl py-2 whitespace-nowrap">
                     Umelka<span className="text-bib"> League</span>
                 </Link>
-                <nav aria-label="Main" className="flex-1 overflow-x-auto">
+                <nav aria-label="Main" className="hidden sm:block flex-1 overflow-x-auto">
                     <ul className="flex sm:justify-end gap-1 -mx-3 sm:mx-0">
                         {TABS.map(({ href, label }) => (
                             <li key={href}>
