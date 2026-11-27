@@ -7,6 +7,7 @@
     --surface-2: #e7ebe1;
     --line: #d3d9cb;
     --muted: #5b6b61;
+    --ghost-ink: #0b5d3b;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -17,6 +18,7 @@
         --surface-2: #1a2d24;
         --line: #26392f;
         --muted: #8fa397;
+        --ghost-ink: #7fd6a8;
     }
 }
 
@@ -74,35 +76,65 @@ body {
         display: inline-flex;
         align-items: center;
         gap: 0.4rem;
-        padding: 0.6rem 1.1rem;
+        padding: 0.6rem 1.2rem;
         border-radius: 999px;
         font-weight: 600;
         background: var(--color-pitch);
         color: #fff;
-        transition: background-color 0.15s;
+        border: 2px solid var(--color-pitch-deep);
+        box-shadow: 0 4px 0 var(--color-pitch-deep);
+        cursor: pointer;
+        transition: transform 0.12s, box-shadow 0.12s, background-color 0.12s, color 0.12s;
     }
 
     .btn:hover {
-        background: var(--color-pitch-deep);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 0 var(--color-pitch-deep);
+    }
+
+    .btn:active {
+        transform: translateY(3px);
+        box-shadow: 0 1px 0 var(--color-pitch-deep);
     }
 
     .btn-bib {
         background: var(--color-bib);
         color: var(--color-ink);
+        border-color: #c9a600;
+        box-shadow: 0 4px 0 #c9a600;
     }
 
     .btn-bib:hover {
-        background: #ffe14d;
+        box-shadow: 0 6px 0 #c9a600;
+    }
+
+    .btn-bib:active {
+        box-shadow: 0 1px 0 #c9a600;
     }
 
     .btn-ghost {
-        background: transparent;
-        color: var(--foreground);
-        border: 1px solid var(--line);
+        background: var(--surface);
+        color: var(--ghost-ink);
+        border-color: var(--ghost-ink);
+        box-shadow: 0 4px 0 var(--ghost-ink);
     }
 
     .btn-ghost:hover {
-        background: var(--surface-2);
+        background: var(--ghost-ink);
+        color: var(--surface);
+        box-shadow: 0 6px 0 var(--color-bib);
+    }
+
+    .btn-ghost:active {
+        box-shadow: 0 1px 0 var(--color-bib);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .btn,
+        .btn:hover,
+        .btn:active {
+            transform: none;
+        }
     }
 
     .mowed {

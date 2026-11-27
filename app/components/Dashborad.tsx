@@ -44,7 +44,7 @@ export default function Dashboard() {
                 <MostWins wins={wins} players={players} showAll={false} />
             </div>
 
-            <div className="flex flex-wrap gap-2 mt-6">
+            <div className="flex flex-wrap gap-2 mt-6 justify-center">
                 <Link href="/stats" className="btn btn-ghost">Full tables</Link>
                 <Link href="/matches" className="btn btn-ghost">All matches</Link>
                 <Link href="/summary" className="btn btn-ghost">🏁 Season summary</Link>
